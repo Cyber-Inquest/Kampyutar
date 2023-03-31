@@ -1,0 +1,144 @@
+.bb_main{
+    width: 96%;
+    padding: 2%;
+    display: flex;
+}
+
+.main_cat{
+    width: 30%;
+}
+
+.main_subCat{
+    width: 40%;
+}
+
+.main_branchList{
+    width: 30%;
+}
+
+.mainCatZip{
+    width: 100%;
+}
+
+.mainCat_cat{
+    width: 80%;
+    font-size: 20px;
+    background-color: grey;
+    padding: 15px;
+    margin: 5px;
+    /* text-align: center; */
+    margin-right: auto;
+    margin-left: auto;
+    cursor: pointer;
+    color: white;
+    position: relative;
+}
+
+.activeTab{
+    background-color: #2a435b!important;
+}
+
+.subCatZip{
+    width: 100%;
+    display: none;
+}
+
+.subcat_cat{
+    width: 80%;
+    font-size: 20px;
+    background-color: grey;
+    padding: 15px;
+    margin: 5px;
+    /* text-align: center; */
+    margin-right: auto;
+    margin-left: auto;
+    cursor: pointer;
+    color: white;
+    position: relative;
+}
+
+.branchZip{
+    width: 100%;
+    display: none;
+}
+
+.branchItem{
+    width: 80%;
+    font-size: 20px;
+    background-color: grey;
+    padding: 15px;
+    margin: 5px;
+    /* text-align: center; */
+    margin-right: auto;
+    margin-left: auto;
+    cursor: pointer;
+    color: white;
+    position: relative;
+}
+
+/* add area */
+add_mainCatZip{
+    width: 95%;
+    font-size: 20px;
+    background-color: #2a435b;
+    padding: 15px;
+    margin: 5px;
+    /* text-align: center; */
+    margin-right: auto;
+    margin-left: auto;
+    cursor: pointer;
+    color: white;
+    display: flex;
+}
+
+.form_mainCatZip, #form_subcat_cat, #form_branchItem{
+    width: auto;
+    margin-top: auto;
+    margin-bottom: auto;
+    /* display: none; */
+}
+
+.eyeShow{
+    width: 20%;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.form_mainCatZip form, .form_subcat_cat form, .form_branchItem form{
+    text-align: center;
+}
+
+.form_mainCatZip input, .form_subcat_cat input, .form_branchItem input{
+    padding: 8px 10px;
+    width: 65%;
+}
+
+.form_mainCatZip button, .form_subcat_cat button, .form_branchItem button{
+    padding: 8px 15px;
+    border-radius: 0px 8px 8px 0px;
+    border: 1px solid rgb(88, 88, 88);
+    background-color: rgb(88, 88, 88);
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+.form_mainCatZip button:hover, .form_subcat_cat button:hover, .form_branchItem button:hover{
+    border: 1px solid green;
+    background-color: green;
+}
+
+.delTag{
+    position: absolute;
+    top: 15px;
+    right: 20px;
+}
+
+.delTag i{
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.delTag i:hover{
+    color: red;
+}

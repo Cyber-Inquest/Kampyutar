@@ -1,0 +1,89 @@
+{% load static %}
+<div class="cc_header_topbar">
+    <div class="cc_htopbar_left">
+        <a href="">Further Query</a>
+        <span class="verLine">||</span>
+        <span>Contact: 9874985858</span>
+        <span class="verLine">||</span>
+        <span>bigbyte@gmail.com</span>
+    </div>
+    <div class="cc_htopbar_right">
+
+        <a href="{% url 'vendor_authentication_vendor' %}">{{request.user.username}}</a>
+        &nbsp;&nbsp;&nbsp;&nbsp;
+
+    </div>
+</div>
+
+<!-- middle navigation bar with logo and cart -->
+<div class="cc_header_middlebar">
+
+    <div class="cc_hmiddlebar_left">
+        <div class="cc_mainlogo centerlr mcentertb">
+            <a href="{% url 'vendor_page_vendor' %}">
+                <img src="{% static 'css/images/mainlogo.png' %}" alt="">
+            </a>
+        </div>
+    </div>
+
+    <div class="cc_hmiddlebar_mid">
+        <div class="cc_searchContainer centerlr">
+            <div class="cc_search_txt">
+                <input placeholder="Enter Keywords to search ....">
+            </div>
+            <div class="bb_search_btn">
+                <i class="fa fa-search"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="cc_hmiddlebar_right" id="vendor_append">
+        <a href="{% url 'checkout_page_vendor' %}">
+            <button>
+                <div class="cc_shoppingCartDiv">
+                    <div class="cc_sc_img mcentertb">
+                        <img src="{% static 'css/vendor_css/images/share/shopping_cart.png' %}" alt="">
+                    </div>
+                    <div class="cc_sc_text">
+                        <span class="sctitle">SHOPPING CART</span>
+                        <br>
+                        <span class="sc_item">{{order_cart.cart_total_items}} item</span> - <span class="sc_price">NPR {{order_cart.cart_total_price|floatformat:2}}</span>
+                    </div>
+                </div>
+            </button></a>
+    </div>
+</div>
+<!-- navigation bar  -->
+
+<div class="topnav" id="myTopnav">
+    <!-- <div class="dropdown toActive">
+        <button class="dropbtn">
+            <i class="fa-solid fa-house"></i> HOME
+        </button>
+    </div> -->
+    <div class="dropdown">
+        <a href="{% url 'vendor_page_vendor' %}" class="dropbtn">
+        <i class="fa-solid fa-fire-flame-curved"></i> Today's Deals</a>        
+    </div>
+    <div class="dropdown">
+    <a href="{% url 'price_drop_page_vendor' %}" class="dropbtn">
+        <i class="fa-solid fa-droplet"></i> Price Drop
+</a>
+        
+    </div>
+    <div class="dropdown">
+    <a href="{% url 'just_launch_page_vendor' %}" class="dropbtn">
+        <i class="fa-solid fa-rocket"></i> Just Launched
+</a>
+        
+    </div>
+    <div class="dropdown">
+    <a href="{% url 'just_sold_page_vendor' %}" class="dropbtn">
+        <i class="fa-solid fa-hand-holding-dollar"></i> Just Sold
+</a>
+        
+    </div>
+
+    <a href="javascript:void(0);" style="font-size:15px; color:white; padding:14px;" class="bb_home_icon" onclick="myFunction()">&#9776;</a>
+</div>
+<script src="{% static 'js/topnav.js' %}"></script>

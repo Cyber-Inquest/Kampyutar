@@ -1,0 +1,13 @@
+{% load static %}
+<H1>Blogs Page</H1>
+
+{% for item in blogs_query %}
+<div>
+  <br><hr>
+  <a href="/admin_django/sb_blog_edit/{{item.id}}"><h2>{{item.title}}</h2></a>
+  <a href="/admin_django/sb_blog_edit/{{item.id}}"><img src="{{item.photo_img.url}}" width="700" height="400"></a>
+  <br>
+  <a href="/admin_django/sb_blog_edit/{{item.id}}"><p1>{{item.blog_summary}}</p1></a>
+  <br><hr>
+</div>
+{% endfor %}

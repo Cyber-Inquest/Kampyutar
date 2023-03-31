@@ -1,0 +1,277 @@
+.vendor_body{
+    width: 100%;
+    /* height: 100vh; */
+}
+
+.dropdown{
+    margin: 8px 15px;
+}
+
+.vendor_topBar{
+    width: 95%;
+    background-color: black;
+    color: white;
+    text-align: center;
+    margin: 20px auto;
+    border-radius: 10px;
+}
+
+.vtb_red{    
+    border: 4px solid red;
+}
+
+.vtb_green{    
+    border: 4px solid green;
+}
+
+.vtb_blue{    
+    border: 4px solid #4CB9EB;
+}
+
+.vtb_orange{    
+    border: 4px solid orange;
+}
+
+.v_tB_title{
+    padding: 10px 0px;
+}
+
+.v_tB_title i{
+    margin: 0px 10px;
+}
+
+.v_tB_brands{
+    width: 100%;
+}
+
+.v_tB_brandSlideShow{
+    width: 94%;
+    margin: 0px auto;
+}
+
+.v_tB_perSlide{
+    width: 70px;
+    height: 60px;
+    border-radius: 10px;
+    margin: 10px;
+    background-color: #363636;    
+    position: relative;
+}
+
+.v_tB_perSlide img{    
+    width: 55%!important;
+    position: absolute;
+    margin: auto;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.v_tB_filters{
+    display: flex;
+    width: 100%;
+    font-size: 16px;
+}
+
+.v_tB_tag{
+    margin: 20px 50px;
+    width: 30%;
+}
+
+.v_tB_price{
+    width: 80px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    background-color: #363636;
+    color: white;
+    border: 1px solid #363636;
+}
+
+#v_tB_condition{
+    width: 160px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    background-color: #363636;
+    color: white;
+    border: 1px solid #363636;
+}
+
+.label_txt{
+    padding: 0px 10px;
+}
+
+/* switch */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 25px;
+  }
+
+  .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  /* The slider */
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #363636;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+  
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+  
+  input:checked + .slider {
+    background-color: #363636;
+  }
+  
+  input:focus + .slider {
+    box-shadow: 0 0 1px #363636;
+  }
+  
+  input:checked + .slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+  }
+  
+  /* Rounded sliders */
+  .slider.round {
+    border-radius: 34px;
+  }
+  
+  .slider.round:before {
+    border-radius: 50%;
+  }
+
+
+
+  /* Content Space */
+  .vendor_contentSpace{
+      width: 100%;
+  }
+
+  .v_cS_perContent{
+      width: 95%;
+      border-radius: 10px;
+      margin: 10px auto;
+      display: flex;
+      background-color: rgb(225, 225, 225);
+      cursor: pointer;
+  }
+
+  .v_cS_pCTitle{
+      width: 60%;
+      padding: 10px 20px;
+  }
+
+  .pcTitle_name{
+      font-size: 20px;
+      font-weight: bold;
+  }
+
+  .v_cS_pCTitle p{
+      margin: 0px;
+  }
+
+  .v_cS_hotTags{
+    text-align: center;    
+    margin: auto 20px;
+    font-weight: bold;
+  }
+
+  .v_cS_hotTags i{
+      font-size: 20px;
+    margin: auto 10px;
+  }
+
+  .v_cS_priceTag{
+      /* width: 10%; */
+      text-align: center;
+      margin: auto 10px;
+      font-weight: bold;
+  }
+
+  .v_cS_qty{
+      /* width: 10%; */
+      text-align: center;
+      margin: auto 10px;
+  }
+
+  .v_cS_qty input{
+    width: 30px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    background-color: white;
+    color: black;
+    border: 1px solid white;
+  }
+
+  .v_cS_addToCart{
+      /* width: 15%; */
+      text-align: center;
+      margin: auto 10px;
+  }
+
+  .v_cS_addToCartBtn{
+      padding: 8px 20px;
+      background-color: red;
+      color: white;
+      border: 2px solid red;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+  }
+
+  .v_cS_btns{
+      width: 40%;
+      display: flex;
+      justify-content: right;
+  }
+
+
+  /* pagination */
+
+  .pagination_center{
+    text-align: center;
+    padding: 30px 0px 10px 0px;
+}
+
+.pagination {
+    display: inline-block;
+}
+
+.pagination a {
+    color: black;
+    float: left;
+    padding: 8px 16px;
+    text-decoration: none;
+}
+
+.pagination a.active {
+    background-color: #07003A;
+    color: white;
+}
+
+.pagination a:hover:not(.active) {
+    background-color: grey;
+}

@@ -1,0 +1,222 @@
+.bb_heading{
+    margin-left: auto;
+    margin-right: auto;
+    /* border: 1px solid gray; */
+    height: 70px;
+    width: 75%;
+    padding: 15px;
+    
+}
+.heading_L{
+    float: left;
+    height: auto;
+    margin-left: 10px;
+}
+.heading_R{
+    float: right;
+    height: auto;
+    margin-top: 30px;
+    margin-right: 10px;
+    color: blue;
+}
+.heading_R a{
+    text-decoration: none;
+}
+.bb_container{
+    height: auto;
+    /* border: 1px solid gray; */
+    margin-left: auto;
+    margin-right: auto;
+    /* margin-top: 5px; */
+    display: flex;
+    padding: 20px 165px;
+}
+.col1{
+    border: 1px solid gray;
+    height:auto;
+    width: 65%;
+    /* height:fit-content; */
+}   
+.col2{
+    border: 1px solid gray;
+    height:350px;
+    width: 35%;
+}
+.top{
+    height: auto;
+    /* height:fit-content; */
+    /* border: 1px solid gray; */
+    border-bottom: 1px solid gray;
+   
+    padding: 10px;  
+    background-color: rgb(221, 210, 210);
+}
+.top span{
+    padding: 5px;
+    font-size: 18px;
+}
+
+.mid{
+    height: auto;
+    border-bottom: 1px solid gray;
+    display: flex;
+}
+.mid2{
+    height: auto;
+    /* border-bottom: 1px solid gray; */
+    display: flex;
+}
+
+.photo{
+    width: 30%;
+    padding: 14px 0px;
+}
+.photo1{
+    background-color: #ffffff;
+    width: 85%;
+    /* border: 1px solid rgba(94, 93, 93, 0.404); */
+    margin-left: auto;
+    margin-right: auto;
+    height: 150px;
+     
+}
+.photo1 img{
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+.content{
+    width:70%;
+    margin-top: 40px;
+    display:flex;
+}
+.content_L{
+    float: left;
+    width: 70%;
+}
+.content_R{
+    text-align: right;
+    margin-right: 25px;
+    width: 30%;
+}
+.price{
+    text-decoration: line-through;
+    font-size: 12px;
+    color: rgb(153, 147, 147);
+    
+
+}
+.saving{
+    font-size:14px;
+    color: green;
+}
+
+
+.top1{
+    border-bottom: 1px solid gray;
+    height: auto;
+   background-color:  rgb(221, 210, 210);
+    padding: 10px;  
+}
+.graph{
+    margin-top: 40px;
+    font-size: 12px;
+   
+    color: gray;
+}
+.graph i{
+    margin-right: 5px;
+
+}
+.qty{
+    margin-top: 30px;
+}
+.forremove{
+    color: red;
+    margin-top: 30px;
+    margin-bottom: 20px;
+}
+/* .icon1{
+    border: 1px solid gray;
+    padding: 10px;
+}
+.icon1 i{
+    margin-left: 12px;
+    
+} */
+/* .icon number{
+    border:1px solid gray ;
+    padding:10px;
+} */
+.summary{
+    margin:30px;
+    height: auto;
+}
+.one{
+    height: 20px;
+}
+.one1{
+    float: left;
+}
+.one2{
+    float: right;
+}
+.two{
+    margin-top: 5px;
+    height: 20px;
+}
+.two1{
+    float: left;
+}
+.two2{
+    float: right;
+    color: gray;
+    font-size: 15px;
+}
+.three{
+    height: 20px;
+    margin-top: 5px;
+    margin-bottom: 32px;
+    font-size: 15px;
+}
+.three1{
+    float: left;
+}
+.three2{
+    float:right;
+    color: gray;
+}
+.subtotal{
+    margin-top: 32px;
+    height: 20px;
+    font-weight: bold;
+}
+.subtotal1{
+    float: left;
+}
+.subtotal2{
+    float: right;
+}
+.subtotal3{
+    float: right;
+    color: green;
+    font-size: 14px;
+}
+.but{
+    text-align: center;
+    margin-top: 40px;
+}
+.button {
+    background-color:red;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 10px;
+  }

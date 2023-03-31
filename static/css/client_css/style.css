@@ -1,0 +1,280 @@
+.bb_body{
+    padding: 0px 3% 50px 3%;
+}
+
+.bb_mainContainerBB{
+        width: 100%;
+    background-color: black;
+    color: white;
+    position: sticky;
+    bottom: 0px;
+    font-size: 16px;
+    z-index: 10;
+    border-top: 2px solid red;
+    display: none;
+}
+
+
+.bb_bottomBarContent{
+    width: 100%;
+    height: 60px;
+    display: flex;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.bb_bottomBarPerContent{
+    width: 25%;
+    text-align: center;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.bb_bottomBarPerContent a{
+    text-decoration: none;
+    color: white;
+}
+
+.bb_product1{
+    border-top: 3px solid #07003A;
+    border-bottom: 3px solid #07003A;
+    border-right: 3px solid #07003A;
+    position: relative;
+    margin-top: 50px;
+}
+
+.bb_product_div_name{
+    position: absolute;
+    top: -40px;
+}
+
+.bb_product_name{
+    background-color: #07003A;
+    padding: 5px 30px;
+    font-size: 22px;
+    font-weight: bolder;
+    color: white;
+    border-radius: 5px 5px 0px 0px;
+}
+
+/* Product tab start from here */
+
+.bb_product_baseRow{
+    display: flex;
+    width: 100%;
+}
+
+.bb_product_baseRowNoFlex{
+    width: 100%;
+    position: relative;
+}
+
+.offers_tag{
+    position: absolute;
+    z-index: 5;
+    right: -15px;
+    top: -15px;
+}
+
+.offers_img{
+    /* background-color: red; */
+    width: 120px;
+    /* height: 70px; */
+}
+
+.offers_img img{
+    width: 100%;
+}
+
+/* Product tab right side start from here */
+
+.bb_product_baseCol{
+    width: 99%;
+    padding: 5px 6px;
+}
+
+.bb_product_baseCol_right{
+    width: 80%;
+    padding: 5px 5px;
+}
+
+.bb_perProduct_row{
+    display: flex;
+    width: 100%;
+}
+
+.bb_perProduct_col{
+    width: 24%;
+    padding: 5px;
+}
+
+.bb_perProduct_item{
+    background-color: white;
+    text-align: center;
+    height: 430px;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+    position: relative;
+}
+
+.bb_perProduct_item:hover{
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+.bb_item_name{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    display: -webkit-box;
+    line-height: 1.4;
+    height: 65px;
+}
+
+/* item image and icon */
+
+.bb_item_img{
+    width: 90%;
+    height: 200px;
+    position: relative;
+    padding: 0px 5%;
+    margin-bottom: 20px;
+}
+
+.bb_item_img i{
+    position: absolute;
+    font-size: 20px;
+    top: 6px;
+    right: 6px;
+    color: grey;
+    cursor: pointer;
+}
+
+.bb_item_img i:hover{
+    color: red;
+}
+
+.bb_item_img img{
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    cursor: pointer;
+    padding: 4% 0%;
+}
+
+/* item name */
+
+
+.bb_item_name h4{
+    padding: 5px 15px;
+    font-size: 14px;
+    margin: 0px;
+    font-weight: bolder;
+    cursor: pointer;
+    color: black;
+}
+
+.bb_item_price{
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 80px;
+}
+
+.bb_item_price h4{
+    padding: 10px;
+    font-size: 16px;
+    margin: 0px;
+    font-weight: bolder;
+    color: red;
+}
+
+.bb_item_price h5{
+    margin: 0px;
+}
+
+/* item add to cart */
+
+.bb_item_addToCart{    
+    padding: 15px;
+    text-align: center;  
+    position: absolute;  
+    bottom: 0;
+    right: 0;
+    left: 0;
+}
+
+.bb_item_addToCart_btn{
+    background-color: red;
+    color: white;
+    padding: 10px 20px;
+    border: 2px solid red;
+    border-radius: 10px;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.bb_item_addToCart_btn:hover{
+    color: red;
+    background-color: white;
+}
+
+/*
+.bb_item_addToCart_btn i, bb_item_addToCart_btn_disable i{
+    font-size: 16px;
+}
+*/
+
+.bb_item_addToCart_btn_disable{
+    background-color: grey;
+    color: white;
+    padding: 10px 20px;
+    border: 2px solid grey;
+    border-radius: 10px;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+
+
+/* Product tab left side start from here */
+
+.bb_product_baseCol_left{
+    width: 20%;
+}
+
+.bb_pbaseCol_left_div{
+    width: 100%;
+    height: 450px;  
+    position: relative;  
+}
+
+.bb_pbaseCol_left_div img{
+    width: 100%;
+    height: 100%;
+    object-fit: none;
+}
+
+.bb_pbaseCol_left_btn{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    background-color: red;
+    padding: 10px 20px;
+    border: 2px solid white;
+    border-radius: 25px;
+    font-size: 16px;
+    font-weight: bolder;
+    cursor: pointer;
+}
+
+.bb_pbaseCol_left_btn:hover{
+    background-color: white;
+    color: red;
+}

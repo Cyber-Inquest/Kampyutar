@@ -1,0 +1,365 @@
+body {
+    background-color: #D9D9D9;
+    width: 100%;
+    height: 100%;
+
+}
+
+.bb_b_forflex {
+    display: flex;
+    height: 100%;
+    width: 92%;
+    padding: 3% 4%;
+}
+
+.bb_b_container1 {
+    width: 22%;
+    margin: 0px 10px;
+    background-color: white;
+}
+
+.bb_b_container2 {
+    width: 78%;
+    background-color: white;
+    height: 100%;
+    padding: 20px 20px 80px 20px;
+}
+
+/* code for the search part of container1 */
+.bb_b_search input[type=text] {
+    width: 90%;
+    padding: 0px 10px;
+    border: none;
+    background-color: #D9D9D9;
+}
+
+.bb_b_search {
+
+    margin: 15px;
+    /* display: inline-block; */
+}
+
+.bb_b_searcharea {
+    display: flex;
+    /* border: 2px solid black; */
+    /* border-radius: 3px; */
+    background-color: #D9D9D9;
+}
+
+.bb_b_search .fa {
+    color: #1a1818;
+    font-size: 18px;
+    border: none;
+    cursor: pointer;
+}
+
+.bb_b_searchicon {
+    float: left;
+    /* width:10%; */
+    padding: 10px;
+}
+
+
+/* code for container2 date and social media logos */
+.bb_b_fordateandlogo {
+    display: flex;
+    padding: 0px 2%;
+}
+
+.bb_b_date {
+    width: 50%;
+    /* justify-content: left; */
+    margin: auto;
+}
+
+.bb_b_date a {
+    text-decoration: none;
+}
+
+.bb_b_logo {
+    /* float: right; */
+    width: 50%;
+}
+
+.bb_b_allLogo{
+    float: right;
+}
+
+.bb_b_logo .fa {
+    padding: 5px;
+    font-size: 21px;
+    color: #666666;
+    /* width: 23px;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 50%; */
+}
+
+.bb_b_container2 .fa:hover {
+    /* opacity: 0.7; */
+    color: red;
+}
+
+/* .fa-facebook {
+    background: #3B5998;
+    color: white;
+}
+
+.fa-twitter {
+    background: #55ACEE;
+    color: white;
+}
+
+.fa-instagram {
+    background: #125688;
+    color: white;
+}
+
+.fa-snapchat-ghost {
+    background: #fffc00;
+    color: white;
+    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+}
+
+.fa-skype {
+    background: #00aff0;
+    color: white;
+} */
+
+/* code for container2 date and social media logos ends here */
+
+
+h1 {
+    /* text-align: center; */
+    font-size: 32px;
+    font-weight: bolder;
+    padding: 0px 2%;
+}
+
+.bb_b_foroptions{
+    padding: 5px 15px;
+}
+
+.bb_b_foroptions p{
+    font-size: 16px;
+}
+
+.bb_b_foroptions a{
+    text-decoration: none;
+    color: black;
+}
+
+.bb_b_foroptions a:hover{
+    color: red;
+}
+
+/* code for content to be written */
+.bb_b_fortext {
+    padding: 0px 2%;
+    justify-content: center;
+
+}
+
+.bb_b_firstcontent p {
+    font-size: large;
+    text-align: justify;
+
+}
+
+.bb_b_fortext h4 {
+    font-size: 2em;
+    text-align: center;
+
+}
+
+.bb_b_fortext h5 {
+    font-size: 1.5em;
+    /* text-align: center; */
+
+}
+
+.bb_b_fortext h6 {
+    font-size: 1em;
+}
+
+.bb_b_forspec ul {
+    list-style: none;
+    margin-block-end: 0em;
+    margin-block-start: 0em;
+    padding-inline-start: 0px;
+}
+
+.bb_b_forspec a {
+    text-decoration: none;
+    color: black;
+}
+
+.bb_b_forspec a:hover {
+    color: red;
+}
+
+.bb_b_blog_image img {
+    height: 100%;
+    width: 100%;
+}
+
+
+
+
+
+/* code for the comment section */
+.bb_b_bottompart {
+    padding: 10px 20px;
+    /* height: 100%; */
+}
+
+.bb_b_forcomment {
+    display: flex;
+    width: 99%;
+    height: 100%;
+    /* border: 1px solid rgb(134, 134, 134); */
+    /* padding: 15px 0px; */
+}
+
+.bb_b_forperson {
+    /* height: fit-content; */
+    width: 7%;
+    text-align: center;
+    /* border: 2px solid black; */
+    /* margin-left: 4%; */
+}
+
+.bb_b_person {
+        /* margin-top: 4px; */
+        width: 40px;
+        height: 40px;
+        margin-right: auto;
+        margin-left: auto;
+        /* margin-top: auto; */
+        border: 2px solid black;
+        border-radius: 50%;
+        /* margin-bottom: auto; */
+}
+
+.bb_b_commentsection {
+    /* height: 100%; */
+    width: 90%;
+    padding: 0px 10px;
+    /* border-radius: 3px; */
+    /* margin-left: 15px; */
+    /* margin-right: 20px; */
+}
+
+.bb_b_commentsection textarea {
+    color: rgb(117, 106, 106);
+    height: 70px;
+    width: 98%;
+    padding: 5px 10px;
+    resize: none;
+}
+
+.bb_b_forbutton {
+    /* width: 83%; */
+    /* height: 50px; */
+    padding: 16px;
+    /* background-color: #fffc00; */
+}
+
+.bb_b_forbutton button {
+    float: right;
+    /* width: 10%; */
+    /* height: 55%; */
+    padding: 5px 30px;
+    font-size: 14px;
+    font-weight: bold;
+    color: white;
+    background-color: red;
+    border: 2px solid red;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.bb_b_forbutton button:hover {
+    background-color: rgb(192, 2, 2);
+    border: 2px solid rgb(192, 2, 2);
+
+}
+
+.textAreaz{
+    padding: 5px 10px;
+    font-size: 14px;
+    width: 98%;
+    margin-bottom: 10px;
+}
+
+/* end of comment section code */
+
+/* list Part */
+.bb_b_showlist{
+    margin: 0px;
+}
+.bb_b_mid{
+    border: 1px solid gray;
+    display: flex;
+    margin: 20px 10px;
+}
+
+.bb_b_photo{
+    width: 24%;
+    padding: 10px;
+}
+.bb_b_photo1{
+    background-color: #ffffff;
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;    
+}
+
+.bb_b_photo1 img{
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.bb_b_content{
+    width:70%;
+    margin: 20px 0px;
+}
+.bb_b_content_L{
+    width: 100%;    
+}
+
+.bb_b_content_R{
+    float: right;
+    padding: 10px;
+}
+    
+.bb_b_content_R a, .bb_b_content_L a{
+    text-decoration: none;
+    color: black;
+    cursor: pointer;
+}
+
+.bb_b_content_R a:hover, .bb_b_content_L a:hover{
+    color: red;
+}
+
+.bb_b_top1{
+    border-bottom: 1px solid gray;
+    height: auto;
+   background-color:  rgb(221, 210, 210);
+    padding: 10px;  
+}
+
+.bb_b_Little_content{
+    text-align: justify;
+}
+
+.bb_b_icon input{
+    border:1px solid gray ;
+    padding:10px;
+}
+
+.bb_b_title h1{
+    padding: 0px!important;
+}

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../css/fontawesome-free-6.0.0-beta3-web/css/all.css">
+    <link rel="stylesheet" href="../../css/main_copy.css">
+    <link rel="stylesheet" href="../../css/banner.css">
+    <link rel="stylesheet" href="../../css/banner_slideShow.css">
+    <link rel="stylesheet" href="../../css/addProducts.css">
+    <link rel="stylesheet" href="../../css/brands.css">
+    <title>Image Panel</title>
+</head>
+
+<body>
+
+    <!-- navigation bar start -->
+    <div class="sc_navbar">
+        <div class="sc_header">
+            <div class="sc_header_right">
+                <a href="#home" class="admin_hello">Hello Admin</a>
+                <a href="#" class="logout_btn">Logout</a>
+            </div>
+        </div>
+    </div>
+    <!-- navigation bar End -->
+
+    <!-- side bar start -->
+    <div class="sc_sidebar_list">
+        <div class="sc_sidebar">
+            <a href="index.php"><i class="fas fa-rupee-sign"></i>Dashboard</a>
+            <a href="products.php"><i class="fas fa-barcode"></i>Products</a>
+            <a class="active" href="images.php"><i class="fas fa-plus-circle"></i>Images</a>
+            <a href="ads.php"><i class="fas fa-mitten"></i>Ads</a>
+            <a href="account.php"><i class="fas fa-users"></i>User Accounts</a>
+        </div>
+    </div>
+
+    <!-- side bar End -->
+
+    <div class="sc_content_container" id="order_tab">
+        <div class="admin_addbrand_title">
+            <a href="../images.php"><i class="far fa-arrow-alt-circle-left"></i></a>
+            <h1>Add Branner</h1>
+        </div>
+        <div class="admin_addbrand_content">
+            <form action="">
+                <div class="add_contentDiv">
+                    <div class="add_title margin_tb_auto" for="product_name">Name</div>
+                    <div class="add_description_text">
+                        <input id="product_name">
+                    </div>
+                </div>
+
+                <div class="add_contentDiv">
+                    <div class="add_title margin_tb_auto" for="product_url">URL Link</div>
+                    <div class="add_description_text">
+                        <input id="product_url">
+                    </div>
+                </div>
+
+                <div class="center">
+                    <div class="form-input">
+                        <label for="file-ip-1">Upload Image</label>
+                        <input type="file" id="file-ip-1" accept="image/*" onchange="showPreview(event);">
+                        <div class="preview">
+                            <img id="file-ip-1-preview">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="add_contentDiv_submit">
+                    <input class="add_product_submit" type="submit" value="Submit" style="margin: 5px 0px 50px 0px;">
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="../../js/subBottomBar.js"></script>
+
+</body>
+
+</html>

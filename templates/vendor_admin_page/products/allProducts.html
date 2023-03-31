@@ -1,0 +1,30 @@
+<div class="admin_mainPanel">
+    <div class="allProductsContent" id="defaultH">
+        <h1>All Products</h1>
+    </div>
+
+    
+
+    <!-- these are contents -->
+    {% include 'vendor_admin_page/products/allProducts/laptops.html' %}
+    {% include 'vendor_admin_page/products/allProducts/desktops.html' %}
+    {% include 'vendor_admin_page/products/allProducts/apple.html' %}
+    {% include 'vendor_admin_page/products/allProducts/components.html' %}
+    <!-- contents till here -->
+
+
+    <!-- these are tabs: from here -->
+    <div class="admin_bottomBar">
+        <ul>
+            <li class="abb_li" onclick="openSubBottomBar('asbb_laptop', this)">Laptops</li>
+            <li class="abb_li" onclick="openSubBottomBar('asbb_desktop', this)">Desktops</li>
+            <li class="abb_li" onclick="openSubBottomBar('asbb_apple', this)">Apple</li>
+            <li class="abb_li" onclick="openSubBottomBar('asbb_components', this)">Components</li>
+        </ul>
+    </div>
+
+    {% include 'vendor_admin_page/products/allProducts/subBottomBar.html' %}
+    <!-- these are tabs: to here -->
+
+
+</div>

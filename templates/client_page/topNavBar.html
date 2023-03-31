@@ -1,0 +1,70 @@
+{% load static %}
+<div class="cc_header_topbar">
+    <div class="cc_htopbar_left">
+        <a href="">Further Query</a>
+        <span class="verLine">||</span>
+        <span>Contact: 9874985858</span>
+        <span class="verLine">||</span>
+        <span>bigbyte@gmail.com</span>
+    </div>
+    <div class="cc_htopbar_right">
+
+        <a href="{% url 'client_authentication_app' %}">
+            {% if current_user %}
+                {{current_user}}
+            {% else %}
+                Sign in
+            {% endif %}
+        </a>
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="">My Wishlist</a>
+    </div>
+</div>
+
+<div class="cc_header_middlebar">
+
+    <div class="cc_hmiddlebar_left">
+        <div class="cc_mainlogo centerlr mcentertb">
+            <img src="{% static 'css/images/mainlogo.png' %}" alt="">
+        </div>
+    </div>
+
+    <div class="cc_hmiddlebar_mid">
+        <div class="cc_searchContainer centerlr">
+            <div class="cc_search_txt">
+                <input placeholder="Enter Keywords to search ....">
+            </div>
+            <div class="bb_submit_btn">
+                <i class="fa fa-search"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="cc_hmiddlebar_right" id="append_here">
+        <a href="{% url 'shopping_cart_app' %}">
+        <button>
+            <div class="cc_shoppingCartDiv">
+                <div class="cc_sc_img mcentertb">
+                    <img src="{% static 'css/images/share/shopping_cart.png' %}" alt="">
+                </div>
+                <div class="cc_sc_text">
+                    <span class="sctitle">SHOPPING CART</span>
+                    <br>
+                    <span class="sc_item">{{cart_quantity_total}} item</span> - <span class="sc_price">NPR {{cart_total_price|floatformat:2}}</span>
+                </div>
+            </div>
+        </button>
+        </a>
+    </div>
+</div>
+
+<div class="cc_header_navbar">
+    <ul>
+        <li><a href="#home"><i class="fa fa-fw fa-home"></i> HOME</a></li>
+        <li><a href="{% url 'list_page_app' %}"><i class="fas fa-laptop"></i> LAPTOP</a></li>
+        <li><a href="#home"><i class="fas fa-desktop"></i> DESKTOP</a></li>
+        <li><a href="#home"><i class="fab fa-apple"></i> APPLE</a></li>
+        <li><a href="#home"><i class="fas fa-microchip"></i> COMPONENT</a></li>
+        <li><a href="#home"><i class="fas fa-laptop-medical"></i> PC BUILDER</a></li>
+    </ul>
+</div>

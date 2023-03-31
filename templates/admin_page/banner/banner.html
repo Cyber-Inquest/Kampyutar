@@ -1,0 +1,35 @@
+{% load static %}
+<div class="admin_previewContainer">
+    <a href="{% url 'image_slideshow_admin' %}" class="admin_prevButton">Preview the Slideshow</a>
+    <a href="{% url 'image_slideshow_deploy_admin' %}"><button class="admin_prevButton">Deploy Now</button></a>
+</div>
+
+<!--start container for order and storage  -->
+<div class="sc_container2">
+    <div class="sc_div_row">
+
+    {% for item in slideshow_list%}
+        <div class="sc_div_col">
+
+            <div class="sc_perDiv sc_perDiv_img_hover">
+                <img src="{{ item.photo_img.url }}" alt="">
+            </div>
+
+            <div class="delete_slideShowBTN">
+                <i class="fa-solid fa-xmark" data-imageproductid="{{item.id}}"></i>
+            </div>
+        </div>
+    {% endfor %}
+
+        <div class="sc_div_col">
+            <a href="{% url 'sb_add_images_admin' %}">
+                <div class="sc_perDiv sc_perDiv_img_hover">
+                    <img src="{% static 'css/images/brands/adds.png' %}" alt="">
+                    <!-- <div class="sc_centered">ADD Brand</div> -->
+                </div>
+            </a>
+        </div>
+
+    </div>
+</div>
+<!-- end container for order and storage-->

@@ -1,0 +1,57 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
+body{
+    width: 100%;
+    height: 100%;
+    padding: 0px;
+    margin: 0px;
+    background-color:#d4d3dd;
+    font-family: 'Roboto', sans-serif;
+    color: #07003A;
+}
+.login{
+    width: 40%;
+    height: 100%;
+    text-align: center;
+    color: #07003A;
+    margin:10% 30% 10% 30%;
+    
+}
+.login h1{
+    font-size: 40px;
+}
+.login h4{
+    font-size: 14px;
+    color: #07003A;
+    padding:0px 100px 0px 100px;
+}
+.container input[type=email] {
+    width: 60%;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-sizing: border-box;
+    margin: 10px 0px;
+}
+
+.bb_otp_button {
+    background-color:red;
+    color: white; 
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 25%;
+    opacity: 0.9;
+    border-radius: 10px;
+}
+.bb_otp_button:hover {
+    background-color: rgb(182, 1, 1);
+}
+::placeholder{
+    color: gray;
+}
+.container {
+    border-radius: 10px;
+    padding: 10px;
+}
+

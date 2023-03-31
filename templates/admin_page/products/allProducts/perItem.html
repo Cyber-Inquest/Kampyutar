@@ -1,0 +1,22 @@
+
+        <div class="bb_perProduct_col">
+
+            <div class="bb_perProduct_item">
+                <div class="bb_item_img">
+                    {% for item in product_images %}
+                        {% if item.product_id == items.id %}
+                             <img src="{{item.photo_img.url}}" alt="">
+                       {% endif %}
+                    {% endfor %}
+                    <i class="fas fa-trash-alt" data-allproduct={{items.id}} data-categories="{{items.categories}}"></i>
+                </div>
+                <div class="bb_item_name">
+                    <h4>{{items.title}}</h4>
+                </div>
+                <div class="bb_item_addToCart">
+                    <a href="/admin_django/product/edit_product/{{items.categories}}/{{items.id}}">
+                        <button class="bb_item_addToCart_btn"><i class="fas fa-eye"></i> &nbsp; View Details</button>
+                    </a>
+                </div>
+            </div>
+        </div>

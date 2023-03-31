@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="{% static 'css/vendor_admin_css/vendor.css' %}">
+    <link rel="stylesheet" href="{% static 'css/fontawesome-free-6.0.0-beta3-web/css/all.css' %}">
+    <link rel="stylesheet" href="{% static 'css/admin_css/main_copy.css' %}">
+    <link rel="stylesheet" href="{% static 'css/admin_css/account.css' %}">
+    <link rel="stylesheet" href="{% static 'css/admin_css/brands.css' %}">
+    <link rel="stylesheet" href="{% static 'css/admin_css/toastr.min.css' %}">
+
+    <title>Dashboard: Add Order</title>
+</head>
+
+<body>
+
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+            {% if message.tags == 'success'%}
+                <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+            {% elif message.tags == 'info' %}
+                <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+            {% elif message.tags == 'warning' %}
+                <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+            {% elif message.tags == 'error' %}
+                <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+            {% endif %}
+    {% endfor %}
+</ul>
+{% endif %}
+
+    <!-- navigation bar start -->
+    <div class="sc_navbar">
+        <div class="sc_header">
+            <div class="sc_header_right">
+                <a href="#home" class="admin_hello">Hello {{request.user}}</a>
+                <a href="{% url 'admin_login_admin' %}" class="admin_hello" style="margin: 0px 5px;">Go to Customer Portal</a>
+                <a href="{% url 'logged_out_admin' %}" class="logout_btn">Logout</a>
+            </div>
+        </div>
+    </div>
+    <!-- navigation bar End -->
+
+    <!-- side bar start -->
+    <div class="sc_sidebar_list">
+        <div class="sc_sidebar v_sidebar">
+            <a href="{% url 'index_vendor_admin_page' %}" ><i class="fas fa-rupee-sign"></i>Dashboard</a>
+            <a href="{% url 'sb_product_vendor_admin_page' %}"><i class="fas fa-barcode"></i>Products</a>
+            <a class="active" href="{% url 'sb_order_vendor_admin_page' %}"><i class="fa-solid fa-cart-shopping"></i>Orders</a>
+            <a href="{% url 'sb_vendor_account_vendor_admin_page' %}"><i class="fas fa-users"></i>Vendor A/C</a>
+        </div>
+    </div>
+    <!-- side bar End -->
+
+    <div class="sc_content_container sc_cc_tab" id="adminAcc_tab">
+        <div class="admin_addbrand_title" style="padding: 1px 0px;">
+            <a href="{% url 'sb_order_vendor_admin_page' %}"><i class="far fa-arrow-alt-circle-left"></i></a>
+            <div class="v_perDetails">
+                <h1 style="margin: 10px 0px;">{{vendor_user_query.username}}</h1>
+                <h3 style="margin: 10px 0px;">{{vendor_user_query.profile.contact}}</h3>
+            </div>
+        </div>
+        <div class="admin_userpanel_content">
+            <table class="v_customers" id="admin_customers">
+                <tr>
+                    <th width="5%">S.N.</th>
+                    <th width="35%">Product Name</th>
+                    <th width="10%">Brand</th>
+                    <th width="10%">Price</th>
+                    <th width="5%">Qty</th>
+                    <th width="10%">Date</th>
+                    <th width="25%">Actions</th>
+                </tr>
+                {% for items in order_list %}
+                <tr>
+                    <td>{{forloop.counter}}</td>
+                    <td>{{items.0.0}}</td>
+                    <td>{{items.0.1}}</td><td>{{items.0.2}}</td>
+                    <td>{{items.0.3}}</td><td>{{items.0.4}}</td>
+                    <td>
+                        <i class="fa-solid fa-laptop v_i tillSuccess"></i>
+                        {% if items.1.verified == 1 %}
+                            <i class="fa-solid fa-truck-ramp-box v_i tillSuccess" onclick="vendor_eachorder_status({{items.0.5}}, 1)"></i>
+                        {% else %}
+                            <i class="fa-solid fa-truck-ramp-box v_i" onclick="vendor_eachorder_status({{items.0.5}}, 1)"></i>
+                        {% endif %}
+
+                        {% if items.1.delivering == 1 %}
+                            <i class="fa-solid fa-truck v_i tillSuccess" onclick="vendor_eachorder_status({{items.0.5}}, 2)"></i>
+                        {% else %}
+                            <i class="fa-solid fa-truck v_i" onclick="vendor_eachorder_status({{items.0.5}}, 2)"></i>
+                        {% endif %}
+
+                        {% if items.1.delivered == 1 %}
+                            <i class="fa-solid fa-circle-check v_i tillSuccess" onclick="vendor_eachorder_status({{items.0.5}}, 3)"></i>
+                        {% else %}
+                            <i class="fa-solid fa-circle-check v_i" onclick="vendor_eachorder_status({{items.0.5}}, 3)"></i>
+                        {% endif %}
+
+                        <i class="fa-solid fa-trash-can v_i v_di" onclick="vendor_eachorder_delete({{items.1.id}}, '{{items.1.products_type}}', {{items.1.user_id}})"></i>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+<script>
+    window.CSRF_TOKEN = "{{ csrf_token }}";
+    var cart_selection = "{{ cart_selection }}";
+
+</script>
+<script src="{% static 'js/jquery-1.9.1.min.js' %}"></script>
+<script src="{% static 'js/toastr.min.js' %}"></script>
+<script src="{% static 'js/vendor/vendor_order_status.js' %}"></script>
+
+</body>
+
+</html>

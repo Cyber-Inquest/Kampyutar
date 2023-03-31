@@ -1,0 +1,177 @@
+
+.bb_pd_container{
+    height: 700px;
+    width: 95%;
+    display: flex;
+    margin-left: auto;
+    margin-right: auto;
+    border: 1px solid rgba(155, 152, 152, 0.404);
+
+}
+.bb_container_col1{
+    width: 50%;
+    height: 93%;
+    margin: 20px;
+    overflow-y: scroll;
+}
+
+.bb_bd_col_inside{
+    width: 100%;
+    margin: 20px 0px;
+    height: auto;
+}
+.bb_container_col2{
+    padding-top: 10px;
+    width: 50%;
+    height: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    padding:5px 5px 5px 5px;
+
+}
+.checked {
+    color: orange;
+}
+.bb_bd_top{
+    color: red;
+}
+
+.bb_bd_review_submit{
+    text-align: center;
+    margin: 20px 0px;
+}
+.bb_bd_review_submit button{
+    border-radius: 5px;
+    background-color:#218838;
+    color: white;
+    border: 1px solid #218838;
+    font-size: 16px;
+    padding : 10px 20px;
+    cursor: pointer;
+}
+
+.bb_bd_review_submit button:hover{
+    background-color:#176327;
+    color: white;
+    border: 1px solid #176327;
+}
+
+
+.bb_pd_rev_profile{
+    padding: 18px;
+    background-color:#cdc9c9;
+    margin-bottom: 20px;
+}
+
+.bb_bd_profile_star{
+    margin: 10px 0px;
+}
+
+.bb_bd_profile_name{
+    margin: 10px 0px;
+}
+
+.bb_bd_des{
+    height: 50%;
+    font-size: 14px;
+
+}
+
+.bb_bd_review_rate{
+    margin: 20px 0px;
+    font-size: 18px;
+}
+
+
+.bb_bd_review_form{
+    width:100%;
+}
+
+.bb_review_detail{
+    width: 100%;
+    display: flex;
+    margin: 10px 0px;
+}
+
+.bb_review_static{
+    width: 20%;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.bb_review_dynamic{
+    width: 80%;
+    text-align: center;
+}
+
+.bb_review_dynamic input{
+    width: 80%;
+    font-size: 14px;
+    padding: 10px;
+}
+
+.bb_review_textField{
+    width: 100%;
+    margin: 20px 0px;
+}
+
+.bb_review_sTextField{
+    width: 100%;
+    margin: 10px 0px;
+}
+
+.bb_review_dTextField{
+    width: 100%;
+    margin: 10px 0px;
+    text-align: center;
+}
+
+.bb_review_dTextField textarea{
+    width: 90%;
+    height: 160px;
+    font-size: 14px;
+    font-family: 'Roboto', sans-serif;
+    resize: none;
+    padding: 10px;
+}
+
+/* width */
+.bb_container_col1::-webkit-scrollbar {
+    width: 20px;
+  }
+
+  /* dynamic star rating */
+  .rate {
+    float: left;
+    height: 50px;
+}
+.rate:not(:checked) > input {
+    position:absolute;
+   display: none;
+}
+.rate:not(:checked) > label {
+    float:right;
+    width:1em;
+    overflow:hidden;
+    white-space:nowrap;
+    cursor:pointer;
+    font-size:30px;
+    color:#ccc;
+}
+.rate:not(:checked) > label:before {
+    content: '★ ';
+}
+.rate > input:checked ~ label {
+    color: orange;
+}
+.rate:not(:checked) > label:hover,
+.rate:not(:checked) > label:hover ~ label {
+    color: orange;
+}
+.rate > input:checked + label:hover,
+.rate > input:checked + label:hover ~ label,
+.rate > input:checked ~ label:hover,
+.rate > input:checked ~ label:hover ~ label,
+.rate > label:hover ~ input:checked ~ label {
+    color: rgb(235, 154, 3);
+}

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+{% load widget_tweaks %}
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/fontawesome-free-6.0.0-beta3-web/css/all.css' %}">
+    <link rel="stylesheet" href="{% static 'css/admin_css/main_copy.css' %}">
+    <link rel="stylesheet" href="{% static 'css/admin_css/banner.css' %}">
+    <link rel="stylesheet" href="{% static 'css/admin_css/banner_slideShow.css' %}">
+    <link rel="stylesheet" href="{% static 'css/admin_css/addProducts.css' %}">
+    <link rel="stylesheet" href="{% static 'css/admin_css/brands.css' %}">
+
+    <title>Image Panel</title>
+</head>
+
+<body>
+
+    <!-- navigation bar start -->
+    <div class="sc_navbar">
+        <div class="sc_header">
+            <div class="sc_header_right">
+                <a href="#home" class="admin_hello">Hello Admin</a>
+                <a href="#" class="logout_btn">Logout</a>
+            </div>
+        </div>
+    </div>
+    <!-- navigation bar End -->
+
+    <!-- side bar start -->
+    <div class="sc_sidebar_list">
+        <div class="sc_sidebar">
+            <a href="{% url 'index_admin' %}"><i class="fas fa-rupee-sign"></i>Dashboard</a>
+            <a href="{% url 'sb_product_admin' %}"><i class="fas fa-barcode"></i>Products</a>
+            <a class="active" href="{% url 'sb_images_admin' %}"><i class="fas fa-plus-circle"></i>Images</a>
+            <a href="{% url 'sb_ads_admin' %}"><i class="fas fa-mitten"></i>Ads</a>
+            <a href="{% url 'sb_account_admin' %}"><i class="fas fa-users"></i>User Accounts</a>
+        </div>
+    </div>
+
+    <!-- side bar End -->
+
+    <div class="sc_content_container" id="order_tab">
+        <div class="admin_addbrand_title">
+            <a href="{% url 'sb_images_admin' %}"><i class="far fa-arrow-alt-circle-left"></i></a>
+            <h1>Add Banner</h1>
+        </div>
+        <div class="admin_addbrand_content">
+
+            <form action="{% url 'sb_add_images_post_admin' %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <div class="add_contentDiv">
+                    <div class="add_title margin_tb_auto" for="product_url">URL Link</div>
+                    <div class="add_description_text">
+                        {% render_field add_images.link d="product_url" %}
+                    </div>
+                </div>
+
+                <div class="center">
+                    <div class="form-input">
+                        <label for="file-ip-1">Upload Image</label>
+                         {% render_field add_images.photo_img id="file-ip-1" name="photo_img" class="img_upload" onchange="showPreview(event);" %}
+                        <div class="preview">
+                            <img id="file-ip-1-preview">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="add_contentDiv_submit">
+                    <input class="add_product_submit" type="submit" value="Submit" style="margin: 5px 0px 50px 0px;">
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="{% static 'js/subBottomBar.js' %}"></script>
+
+</body>
+
+</html>

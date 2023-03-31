@@ -1,0 +1,189 @@
+.footer_main{
+    margin-top: 60px;
+}
+
+.bb_email_div{
+    width: 100%;
+    height: 100%;
+    padding: 20px 0px 50px 0px;
+    text-align: center;
+    background-image: url('../images/Bg_mail2.png');
+    background-color: white;
+    background-size: 100% 400px;
+    background-repeat: no-repeat;
+    background-position: 0px -110px;
+}
+
+.bb_email_div h2{
+    margin-top: auto;
+    margin-bottom: auto;
+    color: black;
+}
+
+.bb_emailbox_main{
+    border-radius: 5px;
+    width: 50%;
+    margin: 20px auto;
+    display: flex;
+}
+
+.bb_email_txt{
+    width: 80%;    
+}
+
+.bb_email_txt input{
+    float: left;
+    width: 96%;
+    padding: 12px;  
+    border: 2px solid;  
+    border-radius: 5px 0px 0px 5px;
+    font-size: 16px;
+}
+
+.bb_submit_btn{
+    width: 20%;
+    background-color: red;
+    padding: 12px;
+    border-radius: 0px 5px 5px 0px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 100%;
+}
+
+/* footer */
+.bb_footer_div{
+    background-color: black;
+    color: white;  
+    /* padding-bottom: 30px;  */
+}
+
+.bb_footer_topDiv{
+    display: flex;
+    position: relative;
+    width: 90%;    
+    padding: 15px 5%; 
+}
+
+.bb_footer_aboutus{
+    width: 70%;
+    height: auto;
+    background-color: indigo;
+    color: white;
+    float: right;
+    position: absolute;
+    top: -30px;
+    right: 0px;
+    padding: 30px;
+}
+
+.bb_footer_aboutus h2{
+    margin: 0;
+    font-size: 28px;
+}
+
+.bb_footer_aboutusContent{
+    margin: 20px 0px;
+    font-size: 18px;
+    text-align: justify;
+}
+
+.bb_footer_topleft{
+    width: 25%;
+}
+
+.bb_footer_paymentMain{
+    width: 60%;
+    margin: 20px 0px;
+    overflow-y: auto;
+}
+
+.bb_footer_payment{
+    width: 50%;
+    float: left;
+    margin: 5px 0px;
+}
+
+.bb_footer_pay_per{
+    width: 60px;
+    background-color: white;
+    border-radius: 5px;
+    padding: 5px 5px 0px 5px;
+    cursor: pointer;
+}
+
+.bb_footer_pay_per img{
+    width: 100%;
+}
+
+.padding_extra_pay{
+    padding: 10px 5px 5px 5px;
+}
+
+.bb_footer_middle{
+    padding: 5px 5%;
+    display: flex;
+    width: 90%;
+}
+
+.bb_fm_txt{
+    width: 10%;
+}
+
+.bb_fm_share{
+    width: 90%;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.bb_fm_share i{
+    font-size: 25px;
+    margin: 0px 0px 0px 15px;
+    cursor: pointer;
+    text-decoration: none;
+    color: white;
+}
+
+.bb_fm_share i:hover{
+    color: red;
+}
+
+.bb_footer_bottom{
+    color: white;
+    padding: 5px 5% 35px 5%;
+    display: flex;
+    width: 90%;
+}
+
+.bb_fbtm_col1{
+    width: 36%;
+}
+
+.bb_fbtm_col2{
+    width: 36%;
+}
+
+.bb_fbtm_col3{
+    width: 28%;
+}
+
+.bb_fbtm_content li{
+    list-style-type: none;
+    cursor: pointer;
+}
+
+.bb_footer_copyright{
+    width: 100%;
+    text-align: center;
+    padding: 10px 0px 15px 0px;
+}
+
+.bb_fbtm_content li a{
+    text-decoration: none;
+    color: white;
+}
+
+.bb_fbtm_content li a:hover{
+    color: red;
+}
+

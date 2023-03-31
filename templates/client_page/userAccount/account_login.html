@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+{% load static %}
+{% load widget_tweaks %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/client_css/login_main.css' %}">
+    <link rel="stylesheet" href="{% static 'css/client_css/responsive.css' %}">
+    <link rel="stylesheet" href="{% static 'css/fontawesome-free-6.0.0-beta3-web/css/all.min.css' %}">
+
+    <script src="{% static 'js/jquery-1.9.1.min.js' %}"></script>
+    <script src="{% static 'js/toastr.min.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'css/admin_css/toastr.min.css' %}">
+    <title>Account</title>
+</head>
+<body>
+{% if messages %}
+<ul class="messages" style="position: absolute;">
+    {% for message in messages %}
+    {% if message.tags == 'success'%}
+    <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+    {% elif message.tags == 'info' %}
+    <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+    {% elif message.tags == 'warning' %}
+    <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+    {% elif message.tags == 'error' %}
+    <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+    {% endif %}
+    {% endfor %}
+</ul>
+{% endif %}
+
+<div class="mainContainer">
+    <div class="mC_right">
+        <div class="container cSignIn">
+            <div class="one">
+                <div class="one_1">
+                    <h1>Sign In</h1>
+                    <h4>Sign In to your Account.</h4>
+                </div>
+            </div>
+            <div class="three">
+
+                <div class="column">
+
+                    <form action="{% url 'client_authentication_sign_in_app' %}" method="post">
+                        {% csrf_token %}
+
+                        {% render_field sign_in_form.email placeholder="Enter Email" %}
+                        {% render_field sign_in_form.password id="id_password3" placeholder="Password" type="password" %}
+
+                        <i class="far fa-eye-slash lol" id="togglePassword3"></i>
+
+                        <div class="termsCondition">
+                            <input name="remember_me" type="checkbox">
+                            <label for="condition">Remember me</label>
+                        </div>
+                        <div class="tiptop">
+                            <button type="submit" class="signupbtn">Login</button>
+                        </div>
+                    </form>
+
+                    <div class="forgetPass">
+                        <a href="{% url 'reset_password' %}">Forget Password</a>
+                    </div>
+
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="mC_left">
+        <div class="container">
+            <div class="one">
+                <div class="one_1">
+                    <h1>Sign Up</h1>
+                    <h4>Create your account.It's free and takes a minute</h4>
+                </div>
+            </div>
+            <div class="three">
+
+                <div class="column">
+                    <form action="{% url 'client_authentication_sign_up_app' %}" method="post">
+                        {% csrf_token %}
+                        <input type="text" name="_username" placeholder="Enter Username" maxlength="15" required>
+
+                        <input type="email" placeholder="Enter Email" name="_email" maxlength="50" required>
+
+                        <input type="password" name="_cpassword" id="id_password1"
+                               placeholder="Password" maxlength="20" required>
+                        <i class="far fa-eye lol" id="togglePassword1"></i>
+
+                        <input type="password" name="_npassword" id="id_password2"
+                               placeholder="Repeat Password" maxlength="20" required>
+                        <i class="far fa-eye lol" id="togglePassword2"></i>
+
+                        <div class="termsCondition">
+                            <input type="checkbox" name="_checkbox" required>
+                            <label for="condition">Accept terms and policies</label>
+                        </div>
+                        <div class="tiptop">
+                            <button type="submit" class="signupbtn">Create Account</button>
+                        </div>
+                        <br>
+                    </form>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+        const togglePassword = document.querySelector('#togglePassword1');
+        const password = document.querySelector('#id_password1');
+        togglePassword.addEventListener('click', function (e) {
+            // toggle the type attribute
+            const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+            password.setAttribute('type', type);
+            // toggle the eye slash icon
+            this.classList.toggle('fa-eye-slash');
+        });
+
+
+        const togglePassword2 = document.querySelector('#togglePassword2');
+        const password2 = document.querySelector('#id_password2');
+        togglePassword2.addEventListener('click', function (e) {
+            // toggle the type attribute
+            const type = password2.getAttribute('type') === 'password' ? 'text' : 'password';
+            password2.setAttribute('type', type);
+            // toggle the eye slash icon
+            this.classList.toggle('fa-eye-slash');
+        });
+
+        const togglePassword3 = document.querySelector('#togglePassword3');
+        const password3 = document.querySelector('#id_password3');
+        togglePassword3.addEventListener('click', function (e) {
+            // toggle the type attribute
+            const type = password3.getAttribute('type') === 'password' ? 'text' : 'password';
+            password3.setAttribute('type', type);
+            // toggle the eye slash icon
+            this.classList.toggle('fa-eye');
+        });
+
+</script>
+
+</body>
+</html>

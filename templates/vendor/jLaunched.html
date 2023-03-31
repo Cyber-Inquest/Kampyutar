@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/fontawesome-free-6.0.0-beta3-web/css/all.css' %}">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+
+    <link rel="stylesheet" href="{% static 'css/client_css/php_m.css' %}">
+    <link rel="stylesheet" href="{% static 'css/client_css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/client_css/footer.css' %}">
+    <link rel="stylesheet" href="{% static 'css/client_css/main.css' %}">
+    <link rel="stylesheet" href="{% static 'css/client_css/topBar.css' %}">
+    <link rel="stylesheet" href="{% static 'css/client_css/responsive.css' %}">
+    <link rel="stylesheet" href="{% static 'css/vendor_css/vendor.css' %}">
+    <link rel="stylesheet" href="{% static 'css/admin_css/toastr.min.css' %}">
+    <title>Big Byte</title>
+</head>
+
+<body>
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+                {% if message.tags == 'success'%}
+                    <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+                {% elif message.tags == 'info' %}
+                    <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+                {% elif message.tags == 'warning' %}
+                    <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+                {% elif message.tags == 'error' %}
+                    <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+                {% endif %}
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+    {% include 'vendor/base/topNavBar.html' %}
+
+
+    <div class="vendor_body">
+        <div class="vendor_topBar vtb_blue">
+            <div class="v_tB_title">
+                <h2><i class="fa-solid fa-rocket" style="color: #4CB9EB;"></i> Just Launched</h2>
+            </div>
+            <div class="v_tB_brands">
+                <div class="v_tB_brandSlideShow owl-carousel" id="v_tB_brandSlideShow">
+                    {% for item in brands_list %}
+                    <div class="v_tB_perSlide">
+
+                            <img class="_vendor_brand_image_jlaunch" data-brandid={{item.id}} src="{{item.photo_img.url}}" alt="">
+                    </div>
+                    {% endfor %}
+
+                </div>
+            </div>
+            <div class="v_tB_filters">
+                <div class="v_tB_one v_tB_tag">
+                    <label for="cars">Price Range:</label>
+                    <input id="price_min" class="v_tB_price" placeholder="Minimum">
+                    -
+                    <input id="price_max" class="v_tB_price" placeholder="Maxmimum">
+                </div>
+
+                <div class="v_tB_two v_tB_tag">
+                    <select name="v_tB_condition" id="v_tB_condition">
+                        <option value="All">All Condition</option>
+                        <option value="New">New</option>
+                        <option value="refurbished">refurbished</option>
+                    </select>
+                </div>
+
+               <div class="v_tB_three v_tB_tag">
+                    <label class="label_txt">All</label>
+                    <label class="switch">
+                        <input type="checkbox" role="switch" value="no" id="toggle_checkbox">
+                        <span class="slider round" data-on="Yes" data-off="No"></span>
+                    </label>
+                    <label class="label_txt">Stock</label>
+                </div>
+
+            </div>
+        </div>
+        <div class="vendor_contentSpace">
+
+           <div class="v_cS_perContent">
+            </div>
+
+
+            <div class="pagination_center">
+                <div class="pagination">
+                    <a href="#">&laquo;</a>
+                    <a href="#">1</a>
+                    <a class="active" href="#">2</a>
+                    <a href="#">3</a>
+                    <a href="#">4</a>
+                    <a href="#">5</a>
+                    <a href="#">6</a>
+                    <a href="#">&raquo;</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    {% include 'vendor/base/footer.html' %}
+    {% include 'vendor/bottom_bar.html' %}
+    <script>
+
+    window.CSRF_TOKEN = "{{ csrf_token }}";
+
+    </script>
+
+    <script src="{% static 'js/jquery-1.9.1.min.js' %}"></script>
+    <script src="{% static 'js/toastr.min.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+    <script src="{% static 'js/vendor.js' %}"></script>
+    <script src="{% static 'js/vendor/vendor_jlaunc.js' %}"></script>
+    <script src="{% static 'js/vendor/vendor_add_cart.js' %}"></script>
+
+</body>
+
+</html>

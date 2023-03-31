@@ -1,0 +1,417 @@
+@import url("https://fonts.googleapis.com/css2?family=Gothic+A1:wght@200&display=swap");
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #D9D9D9;
+    font-family: "Gothic A1", sans-serif;
+}
+
+.dnone{
+    display: none;
+}
+
+.bb_ua_main {
+    min-height: 600px;
+}
+
+.bb_ua_topBar {
+    background-color: white;
+    width: 100%;
+    height: 120px;
+    display: flex;
+    padding: 20px 0px;
+}
+
+.bb_ua_topBar_left {
+    width: 75%;
+    text-align: center;
+    /* background-color: brown; */
+    margin-top: auto;
+    margin-bottom: auto;
+    display: flex;
+    padding: 20px;
+}
+
+.bb_ua_topBar_right {
+    width: 25%;
+    text-align: center;
+    /* background-color: yellow; */
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.bb_ltb_left {
+    width: 30%;
+}
+
+.bb_ltb_right {
+    width: 65%;
+    margin-left: 50px;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.bb_ltbl_ppimg {
+    /* background-color: blueviolet; */
+    width: 80px;
+    height: 80px;
+    float: right;
+}
+
+.bb_ltbl_ppimg img {
+    width: 100%;
+    height: 100%;
+    border-radius: 100px;
+    object-fit: cover;
+    border: 2px solid black;
+}
+
+.bb_ltbl_name {
+    float: left;
+}
+
+.bb_ltbl_name h2 {
+    padding: 0;
+    margin: 0;
+    font-size: 32px;
+    font-weight: bold;
+}
+
+.bb_ltbl_name span {
+    float: left;
+    font-weight: bold;
+    margin: 5px;
+}
+
+.cusButton {
+    padding: 10px 20px;
+    margin: 10px;
+    text-decoration: none;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 6px;
+}
+
+.redBtn {
+    background-color: red;
+    border: 2px solid red;
+}
+
+.redBtn:hover {
+    background-color: rgb(202, 0, 0);
+    border: 2px solid rgb(202, 0, 0);
+}
+
+.blueBtn {
+    background-color: rgb(0, 204, 255);
+    border: 2px solid rgb(0, 204, 255);
+}
+
+.blueBtn:hover {
+    background-color: rgb(0, 166, 207);
+    border: 2px solid rgb(0, 166, 207);
+}
+
+.greenBtn {
+    background-color: #009d1a;
+    border: 2px solid #009d1a;
+}
+
+.greenBtn:hover {
+    background-color: #018917;
+    border: 2px solid #018917;
+}
+
+.bb_ua_secDiv {
+    margin: 0px 20px;
+}
+
+.bb_ua_SecDivNavBar {
+    width: 100%;
+    display: flex;
+}
+
+.bb_ua_SecDivNavBar ul {
+    list-style-type: none;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    padding: 0px;
+    overflow: hidden;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 1.5vw;
+}
+
+.bb_ua_SecDivNavBar li {
+    float: left;
+    padding: 12px 50px;
+    cursor: pointer;
+}
+
+.uaTab_active {
+    border-bottom: 4px solid black !important;
+}
+
+.li_tabs {
+    border-bottom: 1px solid black;
+}
+
+.bb_ua_thirdDiv {
+    margin: 0px 180px;
+}
+
+.bb_ua_thirdDivContent {
+    margin: 35px;
+    /* background-color: white; */
+}
+
+.uaContentTop {
+    width: 100%;
+    display: flex;
+}
+
+.usCT_left {
+    float: left;
+    width: 80%;
+}
+
+.usCT_right {
+    text-align: center;
+    width: 20%;
+}
+
+.usCT_right a {
+    vertical-align: middle;
+    display: inline-block;
+    padding: 8px 30px;
+}
+
+.uaContentMid{
+    padding: 16px 0px;
+}
+
+.uaContentMid span {
+    display: block;
+    margin: 10px;
+    font-size: 20px;
+}
+
+.uaContentMid a{
+    font-size: 18px;
+    text-decoration: none;
+    margin: 10px;
+}
+
+.dFlex{
+    display: flex;
+    width: 100%;
+}
+
+.uaContentMidLeft, .uaContentMidRight{
+    width: 50%;
+    padding: 0px 20px;
+    /* background-color: aqua; */
+}
+
+.uabox{
+    border: 2px solid black;
+}
+
+/* orders css */
+.bb_ua_orderContent{
+    width: 100%;
+}
+
+#ua_orderList {
+    font-family: Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+    text-align: center;
+}
+
+#ua_orderList tr {
+    background-color: #f2f2f2;
+}
+
+#ua_orderList th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    /* text-align: left; */
+    background-color: #2a435b;
+    color: white;
+}
+
+#ua_orderList td, #ua_orderList th {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+.ua_edit {
+    padding: 5px 20px;
+    margin: 0px 5px;
+    background-color: #04AA6D;
+    color: white;
+    border: 2px solid #04AA6D;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.ua_edit:hover{
+    background-color: #007047;
+    color: white;
+    border: 2px solid #007047;
+}
+
+.ua_delete {
+    padding: 5px 20px;
+    margin: 0px 5px;
+    background-color: red;
+    color: white;
+    border: 2px solid red;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.ua_delete:hover{
+    background-color: rgb(206, 4, 4);
+    color: white;
+    border: 2px solid rgb(206, 4, 4);
+}
+
+/* wishlist */
+.bb_ua_wishlistContent{
+    width: 100%;
+    display: inline-block;
+}
+
+.bb_ua_perProduct_col {
+    width: 215px;
+    padding: 6px;
+    float: left;
+}
+
+.bb_ua_perProduct_item {
+    background-color: white;
+    text-align: center;
+    height: 325px;
+    box-shadow: rgb(0 0 0 / 16%) 0px 1px 4px;
+    position: relative;
+}
+
+.bb_ua_item_img {
+    width: 90%;
+    height: 200px;
+    position: relative;
+    padding: 0px 5%;
+    /* margin-bottom: 20px; */
+}
+
+.bb_ua_item_img img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    cursor: pointer;
+    padding: 4% 0%;
+}
+
+.bb_ua_item_img i {
+    position: absolute;
+    font-size: 20px;
+    top: 6px;
+    right: 6px;
+    color: grey;
+    cursor: pointer;
+}
+.bb_ua_item_name{
+    margin: 10px;
+}
+.bb_ua_item_name h4 {
+    padding: 5px 10px;
+    font-size: 11px;
+    margin: 2px;
+    font-weight: bolder;
+    cursor: pointer;
+}
+
+.bb_ua_item_addToCart {
+    padding: 15px;
+    text-align: center;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    left: 0;
+}
+
+.bb_ua_item_addToCart_btn {
+    background-color: red;
+    color: white;
+    padding: 10px 20px;
+    border: 2px solid red;
+    border-radius: 10px;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 11px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.bb_ua_item_addToCart_btn i {
+    font-size: 10px;
+}
+
+/* User Address */
+.bb_ua_addressContent{
+    width: 100%;
+    display: flex;
+}
+
+.ua_billingAddress{
+    width: 50%;
+}
+
+.ua_deliveryAddress{
+    width: 50%;
+}
+
+.ua_aInputContent{
+    width: 100%;
+    padding: 10px 0px;
+}
+
+.ua_inputPerDiv input{
+    width: 80%;
+    font-size: 14px;
+    padding: 6px;
+    border: 1px solid black;
+    border-radius: 5px;
+}
+
+.ua_inputPerDiv{
+    margin: 20px 0px;
+}
+
+.bb_ua_aContentSave{
+    width: 100%;
+    margin: 50px 0px;
+    text-align: center;
+}
+
+/* Account Information */
+.bb_ua_accountInfoContent{
+    width: 100%;
+    display: flex;
+}
+
+.bb_ua_aICleft{
+    width: 50%;
+}
+
+.bb_ua_aICright{
+    width: 50%;
+}
+
+#chkBox, #chkBox2{
+    margin: 10px 0px;
+}

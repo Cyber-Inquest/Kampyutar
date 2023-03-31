@@ -1,0 +1,19 @@
+{% load static %}
+
+{% for item in sub_category_laptop %}
+
+    <div class="allProductsContent" id="{{item.title}}">
+        <h1>{{item.title}}</h1>
+
+        <div class="admin_mP_content">
+            {% for items in laptop_list %}
+                {% if items.sub_categories_id == item.id %}
+
+                    {% include 'vendor_admin_page/products/allProducts/perItem.html' with items=items product_images=product_images_laptop %}
+
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+
+{% endfor %}

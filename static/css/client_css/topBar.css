@@ -1,0 +1,227 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
+input:focus, textarea:focus, select:focus{
+    outline: none;
+}
+
+.centerlr {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.mcentertb {
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.centertb {
+    top: 50%;
+}
+
+.cc_header_topbar {
+    display: flex;
+    width: 100%;
+    background-color: grey;
+    color: white;
+    font-size: 14px;
+}
+
+.cc_header_topbar a {
+    text-decoration: none;
+    color: white;
+}
+
+.verLine {
+    margin: 0px 10px;
+}
+
+.cc_header_topbar span {
+    cursor: default;
+}
+
+.cc_htopbar_left {
+    width: 50%;
+    padding: 2px 40px;
+}
+
+.cc_htopbar_right {
+    width: 50%;
+    text-align: right;
+    padding: 2px 40px;
+}
+
+/* middle navigatio0n bar with icon and cart */
+.cc_header_middlebar {
+    width: 100%;
+    height: 100px;
+    display: flex;
+    background-color: #000011;
+    color: white;
+}
+
+.cc_hmiddlebar_left {
+    width: 20%;
+}
+
+.cc_hmiddlebar_mid {
+    width: 62%;
+    margin: auto;
+}
+
+.cc_hmiddlebar_right {
+    width: 18%;
+    margin: auto;
+    display: flex;
+}
+
+.cc_mainlogo {
+    width: 80%;
+    height: 100%;
+    position: relative;
+}
+
+.cc_mainlogo img {
+    width: 100%;
+    position: absolute;
+    margin: auto;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.cc_searchContainer {
+    width: 80%;
+    display: flex;
+}
+
+
+.cc_search_txt {
+    width: 96%;
+    height: 15px;
+    /* background-color: turquoise; */
+}
+
+.cc_search_txt input {
+    float: left;
+    width: 96%;
+    padding: 10px;
+    border: 2px solid white;
+    /* border-radius: 5px 0px 0px 5px; */
+    font-size: 14px;
+}
+
+.bb_search_btn {
+    width: 8%;
+    background-color: red;
+    padding: 10px;
+    border: 1px solid red;
+    /* border-radius: 0px 5px 5px 0px; */
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    text-align: center;
+    font-size: 100%;
+}
+
+.bb_search_btn {
+    margin: auto;
+}
+
+.cc_hmiddlebar_right button {
+    text-decoration: none;
+    color: white;
+    cursor: pointer;
+    width: 90%;
+    padding: 8px 0px;
+    background-color: #000011;
+    border-color: #000011;
+}
+
+.cc_hmiddlebar_right button:hover {
+    background-color: #000025;
+}
+
+.cc_shoppingCartDiv {
+    width: 100%;
+    display: flex;
+    text-align: center;
+    /* background-color: burlywood; */
+}
+
+.cc_sc_text {
+    width: 70%;
+    text-align: left;
+    margin-left: 10px;
+    /* background-color: crimson; */
+}
+
+.cc_sc_text span{
+    font-size: 12px;
+}
+
+.sctitle {
+    line-height: 2em;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.cc_sc_img {
+    width: 30%;
+    /* background-color: blueviolet; */
+}
+
+.cc_sc_img img {
+    width: 70%;
+}
+
+.cc_header_navbar {
+    width: 100%;
+    height: 40px;
+    background-color: #000011;
+    color: white;
+    /* border: 2px solid red; */
+    text-align: center;
+    display: flex;
+    font-size: 16px;
+    text-transform: uppercase;
+    border-bottom: 2px solid red;
+}
+
+.cc_header_navbar ul {
+    list-style-type: none;
+    margin: auto;
+    padding: 0;
+    overflow: hidden;
+}
+
+.cc_header_navbar li {
+    float: left;
+    margin: 0px 15px;
+}
+
+.cc_header_navbar li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 6px 16px;
+    text-decoration: none;
+}
+
+.cc_header_navbar li a:hover:not(.active) {
+    color: red;
+}
+
+.cc_header_navbar .active {
+    color: red;
+}
+
+.cc_header_navbar li a I{
+    font-size: 15px;
+    margin: 0px 8px;
+    /* display: none; */
+}
+

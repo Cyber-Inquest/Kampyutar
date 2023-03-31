@@ -1,0 +1,72 @@
+@import url('https://fonts.googleapis.com/css2?family=Smooch+Sans:wght@600&display=swap');
+
+.mainDiv_background{
+    background: url('../images/pcBuilder.jpg');
+    background-repeat: no-repeat;
+    /* background-attachment: fixed; */
+    background-size: cover;
+    height: 80vh;
+    margin: 70px 100px;
+    width: 70%;
+    /* text-align: center; */
+    margin-right: auto;
+    margin-left: auto;
+    opacity: 0.8;
+    filter: blur(4px);
+    position: relative;
+}
+
+.mainDiv_comingSoon{
+    font-family: 'Smooch Sans', sans-serif;
+    height: 80vh;
+    margin: 70px 100px;
+    width: 70%;
+    /* text-align: center; */
+    margin-right: auto;
+    margin-left: auto;
+    position: absolute;
+    top: 120px;
+    right: 0;
+    left: 0;
+}
+
+.bb_maintext {
+    padding-top: 10%;
+    text-align: center;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    /* background-color: black; */
+    border-radius: 25px;
+}
+
+.bb_first {
+    font-size: 120px;
+    color: red;
+    -webkit-text-fill-color: red;
+    -webkit-text-stroke-width: 1px;
+    -webkit-text-stroke-color: white;
+}
+
+.bb_second {
+    font-size: 100px;
+    color: white;
+    padding: 0px 0px 0px 10px;
+
+}
+
+.bb_smalltext {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+
+}
+
+.bb_smalltext h2 {
+    color: red;
+    font-size: 100px;
+    text-align: center;
+    -webkit-text-fill-color: red;
+    -webkit-text-stroke-width: 1px;
+    -webkit-text-stroke-color: white;
+}

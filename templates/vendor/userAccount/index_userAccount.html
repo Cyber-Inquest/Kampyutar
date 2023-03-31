@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/fontawesome-free-6.0.0-beta3-web/css/all.css' %}">
+
+    <script src="{% static 'js/jquery-1.9.1.min.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+
+    <link rel="stylesheet" href="{% static 'css/client_css/php_m.css' %}">
+    <link rel="stylesheet" href="{% static 'css/client_css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/client_css/footer.css' %}">
+    <link rel="stylesheet" href="{% static 'css/client_css/main.css' %}">
+    <link rel="stylesheet" href="{% static 'css/client_css/blog.css' %}">
+    <link rel="stylesheet" href="{% static 'css/client_css/company.css' %}">
+    <link rel="stylesheet" href="{% static 'css/client_css/topBar.css' %}">
+    <link rel="stylesheet" href="{% static 'css/client_css/userAccount.css' %}">
+    <link rel="stylesheet" href="{% static 'css/client_css/responsive.css' %}">
+    <link rel="stylesheet" href="{% static 'css/vendor_css/vendor.css' %}">
+    <link rel="stylesheet" href="{% static 'css/admin_css/toastr.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/vendor_admin_css/vendor.css' %}">
+    <script src="{% static 'js/jquery-1.9.1.min.js' %}"></script>
+    <script src="{% static 'js/toastr.min.js' %}"></script>
+
+    <title>Big Byte</title>
+</head>
+
+<body>
+
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+            {% if message.tags == 'success'%}
+                <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+            {% elif message.tags == 'info' %}
+                <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+            {% elif message.tags == 'warning' %}
+                <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+            {% elif message.tags == 'error' %}
+                <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+            {% endif %}
+    {% endfor %}
+</ul>
+{% endif %}
+
+    {% include 'vendor/base/topNavBar.html'%}
+    {% include 'vendor/userAccount/userAccount.html' %}
+    {% include 'vendor/base/footer.html' %}
+    {% include 'vendor/bottom_bar.html' %}
+
+<script>
+
+    window.CSRF_TOKEN = "{{ csrf_token }}";
+</script>
+
+<script src="{% static 'js/company.js' %}"></script>
+<script src="{% static 'js/userAccount.js' %}"></script>
+<script src="{% static 'js/topNav.js' %}"></script>
+<script src="{% static 'js/vendor/vendor_delete_order.js' %}"></script>
+
+</body>
+
+</html>

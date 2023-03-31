@@ -1,0 +1,137 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
+
+body {
+  width: 100%;
+  height: 100%;
+  padding: 0px;
+  margin: 0px;
+  background-color: #d4d3dd;
+  font-family: 'Roboto', sans-serif;
+
+}
+
+.mainContainer {
+  width: 100%;
+  display: flex;
+}
+
+.mainSContainer{
+  width: 100%;
+  height: 100vh;
+}
+
+.mC_left {
+  width: 50%;
+}
+
+.mC_right {
+  width: 50%;
+  background-color: #07003A;
+}
+
+.container {
+  /* background-color: #d4d3dd; */
+  width: 75%;
+  margin-right: auto;
+  margin-left: auto;
+  padding-top: 10%;
+  padding-bottom: 10%;
+  /* margin: 5% 30%; */
+  color: #07003A;
+  text-align: center;
+}
+
+.cSignIn{
+  padding-top: 15%;
+  color: white;
+}
+
+.container h1 {
+  font-size: 45px;
+}
+
+::placeholder {
+  color: gray;
+}
+
+.tiptop button:hover {
+  background-color: rgb(182, 1, 1);
+}
+
+.mC_left input {
+  border: 2px solid #07003A;
+}
+
+.mC_right input {
+  border: 2px solid white;
+}
+
+button {
+  background-color: red;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 30%;
+  opacity: 0.9;
+  border-radius: 10px;
+}
+
+input[type=password] {
+  width: 51%;
+  padding: 15px;
+  margin: 10px 0px;
+  /* display: inline-block; */
+  border-radius: 5px;
+  /* background-color: #07003A; */
+  /* color: white; */
+}
+
+input[type=text], input[type=email] {
+  width: 51%;
+  padding: 15px;
+  margin: 10px 0px;
+  display: inline-block;
+  border-radius: 5px;
+  /* background-color: #07003A; */
+  /* color: white; */
+}
+
+.column i {
+  color: #07003A;
+}
+
+.lol {
+  position: absolute;
+  margin-top: 25px;
+  margin-left: -40px;
+  cursor: pointer;
+}
+
+.fa-eye-slash {
+  margin-left: -41px;
+}
+
+.termsCondition {
+  margin: 10px 0px;
+}
+
+.tiptop {
+  margin: 10px 0px;
+}
+
+.forgetPass{
+  margin: 20px 0px;
+}
+
+.forgetPass a{
+  text-decoration: none;
+  color: white;
+}
+
+.forgetPass a:hover{
+  color: red;
+}
+
+

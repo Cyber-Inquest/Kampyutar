@@ -1,0 +1,124 @@
+.admin_user_div {
+    width: 100%;
+}
+
+.admin_userpanel_header {
+    width: 100%;
+    display: flex;
+}
+
+.admin_cah_left{
+    width: 50%;
+    padding: 26px 15px;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.admin_uph_left {
+    width: 50%;
+    padding: 20px 15px;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.admin_uph_left h2, .admin_cah_left h2 {
+    padding: 0px;
+    margin: 0px;
+}
+
+.admin_uph_right {
+    width: 50%;
+    padding: 20px 15px;
+    text-align: right;
+}
+
+.admin_uph_right input{
+    padding: 10px;
+    font-size: 16px;
+    margin: 0px 10px;
+}
+
+.admin_uph_right button {
+    padding: 10px 40px;
+    border-radius: 10px;
+    border: 2px solid #04AA6D;
+    background-color: #04AA6D;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+
+}
+
+.admin_uph_right button:hover {
+    background-color: white;
+    color: #04AA6D;
+}
+
+/* table */
+#admin_customers {
+    font-family: Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+    text-align: center;
+}
+
+#admin_customers td, #admin_customers th {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+#admin_customers tr {
+    background-color: #f2f2f2;
+}
+
+#admin_customers tr:hover {
+    background-color: #ddd;
+}
+
+#admin_customers th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    /* text-align: left; */
+    background-color: #2a435b;
+    color: white;
+}
+
+.td_edit{
+    padding: 5px 20px;
+    margin: 0px 5px;    
+    background-color: #04AA6D;
+    color: white;
+    border: 2px solid #04AA6D;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.td_edit:hover{   
+    background-color: white;
+    color: #04AA6D;
+    border: 2px solid #04AA6D;
+}
+
+.td_delete{
+    padding: 5px 20px;
+    margin: 0px 5px;
+    background-color: red;
+    color: white;
+    border: 2px solid red;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.td_delete:hover{   
+    background-color: white;
+    color: red;
+    border: 2px solid red;
+}
+
+.productSpecCss{
+    width: 50% !important;
+    text-align: center;
+    align-content: center;
+    margin-right: auto;
+    margin-left: auto;
+}

@@ -1,0 +1,149 @@
+/* product size section start */
+.sc_container2 {
+  /* background-color: #40566C; */
+  width: 96%;
+  padding: 2%;
+  overflow-y: scroll;
+}
+
+.b_span span {
+  font-size: 50px;
+}
+
+
+.no_margin {
+  margin-top: 0px !important;
+}
+
+.sc_div_col {
+  width: 18%;
+  padding: 1%;
+  float: left;
+}
+
+.sc_div_col1 {
+  background-color: blueviolet;
+  color: white;
+  font-size: 50px;
+  /* padding: 30% 20%; */
+  height: 150px;
+  width: 150px;
+  margin: 1% 2% 5% 2%;
+  border-radius: 20px;
+}
+
+.sc_perDiv {
+  width: 100%;
+  height: 200px;
+  margin: 1% 0%;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  cursor: pointer;
+}
+
+.sc_perDiv img {
+  width: 100%;
+  height: 100%;
+  border-radius: 20px;
+  opacity: 0.85;
+  backdrop-filter: blur(6px);
+  object-fit: contain;
+  background-color: white;
+}
+
+.sc_perDiv_img_hover {
+  text-decoration: none;
+  border: none;
+  font-size: 16px;
+  color: #fff;
+  border-radius: 5px;
+  cursor: pointer;
+  outline: none;
+  transition: 0s all;
+}
+
+.sc_perDiv_img_hover:active {
+  transform: scale(0.98);
+  box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
+}
+
+.sc_div_row {
+  width: 100%;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px none;
+  border-radius: 20px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #2a435b;
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #638eb6;
+}
+
+.sc_centered {
+  position: absolute;
+  bottom: 0%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #2a435b;
+  font-size: 20px;
+  font-weight: bolder;
+  opacity: 1;
+  text-align: center;
+}
+
+/* Top right text */
+.sc_top-right {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  font-size: 25px;
+  font-weight: bolder;
+  background-color: #2a435b;
+  padding: 10px;
+  border-radius: 0px 15px;
+  text-align: center;
+  display: none;
+}
+
+/* product size section end */
+
+
+
+/* add Brands CSS */
+.admin_addbrand_title {
+  width: 95%;
+  padding: 1px 30px;
+  display: flex;
+}
+
+.admin_addbrand_title a {
+  text-decoration: none;
+  margin-top: auto;
+  margin-bottom: auto;
+  width: 5%;
+}
+
+.admin_addbrand_title i {
+  font-size: 30px;
+  color: black;
+}
+
+.admin_addbrand_content {
+  width: 84.9%;
+  padding: 1px 90px;
+}

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/fontawesome-free-6.0.0-beta3-web/css/all.css' %}">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+
+    <link rel="stylesheet" href="{% static 'css/client_css/php_m.css' %}">
+    <link rel="stylesheet" href="{% static 'css/client_css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/client_css/footer.css' %}">
+    <link rel="stylesheet" href="{% static 'css/client_css/perBlog.css' %}">
+    <link rel="stylesheet" href="{% static 'css/client_css/topBar.css' %}">
+    <link rel="stylesheet" href="{% static 'css/client_css/main.css' %}">
+    <link rel="stylesheet" href="{% static 'css/client_css/responsive.css' %}">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <meta name="title" content="Kampyutar">
+    <meta name="description" content="Kampyutar is Nepal's best laptop seller and distributer.">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.kampyutar.com">
+    <meta property="og:title" content="Kampyutar: Nepal's Best Laptop Seller and Distributor">
+    <meta property="og:description" content="Kampyutar is Nepal's best laptop seller and distributer.">
+    <meta property="og:image" content="https://www.kampyutar.com{% static 'css/images/mainlogo.png' %}">
+
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://www.kampyutar.com">
+    <meta property="twitter:title" content="Kampyutar: Nepal's Best Laptop Seller and Distributor">
+    <meta property="twitter:description" content="Kampyutar is Nepal's best laptop seller and distributer.">
+    <meta property="twitter:image" content="https://www.kampyutar.com{% static 'css/images/mainlogo.png' %}">
+
+    <title>Blog</title>
+</head>
+
+<body>
+    {% include 'client_page/nav_bar_new/topNavBar.html' %}
+    {% include 'client_page/blog/perBlog.html' %}
+    {% include 'client_page/footer.html' %}
+
+    <script src="{% static 'js/company.js' %}"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+</body>
+
+</html>

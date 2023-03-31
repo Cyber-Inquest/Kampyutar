@@ -1,0 +1,160 @@
+.admin_previewContainer{
+  width: 96%;
+  text-align: center;
+  padding: 2%;
+}
+
+.admin_prevButton{
+  padding: 10px 30px;
+  margin: 0px 20px;
+  background-color: #04AA6D;
+  border: 2px solid #04AA6D;
+  border-radius: 10px;
+  color: white;
+  font-size: 18px;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.admin_prevButton:hover{
+  background-color: white;
+  border: 2px solid #04AA6D;
+  color: #04AA6D;
+}
+
+.delete_slideShowBTN{
+    font-size: 24px;
+    position: absolute;
+    z-index: 10;
+    top: 15px;
+    left: 20px;
+    cursor: pointer;
+}
+
+.delete_slideShowBTN:hover{
+    color: red;
+}
+
+/* product size section start */
+.sc_container2{
+    /* background-color: #40566C; */
+    width: 96%;
+    padding: 2%;
+    overflow-y: scroll;
+}
+
+.b_span span{
+    font-size: 50px;
+}
+
+
+.no_margin{
+    margin-top: 0px !important;
+}
+
+.sc_div_col{
+    width: 18%;
+    padding: 1%;
+    float: left;
+    position: relative;
+}
+
+.sc_div_col1{
+    background-color: blueviolet;
+    color: white;
+    font-size: 50px;
+    /* padding: 30% 20%; */
+    height: 150px;
+    width: 150px;
+    margin: 1% 2% 5% 2%;
+    border-radius: 20px;
+}
+
+/* change is here */
+.sc_perDiv{
+    width: 100%;
+    height: 100px;  
+    margin: 1% 0%;
+    align-items: center;
+    justify-content: center;  
+    position: relative;
+    cursor: pointer;
+}
+
+.sc_perDiv img{
+    width: 100%;
+    height: 100%;
+    border-radius: 5px;
+    opacity: 0.85;
+    backdrop-filter: blur(6px);
+    object-fit: contain;
+    background-color: white;
+}
+
+.sc_perDiv_img_hover{
+    text-decoration: none;
+    border: none;
+    font-size: 16px;
+    color: #fff;
+    border-radius: 5px;
+    cursor: pointer;
+    outline: none;
+    transition: 0s all;
+  }
+  
+  .sc_perDiv_img_hover:active {
+    transform: scale(0.98);
+    box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
+  }
+
+.sc_div_row{
+    width:100%;
+}
+
+/* width */
+::-webkit-scrollbar {
+    width: 5px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px none; 
+    border-radius: 20px;
+  }
+   
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #2a435b; 
+    border-radius: 10px;
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #638eb6; 
+  }
+
+  .sc_centered {
+    position: absolute;
+    bottom: 0%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #2a435b;
+    font-size: 20px;
+    font-weight: bolder;
+    opacity: 1;
+    text-align: center;
+  }
+
+  /* Top right text */
+.sc_top-right {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    font-size: 25px;
+    font-weight: bolder;
+    background-color: #2a435b;
+    padding: 10px;
+    border-radius: 0px 15px;
+    text-align: center;
+  }
+/* product size section end */

@@ -1,0 +1,38 @@
+.v_navbar{
+    background: url(../../images/topNew2.png);
+}
+
+.v_sidebar{
+    background-color: #000011!important;
+}
+
+.v_header{
+    padding: 11px 0px!important;
+}
+
+.v_staff_nav{
+    background-color: #000011!important;
+}
+
+.v_customers{
+    width: 96%!important;
+    float: right;
+    margin-top: 10px;
+}
+
+.tillSuccess{
+    color: green;
+}
+
+.v_i{
+    margin: 5px 10px;
+    cursor: pointer;
+}
+
+.v_i:hover{
+    color: rgb(121, 185, 24);
+}
+
+.v_di:hover{
+    color: red;
+}

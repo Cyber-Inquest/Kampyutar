@@ -1,0 +1,136 @@
+{% load static %}
+{% load social_share %}
+
+<div class="bb_breadcrums">
+    <ul class="bb_breadcrumb_content">
+        <li><a href="{% url 'index_app' %}">Home</a></li>
+
+        {% if per_product.categories %}
+            <li><a href="/list_page/{{per_product.categories}}">{{per_product.categories}}</a></li>
+        {% endif %}
+
+        {% if per_product.sub_categories %}
+            <li><a href="/list_page/{{per_product.categories}}?brand=&sub_categories={{per_product.sub_categories.id}}&slider_min=&slider_max=&show_by=&sort_by=">{{per_product.sub_categories}}</a></li>
+        {% endif %}
+
+        {% if per_product.brand %}
+            <li><a href="/list_page/{{per_product.categories}}?brand={{per_product.brand.id}}&sub_categories={{per_product.sub_categories.id}}&slider_min=&slider_max=&show_by=&sort_by=">{{per_product.brand}}</a></li>
+        {% endif %}
+
+        {% if per_product.title %}
+            <li>{{per_product.title}}</li>
+        {% endif %}
+    </ul>
+</div>
+<!-- main content for description and specification start -->
+<div class="bb_product_description">
+    <!-- description session start -->
+    <div class="bb_pd_content">
+        <div class="bb_Pd_row">
+            <!-- images description on left side start -->
+            <div class="bb_pd_column1">
+                <div class="bb_images_pc">
+                    <!-- Fotorama -->
+                    <div class="fotorama" data-width="600" data-ratio="600/467" data-max-width="100%" data-nav="thumbs">
+                        {% for item in per_images %}
+                            <img src="{{item.photo_img.url}}" width="128" height="128">
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <!-- images description on left side end -->
+
+            <!-- product description on right side start -->
+            <div class="bb_pd_column2">
+                <div class="bb_pd_text">
+                    <div class="bb_pd_textheading">
+                        <h2>{{per_product.title}}
+                        </h2>
+                    </div>
+                    <div class="bb_pd_textdetails">
+                        <p>
+                            {{per_product.description}}
+                        </p>
+                    </div>
+                    <div class="bb_pd_title">
+                        <p> {{per_product.brand}} {{per_product.sub_categories}} {{per_product.categories}} Price in Nepal</p>
+                    </div>
+                </div>
+                <div class="bb_pd_pricediv">
+                    <div class="bb_pd_instock">
+                        {% if per_product.stock %}
+                            <p><span class="pp_bd_dot"></span><span class="bb_pd_stock">In Stock </span></p>
+                        {% else %}
+                            <p><span class="pp_bd_dot" style="background-color:red"></span><span class="bb_pd_stock">Out of Stock </span></p>
+                        {% endif %}
+                    </div>
+                    <div class="bb_pd_price">
+                        <p>NPR: <span>{{per_product.latest_price|floatformat:2}}</span></p>
+                    </div>
+                </div>
+                <div class="bb_pd_addcart">
+                    <form action="#">
+                        {% if per_product.stock %}
+                        <label for="quantity" class="bb_pd_qty">Quantity:</label>
+                            <input type="number" id="_quantity_per_page" name="quantity" min="1" value="1">
+                            <button class="_add_to_cart_btn" data-perproducttype={{per_product.categories}} data-perproduct={{per_product.id}} data-peraction="add" ><i class="fas fa-shopping-cart"></i> &nbsp; <span>Add To Cart</span></button>
+                        {% else %}
+                            <button class="_add_to_cart_btn_disable" data-perproducttype={{per_product.categories}} data-perproduct={{per_product.id}} data-peraction="add" disabled><i class="fas fa-shopping-cart"></i> &nbsp; <span>OUT OF STOCK</span></button>
+                        {% endif %}
+                    </form>
+                </div>
+                <div class="bb_pd_likediv">
+
+                    <div class="fb-like" data-href="http://127.0.0.1:8000/per_page/{{per_product.categories}}/{{per_product.id}}" data-width="" data-layout="button" data-action="like" data-size="large" data-share="false"></div>
+                    {% post_to_twitter "KAMPYUTER" object_or_url '<button class="bb_pd_likebtn"><span><i class="fa-brands fa-twitter"></i></span> &nbsp;Tweet</button>' %}
+                    {% post_to_facebook object_or_url '<button class="bb_pd_likebtn"><span><i class="fa-solid fa-share-nodes"></i></span> &nbsp;Share</button>' %}
+
+
+                </div>
+            </div>
+            <!-- product description on right side end -->
+        </div>
+        <hr>
+    </div>
+
+    <!-- description session end -->
+
+
+
+    <!-- specification and reviews start -->
+    <div class="all">
+        <div class="bb_bd_product_info">
+            <div class="bb_bd_spec_bar">
+                <div class="bb_pd_spec_rev" onclick="openpPage('spec_tab',this)" id="defaultOpen">Specification
+                </div>
+                <div class="bb_pd_spec_rev" onclick="openpPage('review_tab',this)">Reviews</div>
+            </div>
+        </div>
+        <!-- for specification start -->
+        <div class="bb_pd_specification bb_pd_tab" id="spec_tab">
+            <div class="bb_Pd_spec_table">
+
+                <table>
+                    {% for item in per_desc %}
+                    <tr>
+                        <td>{{item.title}}</td>
+                        <td>{{item.description}}</td>
+                    </tr>
+                    {% endfor %}
+
+                </table>
+            </div>
+        </div>
+        <!-- for specification end -->
+        <!-- for review start -->
+        <div class="bb_pd_reviews bb_pd_tab" id="review_tab">
+            <!-- <p>Reviews</p>
+                <img src="images/products/laptop (1).jpg" alt=""> -->
+            {% include 'client_page/Review/review.html' with review_list=review_list per_product=per_product %}
+        </div>
+        <!-- for review end -->
+        <!-- specification and reviews end -->
+    </div>
+
+</div>
+<!-- main content for description and specification end -->

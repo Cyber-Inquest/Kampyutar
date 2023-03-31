@@ -1,0 +1,31 @@
+<div class="admin_subbottomBar" id="asbb_laptop">
+    <ul>
+        {% for item in sub_category_laptop %}
+            <li class="asbb_li" onclick="openSBBcontent('{{item.title}}', this)">{{item.title}}</li>
+        {% endfor %}
+    </ul>
+</div>
+
+<div class="admin_subbottomBar" id="asbb_desktop">
+    <ul>
+        {% for item in sub_category_desktop %}
+            <li class="asbb_li" onclick="openSBBcontent('{{item.title}}', this)">{{item.title}}</li>
+        {% endfor %}
+    </ul>
+</div>
+
+<div class="admin_subbottomBar" id="asbb_apple">
+    <ul>
+        {% for item in sub_category_apple %}
+            <li class="asbb_li" onclick="openSBBcontent('{{item.title}}', this)">{{item.title}}</li>
+        {% endfor %}
+    </ul>
+</div>
+
+<div class="admin_subbottomBar" id="asbb_components">
+    <ul>
+        {% for item in sub_category_components %}
+            <li class="asbb_li" onclick="openSBBcontent('{{item.title}}', this)">{{item.title}}</li>
+        {% endfor %}
+    </ul>
+</div>

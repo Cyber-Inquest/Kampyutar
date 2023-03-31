@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="title" content="Kampyuter">
+    <meta name="description" content="Kampyuter is Nepal's best laptop seller and distributer.">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.kampyuter.com">
+    <meta property="og:title" content="Kampyuter: Nepal's Best Laptop Seller and Distributor">
+    <meta property="og:description" content="Kampyuter is Nepal's best laptop seller and distributer.">
+    <meta property="og:image" content="{% static 'css/images/mainlogo.png' %}">
+
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://www.kampyuter.com">
+    <meta property="twitter:title" content="Kampyuter: Nepal's Best Laptop Seller and Distributor">
+    <meta property="twitter:description" content="Kampyuter is Nepal's best laptop seller and distributer.">
+    <meta property="twitter:image" content="{% static 'css/images/mainlogo.png' %}">
+
+    <link rel="stylesheet" href="{% static 'css/fontawesome-free-6.0.0-beta3-web/css/all.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+
+    <link rel="stylesheet" href="{% static 'css/client_css/php_m.css' %}">
+    <link rel="stylesheet" href="{% static 'css/client_css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/client_css/footer.css' %}">
+    <link rel="stylesheet" href="{% static 'css/client_css/main.css' %}">
+    <link rel="stylesheet" href="{% static 'css/client_css/blog.css' %}">
+    <link rel="stylesheet" href="{% static 'css/client_css/company.css' %}">
+    <link rel="stylesheet" href="{% static 'css/client_css/topBar.css' %}">
+    <link rel="stylesheet" href="{% static 'css/client_css/listProduct.css' %}">
+    <link rel="stylesheet" href="{% static 'css/admin_css/toastr.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/client_css/responsive.css' %}">
+
+    <title>Kampyuter</title>
+
+</head>
+
+<body>
+
+    {% include 'client_page/nav_bar_new/topNavBar.html' with components_brand=components_brand apple_brand=apple_brand desktop_brand=desktop_brand laptop_brand=laptop_brand components_topnav=components_topnav apple_topnav=apple_topnav desktop_topnav=desktop_topnav laptop_topnav=laptop_topnav current_user=current_user cart_quantity_total=cart_quantity_total cart_total_price=cart_total_price %}
+    {% include 'client_page/search/listofproducts.html' with object_bundle=object_bundle page_obj=page_obj %}
+    {% include 'client_page/footer.html' %}
+
+    <style>
+    .bb_listProductInner_right{
+        width: 98%;
+    }
+    .bb_listAllProductDiv{
+        display: initial;
+        padding: initial;
+    }
+    .bb_pro{
+        display: inline-block;
+        width: 100%;
+    }
+</style>
+    <script>
+
+    var user = '{{request.user}}';
+    window.CSRF_TOKEN = "{{ csrf_token }}";
+    </script>
+
+    <script src="{% static 'js/_csrf_tkn.js' %}"></script>
+    <script src="{% static 'js/cart.js' %}"></script>
+    <script src="{% static 'js/client_user.js' %}"></script>
+    <script src="{% static 'js/company.js' %}"></script>
+    <script src="{% static 'js/jquery-1.9.1.min.js' %}"></script>
+    <script src="{% static 'js/toastr.min.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+</body>
+
+</html>

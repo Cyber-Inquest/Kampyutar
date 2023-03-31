@@ -1,0 +1,72 @@
+{% load static %}
+
+    <div class="bb_body">
+    <div class="bb_product1">
+        <div class="bb_product_div_name">
+            <div class="bb_product_name">
+                New Arrivals
+            </div>
+        </div>
+        <div class="bb_product_baseRowNoFlex">
+
+            <div class="offers_tag">
+                <div class="offers_img">
+                    <img src="{% static 'css/images/offer.png' %}" alt="">
+                </div>
+            </div>
+
+            <div class="bb_product_baseCol">
+                <div class="this_container owl-carousel">
+
+                    {% for items in latest_news_object %}
+                    <div class="bb_perProduct_item">
+                        <div class="bb_item_img">
+
+                            {% if items.1.photo_img.url == '/media/default' %}
+                            {% else %}
+                            <a href="/per_page/{{items.0.categories}}/{{items.0.product_id}}"><img src="{{items.1.photo_img.url}}"
+                                                                                     alt=""></a>
+                            {% endif %}
+
+                            {% if items.2 == 'False' %}
+                            <i class="fas fa-heart" data-wishproduct={{items.0.product_id}}
+                               data-wishproducttype={{items.0.categories}}></i>
+                            {% else %}
+                            <i class="fas fa-heart" style="color:red" data-wishproduct={{items.0.product_id}}
+                               data-wishproducttype={{items.0.categories}}></i>
+                            {% endif %}
+
+                        </div>
+                        <div class="bb_item_name">
+                            <a href="/per_page/{{items.0.categories}}/{{items.0.product_id}}"><h4>{{items.0.title}}</h4>
+                            </a>
+                        </div>
+                        <div class="bb_item_price">
+                            <h4>NPR {{items.0.latest_price|floatformat:2}}</h4>
+                            {% if items.0.old_price != 0.0 %}
+                            <h5>
+                                <del>NPR {{items.0.old_price}}</del>
+                            </h5>
+                            {% endif %}
+                        </div>
+                        <div class="bb_item_addToCart">
+                            {% if items.0.stock == 0 %}
+                            <button data-product={{items.0.product_id}} data-producttype={{items.0.categories}}
+                                    data-action="add" class="bb_item_addToCart_btn_disable" disabled><i
+                                    class="fas fa-shopping-cart"></i>
+                                &nbsp; OUT OF STOCK
+                            </button>
+                            {% else %}
+                            <button data-product={{items.0.product_id}} data-producttype={{items.0.categories}}
+                                    data-action="add" class="bb_item_addToCart_btn"><i class="fas fa-shopping-cart"></i>
+                                &nbsp; ADD TO CART
+                            </button>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+            </div>
+        </div>
+    </div>

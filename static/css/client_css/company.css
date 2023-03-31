@@ -1,0 +1,152 @@
+.bb_company_main{
+    width: 100%;
+    background-color: white;
+    margin: 30px 0px;
+    position: relative;
+}
+
+.bb_company_inner{
+    width: 99%;
+    /* margin: 0px 3%; */
+    padding: 13px 5px;
+    overflow: hidden;
+    /* background-color: lawngreen; */
+}
+
+.bb_company_track{
+    display: inline-flex;
+    /* background-color: brown; */
+    /* transition: transform 0.5s; */
+}
+
+.bb_company_list{
+    width: 200px;
+    height: 110px;
+    /* margin: 0px 10px; */
+    margin-right: auto;
+    margin-left: auto;
+    cursor: pointer;
+    /* background-color: lightseagreen; */
+}
+
+.bb_company_list img{
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.top0{
+    top: 0;
+}
+
+.bb_cprev, .bb_cnext {
+    cursor: pointer;
+    position: absolute;
+    width: auto;
+    padding: 55px 16px;
+    color: rgb(0, 0, 0);
+    font-weight: bold;
+    font-size: 18px;
+    transition: 0.6s ease;
+    border-radius: 0 3px 3px 0;
+    user-select: none;
+    z-index: 2;
+}
+
+/* Position the "next button" to the right */
+.bb_cnext {
+    right: 0;
+    border-radius: 3px 0 0 3px;
+}
+
+/* On hover, add a black background color with a little bit see-through */
+.bb_cprev:hover, .bb_cnext:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+}
+
+.animate-right {
+    position: relative;
+    animation: animateright 0.4s
+}
+
+@keyframes animateright {
+    from {
+        right: -5%;
+        opacity: 0
+    }
+
+    to {
+        right: 0;
+        opacity: 1
+    }
+}
+
+.animate-left {
+    position: relative;
+    animation: animateleft 0.4s
+}
+
+@keyframes animateleft {
+    from {
+        right: 0%;
+        opacity: 1
+    }
+
+    to {
+        right: 100%;
+        opacity: 0
+    }
+}
+
+#company_list .owl-stage-outer{
+    width: 95%;
+    margin-left: auto;
+    margin-right: auto;
+    z-index: 3;
+}
+
+#company_list .owl-nav{
+    position: absolute;
+    width: 100%;
+    transform: translate(-50%, -50%);
+    top: 50%;
+    left: 50%;
+    /* background-color: aqua; */
+    color: black;
+    font-size: 40px;
+    font-weight: bold;
+    z-index: 2;
+}
+
+#company_list .owl-nav .owl-prev{
+    position: relative;
+    float: left;
+    display: block;
+}
+
+#company_list .owl-nav .owl-next{
+    position: relative;
+    float: right;
+    display: block;
+}
+
+#company_list .owl-nav .owl-prev span{
+    padding: 130px 14px;
+    margin-left: -10px;
+}
+
+#company_list .owl-nav .owl-next span{
+    padding: 130px 14px;
+    margin-right: -10px;
+}
+
+/* On hover, add a black background color with a little bit see-through */
+#company_list .owl-nav .owl-prev span:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+}
+#company_list .owl-nav .owl-next span:hover{
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+}
