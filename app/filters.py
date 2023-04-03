@@ -16,7 +16,7 @@ class SnippetFilterLaptop(django_filters.FilterSet):
         (24, '24'),
         (36, '36'),
     )
-
+    
     total_choices = SubCategory.objects.filter(categories='Laptops').all()
     sub_categories_CHOICES = []
     for item in total_choices:

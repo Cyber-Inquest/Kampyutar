@@ -10,8 +10,12 @@ from django.shortcuts import redirect
 from django.shortcuts import render
 
 from .decorators import admin_only
-from .forms import LoginForm, AddBrands, AddSlideshow, AddProducts, AddProductsDescription, AddProductsImage, AddBlog, \
-    EditBlog
+try:
+    from .forms import LoginForm, AddBrands, AddSlideshow, AddProducts, AddProductsDescription, AddProductsImage, AddBlog, \
+        EditBlog
+except:
+    pass
+
 from .models import Brands, SubCategory, Slideshow, Profile, ProductSpecification, LaptopProducts, ProductsImage, \
     DesktopsProducts, AppleProducts, ComponentsProducts, LatestProducts, Blogs
 

@@ -25,8 +25,11 @@ from admin_panel.models import Profile, ProductsImage, ProductSpecification, Des
 
 # forms/filters
 from .decorators import client_only
-from .filters import SnippetFilterLaptop, SnippetFilterDesktop, SnippetFilterApple, SnippetFilterComponents, \
-    SnippetFilterVendor
+try:
+    from .filters import SnippetFilterLaptop, SnippetFilterDesktop, SnippetFilterApple, SnippetFilterComponents, \
+        SnippetFilterVendor
+except:
+    pass
 from .forms import LoginForm
 
 # inbuilt

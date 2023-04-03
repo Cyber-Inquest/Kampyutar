@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-as&)2u9v!i$6%6r2obqy$=q5#cw$-&at8=96*b!bu5)ca+4qs@
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.1.64', '127.0.0.1', '127.0.0.1:4040', '21bd-45-139-191-201.ngrok.io']
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -85,13 +85,22 @@ WSGI_APPLICATION = 'BigBytes.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'big_bytes_1',
-        'USER': 'root',
+        'NAME': 'Kampyutar',
+        'USER': 'cyberinquest',
         'PASSWORD': 'mysqlgod123456789',
         'HOST': '127.0.0.1',
         'PORT': '3306',
     }
 }
+
+# Default database engine
+# https://docs.djangoproject.com/en/4.0/ref/settings/#default-database-engine
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
