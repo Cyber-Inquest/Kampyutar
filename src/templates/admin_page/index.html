@@ -8,6 +8,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'css/fontawesome-free-6.0.0-beta3-web/css/all.css' %}">
     <link rel="stylesheet" href="{% static 'css/admin_css/main_copy.css' %}">
+    <link rel="stylesheet" href="{% static 'css/admin_css/account.css' %}">
+    <link rel="stylesheet" href="{% static 'css/admin_css/toastr.min.css' %}">
+    <script src="{% static 'js/jquery-1.9.1.min.js' %}"></script>
+    <script src="{% static 'js/toastr.min.js' %}"></script>
+
     <title>Admin Panel</title>
 </head>
 
@@ -41,6 +46,33 @@
 
 <div class="sc_content_container" id="order_tab">
     <h1>Dashboard</h1>
+    <div class="admin_userpanel_content">
+        <table id="admin_customers">
+            <tr>
+                <th width="5%">S.N.</th>
+                <th width="35%">Product Name</th>
+                <th width="20%">Qty</th>
+                <th width="20%">Date</th>
+                <th width="20%">Actions</th>
+            </tr>
+            {% for items in order_list %}
+            {{items}}
+            <tr>
+                <td>{{forloop.counter}}</td>
+                <td>{{items.products_type}}</td>
+                <td>{{items.quantity}}</td>
+                <td>{{items.date_time}}</td>
+                <td>
+                    <button class="td_edit">Verify</button>
+                    <button class="td_delete">Cancel</button>
+                </td>
+                
+            </tr>
+            {% endfor %}
+
+        </table>
+    </div>
+
 </div>
 
 

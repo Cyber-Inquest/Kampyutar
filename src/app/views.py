@@ -1449,11 +1449,11 @@ def client_authentication_sign_up(request):
                 # check if the password matches
                 if n_password == c_password:
                     try:
-                        new_user = User(username=username, email=email, is_superuser=0, is_staff=1)
+                        new_user = User(username=username, email=email, is_superuser=0, is_staff=0)
                         new_user.set_password(c_password)
-                        new_profile = Profile(user=new_user)
+                        # new_profile = Profile(user=new_user)
                         new_user.save()
-                        new_profile.save()
+                        # new_profile.save()
 
                         messages.success(request, 'Please LogIn !')
                         return redirect('client_authentication_app')

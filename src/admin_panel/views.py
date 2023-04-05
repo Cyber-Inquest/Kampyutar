@@ -16,7 +16,7 @@ try:
 except:
     pass
 
-from .models import Brands, SubCategory, Slideshow, Profile, ProductSpecification, LaptopProducts, ProductsImage, \
+from .models import Brands, Order, SubCategory, Slideshow, Profile, ProductSpecification, LaptopProducts, ProductsImage, \
     DesktopsProducts, AppleProducts, ComponentsProducts, LatestProducts, Blogs
 
 
@@ -57,7 +57,13 @@ def admin_login_post(request):
 @admin_only
 @login_required(login_url='admin_login_admin')
 def index(request):
-    return render(request, 'admin_page/index.html')
+
+    # not delivered not verified and product list for admin to verify
+
+    order_list = Order.objects.filter(verified=False, delivering=False,delivered=False)
+    context = {'order_list': order_list}
+
+    return render(request, 'admin_page/index.html', context)
 
 
 @admin_only
@@ -1406,7 +1412,7 @@ def sb_edit_product_post(request, product_type, ids):
                                                                               stock=stock, latest_price=latest_price,
                                                                               old_price=old_price)
 
-                            new_product_query.save()
+                            new_product_query.save()   
 
                             formset.save()
 
@@ -1589,7 +1595,7 @@ def sb_edit_product_post(request, product_type, ids):
                                                                                   latest_price=latest_price,
                                                                                   old_price=old_price)
 
-                            new_product_query.save()
+                            new_product_query.save()  
 
                             formset.save()
 
@@ -1904,12 +1910,12 @@ def sb_add_admin_account_post(request):
                     new_user.set_password(password)
                     if photo_img:
                         new_profile = Profile(user=new_user, contact=contact, photo_img=photo_img, fullname=fullname,
-                                              location=location)
+                                              location=location,authorization=True)
                         new_user.save()
                         new_profile.save()
                     else:
                         new_profile = Profile(user=new_user, contact=contact, fullname=fullname,
-                                              location=location)
+                                              location=location,authorization=True )
                         new_user.save()
                         new_profile.save()
 

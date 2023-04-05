@@ -1,11 +1,29 @@
 from ckeditor_uploader.fields import RichTextUploadingField
 
 from django.core.validators import MinLengthValidator
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User,BaseUserManager
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
+
 
 from django_mysql.models.fields import SizedTextField
 from django.db import models
 from datetime import datetime
+
+# class MyAccountManager(BaseUserManager):
+#      def create_superuser(self,email,password):
+#         user = self.create_user(
+#             email = self.normalize_email(email),
+#             password = password,
+#         )
+#         user.fullname = "admin"
+#         user.is_job_poster=True
+#         user.is_admin = True
+#         user.is_staff = True
+#         user.is_superuser = True
+#         user.save(using = self._db)
+#         return user
 
 
 class Profile(models.Model):
@@ -21,6 +39,16 @@ class Profile(models.Model):
 
     def __str__(self):
         return self.user.username
+
+ 
+@receiver(post_save, sender=User)
+def create_profile(sender, instance, created, **kwargs):
+    profile_instance = Profile.objects.filter(user=instance)
+    if profile_instance:
+        pass
+    else:
+        Profile.objects.create(user=instance,fullname=instance.username,authorization=0)
+   
 
 
 class Brands(models.Model):
