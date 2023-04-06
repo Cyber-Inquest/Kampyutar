@@ -7,20 +7,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'css/fontawesome-free-6.0.0-beta3-web/css/all.css' %}">
 
-    <meta name="title" content="Kampyutar">
-    <meta name="description" content="Kampyutar is Nepal's best laptop seller and distributer.">
+    <meta name="title" content="Multitrade">
+    <meta name="description" content="Multitrade is Nepal's best laptop seller and distributer.">
 
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://www.kampyutar.com">
-    <meta property="og:title" content="Kampyutar: Nepal's Best Laptop Seller and Distributor">
-    <meta property="og:description" content="Kampyutar is Nepal's best laptop seller and distributer.">
-    <meta property="og:image" content="https://www.kampyutar.com{% static 'css/images/mainlogo.png' %}">
+    <meta property="og:url" content="https://www.multitrade.com.np">
+    <meta property="og:title" content="Multitrade: Nepal's Best Laptop Seller and Distributor">
+    <meta property="og:description" content="Multitrade is Nepal's best laptop seller and distributer.">
+    <meta property="og:image" content="https://www.multitrade.com.np{% static 'css/images/mainlogo.png' %}">
 
     <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://www.kampyutar.com">
-    <meta property="twitter:title" content="Kampyutar: Nepal's Best Laptop Seller and Distributor">
-    <meta property="twitter:description" content="Kampyutar is Nepal's best laptop seller and distributer.">
-    <meta property="twitter:image" content="https://www.kampyutar.com{% static 'css/images/mainlogo.png' %}">
+    <meta property="twitter:url" content="https://www.multitrade.com.np">
+    <meta property="twitter:title" content="Multitrade: Nepal's Best Laptop Seller and Distributor">
+    <meta property="twitter:description" content="Multitrade is Nepal's best laptop seller and distributer.">
+    <meta property="twitter:image" content="https://www.multitrade.com.np{% static 'css/images/mainlogo.png' %}">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
 
@@ -34,7 +34,7 @@
     <link rel="stylesheet" href="{% static 'css/client_css/responsive.css' %}">
     <link rel="stylesheet" href="{% static 'css/admin_css/toastr.min.css' %}">
 
-    <title>Kampyutar</title>
+    <title>Multitrade</title>
 
 </head>
 
@@ -62,7 +62,6 @@
 {% endif %}
 
     {% include 'client_page/nav_bar_new/topNavBar.html' with components_brand=components_brand apple_brand=apple_brand desktop_brand=desktop_brand laptop_brand=laptop_brand components_topnav=components_topnav apple_topnav=apple_topnav desktop_topnav=desktop_topnav laptop_topnav=laptop_topnav current_user=current_user cart_quantity_total=cart_quantity_total cart_total_price=cart_total_price %}
-    {% include 'client_page/main_carosol.html' with slideshow_list=slideshow_list %}
     {% include 'client_page/featured_product.html' with featured_object=featured_object %}
     {% include 'client_page/new_arrival.html' with latest_news_object=latest_news_object %}
     {% include 'client_page/laptops.html' with laptop=laptop %}
@@ -79,7 +78,7 @@
             var link = document.createElement('link');
             link.rel = 'stylesheet';
             link.type = 'text/css';
-            link.href = '{% static 'css/client_css/responsive_mobile.css' %}';
+            link.href = "{% static 'css/client_css/responsive_mobile.css' %}";
             head.appendChild(link);
         }
 

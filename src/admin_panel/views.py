@@ -11,13 +11,11 @@ from django.shortcuts import render
 
 from .decorators import admin_only
 try:
-    from .forms import LoginForm, AddBrands, AddSlideshow, AddProducts, AddProductsDescription, AddProductsImage, AddBlog, \
-        EditBlog
+    from .forms import LoginForm, AddBrands, AddSlideshow, AddProducts, AddProductsDescription, AddProductsImage, AddBlog, EditBlog
 except:
     pass
 
-from .models import Brands, Order, SubCategory, Slideshow, Profile, ProductSpecification, LaptopProducts, ProductsImage, \
-    DesktopsProducts, AppleProducts, ComponentsProducts, LatestProducts, Blogs
+from .models import Brands, Order, SubCategory, Slideshow, Profile, ProductSpecification, LaptopProducts, ProductsImage, DesktopsProducts, AppleProducts, ComponentsProducts, LatestProducts, Blogs
 
 
 @login_required(login_url='admin_login_admin')

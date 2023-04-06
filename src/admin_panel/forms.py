@@ -8,6 +8,7 @@ from django.forms import ModelForm
 from .models import ProductSpecification, ProductsImage, LaptopProducts, SubCategory, Blogs
 
 CATEGORIES_CHOICES = (
+    ('', 'Select Category'),
     ('Laptops', 'Laptop'),
     ('Desktops', 'Desktops'),
     ('Apple', 'Apple'),
