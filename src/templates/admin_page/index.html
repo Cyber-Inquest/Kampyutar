@@ -55,6 +55,7 @@
                 <th width="20%">Date</th>
                 <th width="20%">Actions</th>
             </tr>
+            {% comment %}
             {% for items in order_list %}
             {{items}}
             <tr>
@@ -69,6 +70,7 @@
                 
             </tr>
             {% endfor %}
+            {% endcomment %}
 
         </table>
     </div>

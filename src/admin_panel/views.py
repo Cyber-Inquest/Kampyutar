@@ -10,12 +10,13 @@ from django.shortcuts import redirect
 from django.shortcuts import render
 
 from .decorators import admin_only
+from admin_panel.forms import LoginForm
 try:
-    from .forms import LoginForm, AddBrands, AddSlideshow, AddProducts, AddProductsDescription, AddProductsImage, AddBlog, EditBlog
+    from .forms import  AddBrands, AddSlideshow, AddProducts, AddProductsDescription, AddProductsImage, AddBlog, EditBlog
 except:
     pass
 
-from .models import Brands, Order, SubCategory, Slideshow, Profile, ProductSpecification, LaptopProducts, ProductsImage, DesktopsProducts, AppleProducts, ComponentsProducts, LatestProducts, Blogs
+from .models import Brand, Order, SubCategory, Slideshow, Profile, Specification, Product, ProductImage, Blogs
 
 
 @login_required(login_url='admin_login_admin')

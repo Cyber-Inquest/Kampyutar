@@ -19,9 +19,8 @@ from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, redirect
 
 # models
-from admin_panel.models import Order, Billing, Delivery, Wishlist, Cart, LaptopProducts, Blogs
-from admin_panel.models import Profile, ProductsImage, ProductSpecification, DesktopsProducts, EleAccProducts, \
-    AppleProducts, ComponentsProducts, Slideshow, SubCategory, Brands, LatestProducts, ProductReview
+from admin_panel.models import Category, Order, Billing, Delivery, Wishlist, Cart , Blogs
+from admin_panel.models import Profile, ProductImage, Specification, Product, Slideshow, SubCategory, Brand, ProductReview
 
 # forms/filters
 from .decorators import client_only
@@ -242,167 +241,26 @@ def topbar_components():
 
 # Home page of client side
 def index(request):
-    # laptop list up to 4 items
-    laptop = LaptopProducts.objects.filter().order_by('-id')[0:4]
-
+    #for all the product that categories in front end 
+    featured_products_objects = Product.objects.filter(is_featured=True, is_comming_soon=False, is_shown=True).order_by('-id')[:10]
+    print(featured_products_objects)
+    comming_soon_products_objects = Product.objects.filter(is_comming_soon=True,is_shown=True).order_by('-id')[:10]
+    new_arrival_products_objects = Product.objects.filter(is_comming_soon=False, is_shown=True).order_by('-id')[:10]
+    category_objects = Category.objects.all()
     # desktops list up to 4 items
-    desktops = DesktopsProducts.objects.filter().order_by('-id')[0:4]
-
-    # LatestProduct list
-    new_arrival = LatestProducts.objects.filter().order_by('-id')
-
+    print(category_objects)
     # Bloglist
     blog_list = Blogs.objects.all()
 
-    # FeaturedProduct List
-    laptop_featured = LaptopProducts.objects.filter(featured_product=True)
-    desktop_featured = DesktopsProducts.objects.filter(featured_product=True)
-    apple_featured = AppleProducts.objects.filter(featured_product=True)
-    components_featured = ComponentsProducts.objects.filter(featured_product=True)
 
-    featured_list = sorted(
-        chain(laptop_featured, desktop_featured, apple_featured, components_featured),
-        key=lambda featured: featured.id, reverse=True)
+    context = {
+        'featured_product': featured_products_objects,
+        'comming_soon_product': comming_soon_products_objects,
+        'new_arrival_product': new_arrival_products_objects,
+        
+        'blog_list': blog_list,
+    }
 
-    # pictures for slider
-    slideshow_list = Slideshow.objects.filter(upload=1).all()
-
-    # empty list to save image of laptop and desktop list and function to append images in empty list
-    photo_list_laptop = []
-    photo_list_desktops = []
-    photo_list_new_arrival = []
-    photo_list_featured = []
-
-    for item in laptop:
-        photo_list_laptop.append(ProductsImage.objects.filter(product_id=item.id, products_type="Laptops").last())
-
-    for item in desktops:
-        photo_list_desktops.append(ProductsImage.objects.filter(product_id=item.id, products_type="Desktops").last())
-
-    for item in new_arrival:
-        photo_list_new_arrival.append(
-            ProductsImage.objects.filter(product_id=item.product_id, products_type=item.categories).last())
-
-    for item in featured_list:
-        photo_list_featured.append(
-            ProductsImage.objects.filter(product_id=item.id, products_type=item.categories).last())
-
-    # find brands that are in laptops to show in top-bar
-    laptop_topnav = SubCategory.objects.filter(categories='Laptops')
-    laptop_brand_id = topbar_laptops()
-
-    laptop_brand = []
-    for item in laptop_brand_id:
-        laptop_brand.append(Brands.objects.filter(id=item).last())
-
-    # find brands that are in desktops to show in top-bar
-    desktop_topnav = SubCategory.objects.filter(categories='Desktops')
-    desktop_brand_id = topbar_desktops()
-
-    desktop_brand = []
-    for item in desktop_brand_id:
-        desktop_brand.append(Brands.objects.filter(id=item).last())
-
-    # find brands that are in apple to show in top-bar
-    apple_topnav = SubCategory.objects.filter(categories='Apple')
-    apple_brand_id = topbar_apple()
-
-    apple_brand = []
-    for item in apple_brand_id:
-        apple_brand.append(Brands.objects.filter(id=item).last())
-
-    # find brands that are in components to show in top-bar
-    components_topnav = SubCategory.objects.filter(categories='Components')
-    components_brand_id = topbar_components()
-
-    components_brand = []
-    for item in components_brand_id:
-        components_brand.append(Brands.objects.filter(id=item).last())
-
-    if request.user.is_authenticated and request.user.is_staff and request.user.profile.authorization is False:
-
-        order_cart_cookie = user_saved_cart(request, request.user)
-
-        # get current user
-        current_user = request.user
-
-        # variable to know when to del cart after logged-in right-now is set to true meaning save and del cookie cart
-        _cart_selection = '_tr_del_g'
-
-        # function to know which items in home page is mark to wishlist by the current user
-        user_wishlist_mark_laptop = []
-        user_wishlist_mark_desktop = []
-        user_wishlist_mark_latest = []
-        user_wishlist_mark_featured = []
-
-        for items in laptop:
-            wishlist_query_laptop = Wishlist.objects.filter(product_id=items.id, products_type='Laptops',
-                                                            user=current_user).last()
-            if wishlist_query_laptop:
-                user_wishlist_mark_laptop.append('True')
-            else:
-                user_wishlist_mark_laptop.append('False')
-
-        for items in desktops:
-            wishlist_query_desktops = Wishlist.objects.filter(product_id=items.id, products_type='Desktops',
-                                                              user=current_user).last()
-            if wishlist_query_desktops:
-                user_wishlist_mark_desktop.append('True')
-            else:
-                user_wishlist_mark_desktop.append('False')
-
-        for items in new_arrival:
-            wishlist_query_new_arrival = Wishlist.objects.filter(product_id=items.product_id,
-                                                                 products_type=items.categories,
-                                                                 user=current_user).last()
-            if wishlist_query_new_arrival:
-                user_wishlist_mark_latest.append('True')
-            else:
-                user_wishlist_mark_latest.append('False')
-
-        for items in featured_list:
-            wishlist_query_new_arrival = Wishlist.objects.filter(product_id=items.id,
-                                                                 products_type=items.categories,
-                                                                 user=current_user).last()
-            if wishlist_query_new_arrival:
-                user_wishlist_mark_featured.append('True')
-            else:
-                user_wishlist_mark_featured.append('False')
-
-    else:
-        order_cart_cookie = cookie_cart(request)
-
-        # no current user indication
-        current_user = []
-
-        # variable indicating server to pass the deletion of cart
-        _cart_selection = '_fl_del_g'
-
-        # user not authenticate so all the mark value is false
-        user_wishlist_mark_laptop = ['False', 'False', 'False', 'False']
-        user_wishlist_mark_desktop = ['False', 'False', 'False', 'False']
-        user_wishlist_mark_latest = []
-        user_wishlist_mark_featured = []
-
-        for item in new_arrival:
-            user_wishlist_mark_latest.append('False')
-
-        for items in featured_list:
-            user_wishlist_mark_featured.append('False')
-
-    # bundling all the required data per item to the browser
-    laptop_object = zip(laptop, photo_list_laptop, user_wishlist_mark_laptop)
-    desktops_object = zip(desktops, photo_list_desktops, user_wishlist_mark_desktop)
-    latest_news_object = zip(new_arrival, photo_list_new_arrival, user_wishlist_mark_latest)
-    featured_object = zip(featured_list, photo_list_featured, user_wishlist_mark_featured)
-
-    context = {'laptop': laptop_object, 'cart_quantity_total': order_cart_cookie['cart_total_items'],
-               'cart_total_price': order_cart_cookie['cart_total_price'], 'desktops_object': desktops_object,
-               'slideshow_list': slideshow_list, 'current_user': current_user, 'laptop_topnav': laptop_topnav,
-               'desktop_topnav': desktop_topnav, 'apple_topnav': apple_topnav, 'components_topnav': components_topnav,
-               'laptop_brand': laptop_brand, 'desktop_brand': desktop_brand, 'apple_brand': apple_brand,
-               'components_brand': components_brand, 'cart_selection': _cart_selection,
-               'latest_news_object': latest_news_object, 'featured_object': featured_object, 'blog_list': blog_list}
     return render(request, 'client_page/index_m.html', context)
 
 
