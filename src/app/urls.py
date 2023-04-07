@@ -11,7 +11,12 @@ urlpatterns = [
     path('blog_search', views.blog_search, name='blog_search_app'),
 
     path('list_page/<str:_product>', views.list_page, name='list_page_app'),
+
+
+    #mine created app 
     path('per_page/<str:_product>/<int:ids>', views.per_page, name='per_page_app'),
+     #replace by 
+     path ('product-list/<slug:slug>', views.product_list, name='product_list'),
 
     path('updateCart/', views.update_cart, name='updateCart_app'),
 

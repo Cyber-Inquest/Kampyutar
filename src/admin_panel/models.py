@@ -119,7 +119,7 @@ class Specification(models.Model):
 class ProductImage(models.Model):
     class Meta:
         db_table = 'ProductImage'
-    product                 = models.ForeignKey(Product, on_delete=models.CASCADE)
+    product                 = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="product_image")
     image                   = models.ImageField(upload_to='photos/product', blank=True)
     is_shown                = models.BooleanField(default=True)
 

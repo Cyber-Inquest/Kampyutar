@@ -1,7 +1,7 @@
 import json
 
 import django_filters
-from admin_panel.models import LaptopProducts, Brands, SubCategory
+from admin_panel.models import Product, Brand, SubCategory
 from django import forms
 
 
@@ -22,7 +22,7 @@ class SnippetFilterLaptop(django_filters.FilterSet):
     for item in total_choices:
         sub_categories_CHOICES.append((item.id, item.title))
 
-    total_brand = Brands.objects.all()
+    total_brand = Brand.objects.all()
     brand_choices = []
     for item in total_brand:
         brand_choices.append((item.id, item.title))
@@ -77,7 +77,7 @@ class SnippetFilterDesktop(django_filters.FilterSet):
     for item in total_choices:
         sub_categories_CHOICES.append((item.id, item.title))
 
-    total_brand = Brands.objects.all()
+    total_brand = Brand.objects.all()
     brand_choices = []
     for item in total_brand:
         brand_choices.append((item.id, item.title))
@@ -132,7 +132,7 @@ class SnippetFilterApple(django_filters.FilterSet):
     for item in total_choices:
         sub_categories_CHOICES.append((item.id, item.title))
 
-    total_brand = Brands.objects.all()
+    total_brand = Brand.objects.all()
     brand_choices = []
     for item in total_brand:
         brand_choices.append((item.id, item.title))
@@ -187,7 +187,7 @@ class SnippetFilterComponents(django_filters.FilterSet):
     for item in total_choices:
         sub_categories_CHOICES.append((item.id, item.title))
 
-    total_brand = Brands.objects.all()
+    total_brand = Brand.objects.all()
     brand_choices = []
     for item in total_brand:
         brand_choices.append((item.id, item.title))
@@ -227,7 +227,7 @@ class SnippetFilterComponents(django_filters.FilterSet):
 
 class SnippetFilterVendor(django_filters.FilterSet):
 
-    total_brand = Brands.objects.all()
+    total_brand = Brand.objects.all()
     brand_choices = []
     for item in total_brand:
         brand_choices.append((item.id, item.title))
@@ -237,5 +237,5 @@ class SnippetFilterVendor(django_filters.FilterSet):
                                         empty_label=None)
 
     class Meta:
-        model = LaptopProducts
+        model = Product
         fields = ('categories',)

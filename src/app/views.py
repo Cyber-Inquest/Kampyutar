@@ -243,13 +243,11 @@ def topbar_components():
 def index(request):
     #for all the product that categories in front end 
     featured_products_objects = Product.objects.filter(is_featured=True, is_comming_soon=False, is_shown=True).order_by('-id')[:10]
-    print(featured_products_objects)
     comming_soon_products_objects = Product.objects.filter(is_comming_soon=True,is_shown=True).order_by('-id')[:10]
     new_arrival_products_objects = Product.objects.filter(is_comming_soon=False, is_shown=True).order_by('-id')[:10]
     category_objects = Category.objects.all()
-    # desktops list up to 4 items
-    print(category_objects)
-    # Bloglist
+    all_products_objects = Product.objects.all()
+    
     blog_list = Blogs.objects.all()
 
 
@@ -257,7 +255,8 @@ def index(request):
         'featured_product': featured_products_objects,
         'comming_soon_product': comming_soon_products_objects,
         'new_arrival_product': new_arrival_products_objects,
-        
+        'category': category_objects,
+        'all_products': all_products_objects,
         'blog_list': blog_list,
     }
 
@@ -783,7 +782,7 @@ def list_page(request, _product):
                    }
         return render(request, 'client_page/list_product.html', context)
 
-
+#minecode 
 # function executing for per item page
 def per_page(request, _product, ids):
     # find brands that are in laptops to show in top-bar
@@ -901,6 +900,8 @@ def per_page(request, _product, ids):
         order_cart_cookie = cookie_cart(request)
         current_user = []
 
+
+
     context = {'cart_quantity_total': order_cart_cookie['cart_total_items'],
                'cart_total_price': order_cart_cookie['cart_total_price'], 'per_product': per_product,
                'per_images': per_images, 'per_desc': per_desc, 'current_user': current_user,
@@ -909,6 +910,15 @@ def per_page(request, _product, ids):
                'apple_topnav': apple_topnav, 'apple_brand': apple_brand, 'components_topnav': components_topnav,
                'components_brand': components_brand, 'meta_images': meta_images}
     return render(request, 'client_page/perPage/product_des.html', context)
+
+#replace by this
+def product_list(request,slug):
+    
+    product_list_categories_objects = Product.objects.filter(categories__slug=slug).all()
+    context = {
+        'product_list': product_list_categories_objects
+    }
+    return render(request, 'client_page/product_list.html', context)
 
 
 # add to cart function used in home page which return jsonresponse

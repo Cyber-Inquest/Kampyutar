@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 {% load static %}
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -40,29 +41,30 @@
 
 <style>
     .one {
-      display: none;
+        display: none;
     }
 </style>
+
 <body>
 
-{% if messages %}
-<ul class="messages">
-    {% for message in messages %}
-            {% if message.tags == 'success'%}
-                <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
-            {% elif message.tags == 'info' %}
-                <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
-            {% elif message.tags == 'warning' %}
-                <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
-            {% elif message.tags == 'error' %}
-                <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
-            {% endif %}
-    {% endfor %}
-</ul>
-{% endif %}
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        {% if message.tags == 'success'%}
+        <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+        {% elif message.tags == 'info' %}
+        <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+        {% elif message.tags == 'warning' %}
+        <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+        {% elif message.tags == 'error' %}
+        <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+        {% endif %}
+        {% endfor %}
+    </ul>
+    {% endif %}
 
-    {% include 'client_page/nav_bar_new/topNavBar.html' with components_brand=components_brand apple_brand=apple_brand desktop_brand=desktop_brand laptop_brand=laptop_brand components_topnav=components_topnav apple_topnav=apple_topnav desktop_topnav=desktop_topnav laptop_topnav=laptop_topnav current_user=current_user cart_quantity_total=cart_quantity_total cart_total_price=cart_total_price %}
-   
+    {% include 'client_page/nav_bar_new/topNavBar.html' with components_brand=components_brand apple_brand=apple_brand desktop_brand=desktop_brand laptop_brand=laptop_brand components_topnav=components_topnav apple_topnav=apple_topnav desktop_topnav=desktop_topnav laptop_topnav=laptop_topnav current_user=current_user  cart_quantity_total=cart_quantity_total cart_total_price=cart_total_price %}
+
 
     <div class="bb_body">
         <div class="bb_product1">
@@ -71,66 +73,68 @@
                     Featured Product
                 </div>
             </div>
-    
+
             <div class="bb_product_baseRow">
-    
+
                 <div class="bb_product_baseCol">
                     <div class="this_container owl-carousel">
                         {% for items in featured_product %}
-                            {{items}}
-                            <div class="bb_perProduct_item">
-    
+                        <div class="bb_perProduct_item">
+
                             <div class="bb_item_img">
-                                {% if items.1.photo_img.url == '/media/default' %}
-                                {% else %}
-                                <a href="/per_page/{{items.0.categories}}/{{items.0.id}}"><img src="{{items.1.photo_img.url}}" alt=""></a>
+                                {% for images in items.product_image.all %}
+                                {% if images.is_shown %}
+                                <a href=""><img src="{{images.image.url}}" alt=""></a>
                                 {% endif %}
-    
+                                {% endfor %}
                                 {% if items.2 == 'False' %}
-                                    <i class="fas fa-heart" data-wishproduct={{items.0.id}}
-                                       data-wishproducttype={{items.0.categories}}></i>
+                                <i class="fas fa-heart" data-wishproduct={{items.id}}
+                                    data-wishproducttype={{items.categories}}></i>
                                 {% else %}
-                                    <i class="fas fa-heart" style="color:red" data-wishproduct={{items.0.id}}
-                                       data-wishproducttype={{items.0.categories}}></i>
+                                <i class="fas fa-heart" style="color:red" data-wishproduct={{items.id}}
+                                    data-wishproducttype={{items.categories}}></i>
                                 {% endif %}
                             </div>
-    
-                            <a href="/per_page/Laptops/{{items.0.id}}">
+
+                            <a href="/per_page/Laptops/{{items.id}}">
                                 <div class="bb_item_name">
-                                    <h4>{{items.0.title}}</h4>
+                                    <h4>{{items.title}}</h4>
                                 </div>
                             </a>
-    
+                            
                             <div class="bb_item_price">
-                                {% if items.0.featured_product != 1 %}
-                                <h4>NPR {{items.0.latest_price|floatformat:2}}</h4>
-    
-                                    {% if items.0.old_price != 0.0 %}
-                                        <h5><del>NPR {{items.0.old_price}}</del></h5>
-                                    {% endif %}
+                                {% if items.is_featured %}
+                                <h4>NPR {{items.latest_price|floatformat:2}}</h4>
+
+                                {% if items.previous_price != 0.0 %}
+                                <h5><del>NPR {{items.previous_price}}</del></h5>
+                                {% endif %}
+                                {% else %}
+                                <h4>NPR {{items.latest_price|floatformat:2}}</h4>
                                 {% endif %}
                             </div>
-    
+
                             <div class="bb_item_addToCart">
-                                {% if items.0.stock == 0 %}
-                                    <button data-product={{items.0.id}} data-producttype={{items.0.categories}}
-                                            data-action="add" class="bb_item_addToCart_btn_disable" disabled><i class="fas fa-shopping-cart"></i>
-                                        &nbsp; OUT OF STOCK
-                                    </button>
+                                {% if items.stock == 0 %}
+                                <button data-product={{items.id}} data-producttype={{items.categories}}
+                                    data-action="add" class="bb_item_addToCart_btn_disable" disabled><i
+                                        class="fas fa-shopping-cart"></i>
+                                    &nbsp; OUT OF STOCK
+                                </button>
                                 {% else %}
-                                    <button data-product={{items.0.id}} data-producttype={{items.0.categories}}
-                                            data-action="add" class="bb_item_addToCart_btn"><i class="fas fa-shopping-cart"></i>
-                                        &nbsp; ADD TO CART
-                                    </button>
+                                <button data-product={{items.id}} data-producttype={{items.categories}}
+                                    data-action="add" class="bb_item_addToCart_btn"><i class="fas fa-shopping-cart"></i>
+                                    &nbsp; ADD TO CART
+                                </button>
                                 {% endif %}
                             </div>
                         </div>
                         {% endfor %}
-    
+
                     </div>
                 </div>
-    
-    
+
+
             </div>
         </div>
     </div>
@@ -145,52 +149,62 @@
                 </div>
             </div>
             <div class="bb_product_baseRowNoFlex">
-    
+
                 <div class="offers_tag">
                     <div class="offers_img">
                         <img src="{% static 'css/images/offer.png' %}" alt="">
                     </div>
                 </div>
-    
+
                 <div class="bb_product_baseCol">
                     <div class="this_container owl-carousel">
-    
+
                         {% for items in new_arrival_product %}
                         <div class="bb_perProduct_item">
+
                             <div class="bb_item_img">
-    
-                                {% if items.1.photo_img.url == '/media/default' %}
-                                {% else %}
-                                <a href="/per_page/{{items.0.categories}}/{{items.0.product_id}}"><img src="{{items.1.photo_img.url}}" alt=""></a>
+                                {% for images in items.product_image.all %}
+                                {% if images.is_shown %}
+                                <a href=""><img src="{{images.image.url}}" alt=""></a>
                                 {% endif %}
-    
+                                {% endfor %}
                                 {% if items.2 == 'False' %}
-                                <i class="fas fa-heart" data-wishproduct={{items.0.product_id}} data-wishproducttype={{items.0.categories}}></i>
+                                <i class="fas fa-heart" data-wishproduct={{items.0.id}}
+                                    data-wishproducttype={{items.categories}}></i>
                                 {% else %}
-                                <i class="fas fa-heart" style="color:red" data-wishproduct={{items.0.product_id}} data-wishproducttype={{items.0.categories}}></i>
+                                <i class="fas fa-heart" style="color:red" data-wishproduct={{items.id}}
+                                    data-wishproducttype={{items.categories}}></i>
                                 {% endif %}
-    
                             </div>
-                            <div class="bb_item_name">
-                                <a href="/per_page/{{items.0.categories}}/{{items.0.product_id}}">
-                                    <h4>{{items.0.title}}</h4>
-                                </a>
-                            </div>
+
+                            <a href="/per_page/Laptops/{{items.id}}">
+                                <div class="bb_item_name">
+                                    <h4>{{items.title}}</h4>
+                                </div>
+                            </a>
+                            
                             <div class="bb_item_price">
-                                <h4>NPR {{items.0.latest_price|floatformat:2}}</h4>
-                                {% if items.0.old_price != 0.0 %}
-                                <h5>
-                                    <del>NPR {{items.0.old_price}}</del>
-                                </h5>
+                                {% if items.is_featured %}
+                                <h4>NPR {{items.latest_price|floatformat:2}}</h4>
+
+                                {% if items.previous_price != 0.0 %}
+                                <h5><del>NPR {{items.previous_price}}</del></h5>
+                                {% endif %}
+                                {% else %}
+                                <h4>NPR {{items.latest_price|floatformat:2}}</h4>
                                 {% endif %}
                             </div>
+
                             <div class="bb_item_addToCart">
-                                {% if items.0.stock == 0 %}
-                                <button data-product={{items.0.product_id}} data-producttype={{items.0.categories}} data-action="add" class="bb_item_addToCart_btn_disable" disabled><i class="fas fa-shopping-cart"></i>
+                                {% if items.stock == 0 %}
+                                <button data-product={{items.id}} data-producttype={{items.categories}}
+                                    data-action="add" class="bb_item_addToCart_btn_disable" disabled><i
+                                        class="fas fa-shopping-cart"></i>
                                     &nbsp; OUT OF STOCK
                                 </button>
                                 {% else %}
-                                <button data-product={{items.0.product_id}} data-producttype={{items.0.categories}} data-action="add" class="bb_item_addToCart_btn"><i class="fas fa-shopping-cart"></i>
+                                <button data-product={{items.id}} data-producttype={{items.categories}}
+                                    data-action="add" class="bb_item_addToCart_btn"><i class="fas fa-shopping-cart"></i>
                                     &nbsp; ADD TO CART
                                 </button>
                                 {% endif %}
@@ -198,7 +212,7 @@
                         </div>
                         {% endfor %}
                     </div>
-    
+
                 </div>
             </div>
         </div>
@@ -211,78 +225,197 @@
                     Coming Soon
                 </div>
             </div>
-    
+
             <div class="bb_product_baseRow">
-    
+
                 <div class="bb_product_baseCol">
                     <div class="this_container owl-carousel">
                         {% for items in comming_soon_product %}
-                            {{items}}
-                            <div class="bb_perProduct_item">
-    
+
+                        <div class="bb_perProduct_item">
+
                             <div class="bb_item_img">
-                                {% if items.1.photo_img.url == '/media/default' %}
-                                {% else %}
-                                <a href="/per_page/{{items.0.categories}}/{{items.0.id}}"><img src="{{items.1.photo_img.url}}" alt=""></a>
+                                {% for images in items.product_image.all %}
+                                {% if images.is_shown %}
+                                <a href=""><img src="{{images.image.url}}" alt=""></a>
                                 {% endif %}
-    
+                                {% endfor %}
                                 {% if items.2 == 'False' %}
-                                    <i class="fas fa-heart" data-wishproduct={{items.0.id}}
-                                       data-wishproducttype={{items.0.categories}}></i>
+                                <i class="fas fa-heart" data-wishproduct={{items.0.id}}
+                                    data-wishproducttype={{items.0.categories}}></i>
                                 {% else %}
-                                    <i class="fas fa-heart" style="color:red" data-wishproduct={{items.0.id}}
-                                       data-wishproducttype={{items.0.categories}}></i>
+                                <i class="fas fa-heart" style="color:red" data-wishproduct={{items.id}}
+                                    data-wishproducttype={{items.categories}}></i>
                                 {% endif %}
                             </div>
-    
-                            <a href="/per_page/Laptops/{{items.0.id}}">
+
+                            <a href="/per_page/Laptops/{{items.id}}">
                                 <div class="bb_item_name">
-                                    <h4>{{items.0.title}}</h4>
+                                    <h4>{{items.title}}</h4>
                                 </div>
                             </a>
-    
+                            
                             <div class="bb_item_price">
-                                {% if items.0.featured_product != 1 %}
-                                <h4>NPR {{items.0.latest_price|floatformat:2}}</h4>
-    
-                                    {% if items.0.old_price != 0.0 %}
-                                        <h5><del>NPR {{items.0.old_price}}</del></h5>
-                                    {% endif %}
+                                {% if items.is_featured %}
+                                <h4>NPR {{items.latest_price|floatformat:2}}</h4>
+
+                                {% if items.previous_price != 0.0 %}
+                                <h5><del>NPR {{items.previous_price}}</del></h5>
+                                {% endif %}
+                                {% else %}
+                                <h4>NPR {{items.latest_price|floatformat:2}}</h4>
                                 {% endif %}
                             </div>
-    
+
                             <div class="bb_item_addToCart">
-                                {% if items.0.stock == 0 %}
-                                    <button data-product={{items.0.id}} data-producttype={{items.0.categories}}
-                                            data-action="add" class="bb_item_addToCart_btn_disable" disabled><i class="fas fa-shopping-cart"></i>
-                                        &nbsp; OUT OF STOCK
-                                    </button>
+                                {% if items.stock == 0 %}
+                                <button data-product={{items.id}} data-producttype={{items.categories}}
+                                    data-action="add" class="bb_item_addToCart_btn_disable" disabled><i
+                                        class="fas fa-shopping-cart"></i>
+                                    &nbsp; OUT OF STOCK
+                                </button>
                                 {% else %}
-                                    <button data-product={{items.0.id}} data-producttype={{items.0.categories}}
-                                            data-action="add" class="bb_item_addToCart_btn"><i class="fas fa-shopping-cart"></i>
-                                        &nbsp; ADD TO CART
-                                    </button>
+                                <button data-product={{items.id}} data-producttype={{items.categories}}
+                                    data-action="add" class="bb_item_addToCart_btn"><i class="fas fa-shopping-cart"></i>
+                                    &nbsp; ADD TO CART
+                                </button>
                                 {% endif %}
                             </div>
                         </div>
                         {% endfor %}
-    
+
                     </div>
                 </div>
-    
-    
+
+
             </div>
         </div>
     </div>
 
-    {% include 'client_page/laptops.html' with laptop=laptop %}
-    {% include 'client_page/desktop.html' with desktops_object=desktops_object %}
-    {% include 'client_page/company.html' %}
+   
+    {% for items in category %}
+    {% if items.is_shown %}
+    
+    <div class="bb_body">
+        <div class="bb_product1">
+            <div class="bb_product_div_name">
+                <div class="bb_product_name">
+                    {{items.title}}
+                </div>
+            </div>
+            <div class="bb_product_baseRow" id="wishlist_laptop_123">
+    
+                <div class="bb_product_baseCol_right">
+                    <div class="bb_perProduct_row owl-carousel" >
+                        {% for product in all_products %}
+                        {% if product.categories.id == items.id %}
+                        <div class="bb_perProduct_item">
+
+                            <div class="bb_item_img">
+                                {% for images in product.product_image.all %}
+                                {% if images.is_shown %}
+                                <a href=""><img src="{{images.image.url}}" alt=""></a>
+                                {% endif %}
+                                {% endfor %}
+                                {% if product.2 == 'False' %}
+                                <i class="fas fa-heart" data-wishproduct={{product.0.id}}
+                                    data-wishproducttype={{product.categories}}></i>
+                                {% else %}
+                                <i class="fas fa-heart" style="color:red" data-wishproduct={{product.id}}
+                                    data-wishproducttype={{product.categories}}></i>
+                                {% endif %}
+                            </div>
+
+                            <a href="/per_page/Laptops/{{product.id}}">
+                                <div class="bb_item_name">
+                                    <h4>{{product.title}}</h4>
+                                </div>
+                            </a>
+                            
+                            <div class="bb_item_price">
+                                {% if product.is_featured %}
+                                <h4>NPR {{product.latest_price|floatformat:2}}</h4>
+
+                                {% if product.previous_price != 0.0 %}
+                                <h5><del>NPR {{product.previous_price}}</del></h5>
+                                {% endif %}
+                                {% else %}
+                                <h4>NPR {{product.latest_price|floatformat:2}}</h4>
+                                {% endif %}
+                            </div>
+
+                            <div class="bb_item_addToCart">
+                                {% if product.stock == 0 %}
+                                <button data-product={{product.id}} data-producttype={{product.categories}}
+                                    data-action="add" class="bb_item_addToCart_btn_disable" disabled><i
+                                        class="fas fa-shopping-cart"></i>
+                                    &nbsp; OUT OF STOCK
+                                </button>
+                                {% else %}
+                                <button data-product={{product.id}} data-producttype={{product.categories}}
+                                    data-action="add" class="bb_item_addToCart_btn"><i class="fas fa-shopping-cart"></i>
+                                    &nbsp; ADD TO CART
+                                </button>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endif %}
+    
+    
+                        {% endfor %}
+                    </div>
+                </div>
+    
+                <div class="bb_product_baseCol_left">
+                    <div class="bb_pbaseCol_left_div">
+                        {% if items.image %}
+                        <img src="{{ items.image.url }}" alt="">
+                        {% else %}
+                        <img src="{% static 'css/images/products/laptop.jpg' %}" alt="">
+                        {% endif %}
+                        <a href="{% url 'product_list' slug=items.slug %}" style="text-decoration: none;">
+                            <button class="bb_pbaseCol_left_btn">VIEW ALL</button>
+                        </a>
+                    </div>
+                </div>
+    
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    {% endfor %}
+
+
+    <div class="bb_company_main">
+        <div class="bb_company_inner">
+            <div class="bb_company_track owl-carousel" id="company_list">
+    
+                <div class="bb_company_list">
+                    <img src="{% static 'css/images/logos/cisco.png' %}" alt="">
+                </div>
+    
+                <div class="bb_company_list">
+                    <img src="{% static 'css/images/logos/colorful.png' %}" alt="">
+                </div>
+    
+                <div class="bb_company_list">
+                    <img src="{% static 'css/images/logos/corsair.png' %}" alt="">
+                </div>
+    
+                <div class="bb_company_list">
+                    <img src="{% static 'css/images/logos/cryorig.png' %}" alt="">
+                </div>
+    
+            </div>        
+        </div> 
+        <!-- <a class="bb_cprev top0" onclick="plusSlides(-1)">&#10094;</a>
+        <a class="bb_cnext top0" onclick="plusSlides(1)">&#10095;</a>      -->
+    </div>
     {% include 'client_page/perBlog.html' with blog_list=blog_list %}
     {% include 'client_page/footer.html' %}
     {% include 'client_page/bottom_bar.html' %}
 
-<script>
+    <script>
 
         if ((navigator.userAgent.match(/iPhone/)) || (navigator.userAgent.match(/iPod/))) {
             var head = document.getElementsByTagName('HEAD')[0];
@@ -293,35 +426,37 @@
             head.appendChild(link);
         }
 
-</script>
-<div class="one">
-    <script type="text/javascript">
-
-        var user = '{{request.user}}';
-
-        window.CSRF_TOKEN = "{{ csrf_token }}";
-        var cart_selection = "{{ cart_selection }}";
-
     </script>
-</div>
-<div style="display:none;"><h1>asdasdas</h1></div>
-<script src="{% static 'js/jquery-1.9.1.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/toastr.min.js' %}"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+    <div class="one">
+        <script type="text/javascript">
 
-<script type="text/javascript" src="{% static 'js/cart.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/company.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/topNav.js' %}"></script>
+            var user = '{{request.user}}';
 
-<script type="text/javascript" type="text/javascript" src="{% static 'js/_csrf_tkn.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/client_user.js' %}"></script>
+            window.CSRF_TOKEN = "{{ csrf_token }}";
+            var cart_selection = "{{ cart_selection }}";
 
-<script>
-    if (cart_selection == '_tr_del_g'){
-        cart = {}
-        document.cookie = 'cart=' + JSON.stringify(cart) + ";domain=;path=/"
-     }
-</script>
+        </script>
+    </div>
+    <div style="display:none;">
+        <h1>asdasdas</h1>
+    </div>
+    <script src="{% static 'js/jquery-1.9.1.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/toastr.min.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+
+    <script type="text/javascript" src="{% static 'js/cart.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/company.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/topNav.js' %}"></script>
+
+    <script type="text/javascript" type="text/javascript" src="{% static 'js/_csrf_tkn.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/client_user.js' %}"></script>
+
+    <script>
+        if (cart_selection == '_tr_del_g') {
+            cart = {}
+            document.cookie = 'cart=' + JSON.stringify(cart) + ";domain=;path=/"
+        }
+    </script>
 </body>
 
 

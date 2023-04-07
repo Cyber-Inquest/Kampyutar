@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+    
+{% load app_extras %}
+{% load widget_tweaks %}
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="title" content="Multitrade">
+    <meta name="description" content="Multitrade is Nepal's best laptop seller and distributer.">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.multitrade.com.np">
+    <meta property="og:title" content="Multitrade: Nepal's Best Laptop Seller and Distributor">
+    <meta property="og:description" content="Multitrade is Nepal's best laptop seller and distributer.">
+    <meta property="og:image" content="https://www.multitrade.com.np{% static 'css/images/mainlogo.png' %}">
+
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://www.multitrade.com.np">
+    <meta property="twitter:title" content="Multitrade: Nepal's Best Laptop Seller and Distributor">
+    <meta property="twitter:description" content="Multitrade is Nepal's best laptop seller and distributer.">
+    <meta property="twitter:image" content="https://www.multitrade.com.np{% static 'css/images/mainlogo.png' %}">
+
+    <link rel="stylesheet" href="{% static 'css/fontawesome-free-6.0.0-beta3-web/css/all.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+
+    <link rel="stylesheet" href="{% static 'css/client_css/php_m.css' %}">
+    <link rel="stylesheet" href="{% static 'css/client_css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/client_css/footer.css' %}">
+    <link rel="stylesheet" href="{% static 'css/client_css/main.css' %}">
+    <link rel="stylesheet" href="{% static 'css/client_css/blog.css' %}">
+    <link rel="stylesheet" href="{% static 'css/client_css/company.css' %}">
+    <link rel="stylesheet" href="{% static 'css/client_css/topBar.css' %}">
+
+    <link rel="stylesheet" href="{% static 'css/client_css/listProduct.css' %}">
+    <link rel="stylesheet" href="{% static 'css/admin_css/toastr.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/client_css/responsive.css' %}">
+
+    <title>Multitrade</title>
+
+</head>
+
+<body>
+
+    {% include 'client_page/nav_bar_new/topNavBar.html' with current_user=current_user cart_quantity_total=cart_quantity_total cart_total_price=cart_total_price %}
+    
+
+
+<div class="bb_listProductDiv" id="bb_listProductDiv">
+    <div class="bb_resBtn" onclick="openSideBar()">
+        <i class="fa-solid fa-ellipsis-vertical"></i>
+    </div>
+    <div class="bb_listProductInner">        
+
+        <div class="bb_listProductInner_left" id="leftMe">
+            <div class="bb_listProduct_name">
+                <h1>{{product_list.0.categories|capfirst }}</h1>
+            </div>
+
+            <form method="get">
+
+                <div class="bb_aSearch _brands">
+                    <div class="bb_aSearchContent">
+                        <h3>BRAND</h3>
+
+                        {{ snippet_filter.form.brand }}
+
+                    </div>
+                </div>
+
+
+                <div class="bb_aSearch _subcategory">
+                    <div class="bb_aSearchContent">
+                        <h3>SUBCATEGORY</h3>
+                        {{ snippet_filter.form.sub_categories }}
+                    </div>
+                </div>
+
+
+                <div class="bb_aSearch">
+                    <div class="bb_aSearchContent">
+                        <h3>PRICE</h3>
+
+                        <div class="wrapper">
+                            <div class="container">
+                                <div class="slider-track"></div>
+                                <input type="range" min=0 max="{{max_price}}" value=0
+                                    id="slider-1" oninput="slideOne()">
+                                <input type="range" min="{{min_price}}" max="{{max_price}}" value="{{max_price}}"
+                                    id="slider-2" oninput="slideTwo()">
+                            </div>
+                        </div>
+                        {{ snippet_filter.form.slider }}
+                    </div>
+                </div>
+
+                <input type="submit" class="live_search">
+            </form>
+        </div>
+
+        <div class="bb_listProductInner_right" id="rightMe">
+            <div class="bb_topFilterTool">
+                <form method="get">
+                    <div class="filterShow">
+                        <label for="qtyPer">Show :</label>
+
+                        {{ snippet_filter.form.show_by }}
+                    </div>
+                    <div class="filterSortBy">
+                        <label for="SortBy">Sort By :</label>
+                        {{ snippet_filter.form.sort_by }}
+                    </div>
+                </form>
+            </div>
+
+
+
+            <div class="bb_listAllProductDiv" id="wishlist_listpage">
+
+                {% for item in  product_list %}
+                <div class="bb_perProduct_col">
+
+                    <div class="bb_perProduct_item">
+                        <div class="bb_item_img">
+
+                            {% if item.1.photo_img.url == '/media/default' %}
+
+                            {% else %}
+                            {% for images in item.product_image.all %}
+                                
+                            <a href="">
+                                {% if images.is_shown %}
+                                <img src="{{images.image.url}}" alt=""></a>
+                                {% endif %}
+                            {% endfor %}
+                            {% endif %}
+
+                            {% if item.2 == 'False' %}
+                            <i class="fas fa-heart" data-wishproduct={{item.id}}
+                                data-wishproducttype={{item.categories}}></i>
+                            {% else %}
+                            <i class="fas fa-heart" style="color:red" data-wishproduct={{item.id}}
+                                data-wishproducttype={{item.categories}}></i>
+                            {% endif %}
+
+                        </div>
+                        <div class="bb_item_name">
+                            <a href="/per_page/{{item.categories}}/{{item.id}}">
+                                <h4>{{item.title}}</h4>
+                            </a>
+                        </div>
+                        <div class="bb_item_price">
+                            <h4>NPR {{item.latest_price|floatformat:2}}</h4>
+                            {% if item.previous_price != 0.0 %}
+                            <h5>
+                                <del>NPR {{item.previous_price}}</del>
+                            </h5>
+                            {% endif %}
+                        </div>
+                        <div class="bb_item_addToCart">
+                            {% if item.stock == 0 %}
+                                <button data-product={{item.id}} data-producttype={{item.categories}} data-action="add"
+                                    class="bb_item_addToCart_btn_disable" disabled><i class="fas fa-shopping-cart"></i> &nbsp; OUT OF STOCK
+                                </button>
+                            {% else %}
+                                <button data-product={{item.id}} data-producttype={{item.categories}} data-action="add"
+                                class="bb_item_addToCart_btn"><i class="fas fa-shopping-cart"></i> &nbsp; ADD TO
+                                CART
+                                </button>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="pagination_center">
+                <div class="pagination">
+                    {% if page_obj.has_previous %}
+                    <a href="{% my_url 1 'page' request.GET.urlencode %}">&laquo;</a>
+                    <a href="{% my_url page_obj.previous_page_number 'page' request.GET.urlencode %}">&lt; Previous</a>
+                    {% endif %}
+
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+
+                    {% if page_obj.has_next %}
+                    <a href="{% my_url page_obj.next_page_number 'page' request.GET.urlencode %}">Next </a>
+                    <a href="{% my_url page_obj.paginator.num_pages 'page' request.GET.urlencode %}">&raquo; Last</a>
+                    {% endif %}
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    function openSideBar(){
+        var rightTarget = document.getElementById("rightMe");
+        var leftTarget = document.getElementById("leftMe");
+        var btn = document.getElementsByClassName("bb_resBtn");
+
+        if (leftTarget.className === "bb_listProductInner_left"){
+            leftTarget.className += " SideBarResponsive";
+            btn[0].style.right = "0px";
+            btn[0].style.left = "auto";
+
+            rightTarget.style.display = "none";
+
+            leftTarget.style.display = "block";
+            leftTarget.style.width = "100%";
+            leftTarget.style.height = "100vh";
+            leftTarget.style.backgroundColor = "white";
+
+            var mainDivTarget = document.getElementById("bb_listProductDiv");
+            mainDivTarget.style.margin = "0px";
+            mainDivTarget.style.backgroundColor = "white";
+            mainDivTarget.style.padding = "0px 2% 20% 2%";
+
+        } else {
+            leftTarget.className = "bb_listProductInner_left";
+            btn[0].style.left = "-20px";
+            btn[0].style.right = "auto";
+
+            rightTarget.style.display = "block";
+
+            leftTarget.style.display = "none";
+            leftTarget.style.height = "auto";
+
+            var mainDivTarget = document.getElementById("bb_listProductDiv");
+            mainDivTarget.style.margin = "0px 4%";
+            mainDivTarget.style.backgroundColor = "#f2f3f5";
+            mainDivTarget.style.padding = "0";
+
+
+        }        
+    }
+</script>
+    
+    
+    
+    
+    
+    
+    {% include 'client_page/footer.html' %}
+    {% include 'client_page/bottom_bar.html' %}
+
+    <script>
+
+    var user = '{{request.user}}';
+    window.CSRF_TOKEN = "{{ csrf_token }}";
+</script>
+
+    <script src="{% static 'js/_csrf_tkn.js' %}"></script>
+    <script src="{% static 'js/cart.js' %}"></script>
+    <script src="{% static 'js/client_user.js' %}"></script>
+    <script src="{% static 'js/company.js' %}"></script>
+        <script src="{% static 'js/topNav.js' %}"></script>
+
+    <script src="{% static 'js/doubleRange.js' %}"></script>
+    <script src="{% static 'js/jquery-1.9.1.min.js' %}"></script>
+    <script src="{% static 'js/toastr.min.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+</body>
+
+</html>
