@@ -25,12 +25,11 @@ from admin_panel.models import Profile, ProductImage, Specification, Product, Sl
 # forms/filters
 from .decorators import client_only
 try:
-    from .filters import SnippetFilterLaptop, SnippetFilterDesktop, SnippetFilterApple, SnippetFilterComponents, \
-        SnippetFilterVendor
+    from .filters import SnippetFilterLaptop, SnippetFilterDesktop, SnippetFilterApple, SnippetFilterComponents,SnippetFilterProductList,SnippetFilterVendor
 except:
     pass
 from .forms import LoginForm
-
+from .filters import SnippetFilterProductList
 # inbuilt
 import json
 
@@ -783,6 +782,34 @@ def list_page(request, _product):
         return render(request, 'client_page/list_product.html', context)
 
 #minecode 
+
+#replace by this
+def product_list(request,slug):
+    
+    product_list_categories_objects = Product.objects.filter(categories__slug=slug).all()
+
+
+    product_max_min = Product.objects.aggregate(Max('latest_price'), Min('latest_price'))
+    min_price = product_max_min['latest_price__min']
+    max_price = product_max_min['latest_price__max']
+    snippet_filter = SnippetFilterProductList(request.GET, queryset=product_list_categories_objects)
+    snippet_filter_product_list = snippet_filter.qs
+
+    products = Product.objects.filter(categories__pk=1)
+    brands = Brand.objects.filter(product__in=products).distinct()
+
+    
+    print(brands)
+    context = {
+        'min_price': min_price, 'max_price': max_price,
+        'product_list': product_list_categories_objects,
+        'laptop_brand': brands,
+        'snippet_filter': snippet_filter,
+        'product_list': product_list_categories_objects,
+    }
+    return render(request, 'client_page/product_list.html', context)
+
+
 # function executing for per item page
 def per_page(request, _product, ids):
     # find brands that are in laptops to show in top-bar
@@ -910,16 +937,6 @@ def per_page(request, _product, ids):
                'apple_topnav': apple_topnav, 'apple_brand': apple_brand, 'components_topnav': components_topnav,
                'components_brand': components_brand, 'meta_images': meta_images}
     return render(request, 'client_page/perPage/product_des.html', context)
-
-#replace by this
-def product_list(request,slug):
-    
-    product_list_categories_objects = Product.objects.filter(categories__slug=slug).all()
-    context = {
-        'product_list': product_list_categories_objects
-    }
-    return render(request, 'client_page/product_list.html', context)
-
 
 # add to cart function used in home page which return jsonresponse
 def update_cart(request):
