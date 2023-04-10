@@ -44,7 +44,7 @@
 
 <body>
 
-    {% include 'client_page/nav_bar_new/topNavBar.html' with current_user=current_user cart_quantity_total=cart_quantity_total cart_total_price=cart_total_price %}
+    {% include 'client_page/nav_bar_new/topNavBar.html' with  current_user=current_user cart_quantity_total=cart_quantity_total json_data=json_data cart_total_price=cart_total_price %}
     
 
 
@@ -64,7 +64,7 @@
                 <div class="bb_aSearch _brands">
                     <div class="bb_aSearchContent">
                         <h3>BRAND</h3>
-                        {{ snippet_filter.form.brand }}
+                        {{ snippet_filter.form.brands }}
 
                     </div>
                 </div>
@@ -116,7 +116,7 @@
 
 
 
-            <div class="bb_listAllProductDiv" id="wishlist_listpage">
+            <!-- <div class="bb_listAllProductDiv" id="wishlist_listpage">
 
                 {% for item in  product_list %}
                 <div class="bb_perProduct_col">
@@ -165,6 +165,62 @@
                                 </button>
                             {% else %}
                                 <button data-product={{item.id}} data-producttype={{item.categories}} data-action="add"
+                                class="bb_item_addToCart_btn"><i class="fas fa-shopping-cart"></i> &nbsp; ADD TO
+                                CART
+                                </button>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                </div>
+                {% endfor %}
+            </div> -->
+
+            <div class="bb_listAllProductDiv" id="wishlist_listpage">
+                
+
+                {% for item in zip_pro_img %}
+                <div class="bb_perProduct_col">
+
+                    <div class="bb_perProduct_item">
+                        <div class="bb_item_img">
+
+                            {% if item.1.image.url == '/media/default' %}
+
+                            {% else %}
+                            <a href="{% url 'product_detail' slug=item.0.categories id=item.0.id %}"><img src="{{item.1.image.url}}"
+                                    alt=""></a>
+                            {% endif %}
+
+                            {% if item.2 == 'False' %}
+                            <i class="fas fa-heart" data-wishproduct={{item.0.id}}
+                                data-wishproducttype={{item.0.categories}}></i>
+                            {% else %}
+                            <i class="fas fa-heart" style="color:red" data-wishproduct={{item.0.id}}
+                                data-wishproducttype={{item.0.categories}}></i>
+                            {% endif %}
+
+                        </div>
+                        <div class="bb_item_name">
+                            <a href="{% url 'product_detail' slug=item.0.categories id=item.0.id %}">
+                                <h4>{{item.0.title}}</h4>
+                            </a>
+                        </div>
+                        <div class="bb_item_price">
+                            <h4>NPR {{item.0.latest_price|floatformat:2}}</h4>
+                            {% if item.0.previous_price != 0.0 %}
+                            <h5>
+                                <del>NPR {{item.0.previous_price}}</del>
+                            </h5>
+                            {% endif %}
+                        </div>
+                        <div class="bb_item_addToCart">
+                            {% if item.0.stock == 0 %}
+                                <button data-product={{item.0.id}} data-producttype={{item.0.categories}} data-action="add"
+                                    class="bb_item_addToCart_btn_disable" disabled><i class="fas fa-shopping-cart"></i> &nbsp; OUT OF STOCK
+                                </button>
+                            {% else %}
+                                <button data-product={{item.0.id}} data-producttype={{item.0.categories}} data-action="add"
                                 class="bb_item_addToCart_btn"><i class="fas fa-shopping-cart"></i> &nbsp; ADD TO
                                 CART
                                 </button>

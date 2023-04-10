@@ -63,7 +63,7 @@
     </ul>
     {% endif %}
 
-    {% include 'client_page/nav_bar_new/topNavBar.html' with components_brand=components_brand apple_brand=apple_brand desktop_brand=desktop_brand laptop_brand=laptop_brand components_topnav=components_topnav apple_topnav=apple_topnav desktop_topnav=desktop_topnav laptop_topnav=laptop_topnav current_user=current_user  cart_quantity_total=cart_quantity_total cart_total_price=cart_total_price %}
+    {% include 'client_page/nav_bar_new/topNavBar.html' with json_data=json_data  current_user=current_user  cart_quantity_total=cart_quantity_total cart_total_price=cart_total_price %}
 
 
     <div class="bb_body">
@@ -84,7 +84,7 @@
                             <div class="bb_item_img">
                                 {% for images in items.product_image.all %}
                                 {% if images.is_shown %}
-                                <a href=""><img src="{{images.image.url}}" alt=""></a>
+                                <a href="{% url 'product_detail' slug=items.categories.slug id=items.id %}"><img src="{{images.image.url}}" alt=""></a>
                                 {% endif %}
                                 {% endfor %}
                                 {% if items.2 == 'False' %}
@@ -96,7 +96,7 @@
                                 {% endif %}
                             </div>
 
-                            <a href="/per_page/Laptops/{{items.id}}">
+                            <a href="{% url 'product_detail' slug=items.categories.slug id=items.id %}">
                                 <div class="bb_item_name">
                                     <h4>{{items.title}}</h4>
                                 </div>
@@ -165,7 +165,7 @@
                             <div class="bb_item_img">
                                 {% for images in items.product_image.all %}
                                 {% if images.is_shown %}
-                                <a href=""><img src="{{images.image.url}}" alt=""></a>
+                                <a href="{% url 'product_detail' slug=items.categories.slug id=items.id %}"><img src="{{images.image.url}}" alt=""></a>
                                 {% endif %}
                                 {% endfor %}
                                 {% if items.2 == 'False' %}
@@ -177,7 +177,7 @@
                                 {% endif %}
                             </div>
 
-                            <a href="/per_page/Laptops/{{items.id}}">
+                            <a href="{% url 'product_detail' slug=items.categories.slug id=items.id %}">
                                 <div class="bb_item_name">
                                     <h4>{{items.title}}</h4>
                                 </div>
@@ -237,7 +237,7 @@
                             <div class="bb_item_img">
                                 {% for images in items.product_image.all %}
                                 {% if images.is_shown %}
-                                <a href=""><img src="{{images.image.url}}" alt=""></a>
+                                <a href="{% url 'product_detail' slug=items.categories.slug id=items.id %}"><img src="{{images.image.url}}" alt=""></a>
                                 {% endif %}
                                 {% endfor %}
                                 {% if items.2 == 'False' %}
@@ -249,7 +249,7 @@
                                 {% endif %}
                             </div>
 
-                            <a href="/per_page/Laptops/{{items.id}}">
+                            <a href="{% url 'product_detail' slug=items.categories.slug id=items.id %}">
                                 <div class="bb_item_name">
                                     <h4>{{items.title}}</h4>
                                 </div>
@@ -314,7 +314,7 @@
                             <div class="bb_item_img">
                                 {% for images in product.product_image.all %}
                                 {% if images.is_shown %}
-                                <a href=""><img src="{{images.image.url}}" alt=""></a>
+                                <a href="{% url 'product_detail' slug=product.categories.slug id=items.id %}"><img src="{{images.image.url}}" alt=""></a>
                                 {% endif %}
                                 {% endfor %}
                                 {% if product.2 == 'False' %}
@@ -326,7 +326,7 @@
                                 {% endif %}
                             </div>
 
-                            <a href="/per_page/Laptops/{{product.id}}">
+                            <a href="{% url 'product_detail' slug=product.categories.slug id=items.id %}">
                                 <div class="bb_item_name">
                                     <h4>{{product.title}}</h4>
                                 </div>
@@ -360,8 +360,6 @@
                             </div>
                         </div>
                         {% endif %}
-    
-    
                         {% endfor %}
                     </div>
                 </div>

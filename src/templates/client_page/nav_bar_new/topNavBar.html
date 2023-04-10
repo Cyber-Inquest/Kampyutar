@@ -72,24 +72,25 @@
         </a>
     </div>
 
+    {% for category_id,category_data in json_data.items %}
     <div class="dropdown">
-        <a href="/list_page/Laptops">
+        <a href="{% url 'product_list' slug=category_data.category_slug %}">
             <button class="dropbtn">
-                <i class="fas fa-laptop"></i> LAPTOP
+                <i class="fas fa-laptop"></i> {{category_data.category_name}}
             </button>
         </a>
-        {% if laptop_topnav %}
+        {% if category_data.subcategory %}
         <div class="dropdown-content">
             <div class="row">
-                {% for items in laptop_topnav %}
+                {% for subcategory_id,subcategory_data in category_data.subcategory.items %}
                 <div class="column">
                     <h3>
-                        <a href="/list_page/Laptops?brand=&sub_categories={{items.id}}&slider_min=&slider_max=&show_by=&sort_by=">{{items.title}}</a>
+                        <a href="{% url 'product_list' slug=category_data.category_slug %}?brands=&sub_categories={{subcategory_data.subcategory_id}}&slider_min=&slider_max=&show_by=&sort_by=">{{subcategory_data.subcategory_name}}</a>
                     </h3>
                     <ul>
-                        {% for item in laptop_brand %}
+                        {% for brand_id,brand_data in subcategory_data.brand.items %}
                         <li>
-                            <a href="/list_page/Laptops?brand={{item.id}}&sub_categories={{items.id}}&slider_min=&slider_max=&show_by=&sort_by=">{{item.title}}</a>
+                            <a href="{% url 'product_list' slug=category_data.category_slug %}?brands={{brand_data.brand_id}}&sub_categories={{subcategory_data.subcategory_id}}&slider_min=&slider_max=&show_by=&sort_by=">{{brand_data.brand_name}}</a>
                         </li>
                         {% endfor %}
                     </ul>
@@ -99,107 +100,8 @@
         </div>
         {% endif %}
     </div>
+    {% endfor %}
 
-    <div class="dropdown">
-        <a href="/list_page/Desktops">
-            <button class="dropbtn">
-                <i class="fas fa-desktop"></i> DESKTOP
-            </button>
-        </a>
-        {% if desktop_topnav %}
-        <div class="dropdown-content">
-            <div class="row">
-                {% for items in desktop_topnav %}
-                <div class="column">
-                    <h3>
-                        <a href="/list_page/Desktops?brand=&sub_categories={{items.id}}&slider_min=&slider_max=&show_by=&sort_by=">{{items.title}}</a>
-                    </h3>
-                    <ul>
-                        {% for item in desktop_brand %}
-                        <li>
-                            <a href="/list_page/Desktops?brand={{item.id}}&sub_categories={{items.id}}&slider_min=&slider_max=&show_by=&sort_by=">{{item.title}}</a>
-                        </li>
-                        {% endfor %}
-                    </ul>
-                </div>
-                {% endfor %}
-            </div>
-        </div>
-        {% endif %}
-    </div>
-
-    <!-- <div class="dropdown">
-        <a href="/list_page/Apple">
-            <button class="dropbtn">
-                <i class="fab fa-apple"></i> APPLE
-            </button>
-        </a>
-        {% if apple_topnav %}
-        <div class="dropdown-content">
-            <div class="row">
-                {% for items in apple_topnav %}
-                <div class="column">
-                    <h3>
-                        <a href="/list_page/Apple?brand=&sub_categories={{items.id}}&slider_min=&slider_max=&show_by=&sort_by=">{{items.title}}</a>
-                    </h3>
-                    <ul>
-                        {% for item in apple_brand %}
-                        <li>
-                            <a href="/list_page/Apple?brand={{item.id}}&sub_categories={{items.id}}&slider_min=&slider_max=&show_by=&sort_by=">{{item.title}}</a>
-                        </li>
-                        {% endfor %}
-                    </ul>
-                </div>
-                {% endfor %}
-            </div>
-        </div>
-        {% endif %}
-    </div> -->
-
-    <div class="dropdown">
-        <a href="/list_page/Components">
-            <button class="dropbtn">
-                <i class="fas fa-microchip"></i> COMPONENT
-            </button>
-        </a>
-        {% if components_topnav %}
-        <div class="dropdown-content">
-            <div class="row">
-                {% for items in components_topnav %}
-                <div class="column">
-                    <h3>
-                        <a href="/list_page/Components?brand=&sub_categories={{items.id}}&slider_min=&slider_max=&show_by=&sort_by=">{{items.title}}</a>
-                    </h3>
-                    <ul>
-                        {% for item in components_brand %}
-                        <li>
-                            <a href="/list_page/Components?brand={{item.id}}&sub_categories={{items.id}}&slider_min=&slider_max=&show_by=&sort_by=">{{item.title}}</a>
-                        </li>
-                        {% endfor %}
-                    </ul>
-                </div>
-                {% endfor %}
-            </div>
-        </div>
-        {% endif %}
-    </div>
-
-    <div class="dropdown">
-        <a href="#">
-            <button class="dropbtn">
-                <i class="fa-solid fa-laptop-code"></i> Office Solutions
-            </button>
-        </a>
-    </div>
-
-    <div class="dropdown">
-        <a href="#">
-            <button class="dropbtn">
-                <i class="fa-regular fa-keyboard"></i> Electronics Accessories
-            </button>
-        </a>
-    </div>
-
-        <a href="javascript:void(0);" style="font-size:15px; color:white; padding:14px;" class="bb_home_icon" onclick="myFunction()">&#9776;</a>
+    <a href="javascript:void(0);" style="font-size:15px; color:white; padding:14px;" class="bb_home_icon" onclick="myFunction()">&#9776;</a>
 
 </div>

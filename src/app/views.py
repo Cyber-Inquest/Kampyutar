@@ -249,6 +249,31 @@ def index(request):
     
     blog_list = Blogs.objects.all()
 
+    nav_bar_categories      = Category.objects.filter(is_shown=True).distinct()
+    nav_bar_subcategories   = SubCategory.objects.filter(is_shown=True, product__isnull=False).distinct()
+    nav_bar_brands          = Brand.objects.filter(product__isnull=False).distinct()
+
+    json_data = {
+        a + 1: {
+            "category_name": category.title.upper(),
+            "category_slug": category.slug,
+            "subcategory": {
+                b + 1: {
+                    "subcategory_name": subcategory.title.capitalize(),
+                    "subcategory_id": subcategory.id,
+                    "brand": {
+                        c + 1: {
+                            "brand_name": brand.title.capitalize(),
+                            "brand_id": brand.id,
+                        } for c, brand in enumerate(nav_bar_brands.filter(product__sub_categories=subcategory))
+                    }
+                } for b, subcategory in enumerate(nav_bar_subcategories.filter(category=category))
+            }
+        } for a, category in enumerate(nav_bar_categories)
+    }
+
+    current_user = request.user
+
 
     context = {
         'featured_product': featured_products_objects,
@@ -257,6 +282,8 @@ def index(request):
         'category': category_objects,
         'all_products': all_products_objects,
         'blog_list': blog_list,
+        'json_data': json_data,
+        'current_user': current_user,
     }
 
     return render(request, 'client_page/index_m.html', context)
@@ -785,30 +812,138 @@ def list_page(request, _product):
 
 #replace by this
 def product_list(request,slug):
-    
     product_list_categories_objects = Product.objects.filter(categories__slug=slug).all()
     selected_category_object = Category.objects.filter(slug=slug).first()
 
-    product_max_min = Product.objects.aggregate(Max('latest_price'), Min('latest_price'))
+    product_max_min = Product.objects.filter(categories__slug=slug).aggregate(Max('latest_price'), Min('latest_price'))
     min_price = product_max_min['latest_price__min']
     max_price = product_max_min['latest_price__max']
     snippet_filter = SnippetFilterProductList(request.GET, queryset=product_list_categories_objects,category=selected_category_object)
     snippet_filter_product_list = snippet_filter.qs
 
+    show_by_number = request.GET.get('show_by')
+
+    photo_list = []
+    user_wishlist_mark = []
+
+    # get the value from user for displaying required items per page
+    if show_by_number is not None:
+        if show_by_number:
+            paginated_filtered = Paginator(snippet_filter_product_list, int(show_by_number))
+        else:
+            paginated_filtered = Paginator(snippet_filter_product_list, 12)
+    else:
+        paginated_filtered = Paginator(snippet_filter_product_list, 12)
+
+    # pagination
+    page_number = request.GET.get('page')
+    page_obj = paginated_filtered.get_page(page_number)
+
+    # to mark wishlist if user is authenticated and item is in wishlist
+    for items in page_obj:
+        if request.user.is_authenticated and request.user.is_staff and request.user.profile.authorization is False:
+            wishlist_query_components = Wishlist.objects.filter(product_id=items.id,
+                                                                user=request.user).last()
+            if wishlist_query_components:
+                user_wishlist_mark.append('True')
+            else:
+                user_wishlist_mark.append('False')
+        else:
+            user_wishlist_mark.append('False')
+
+    # to show image with product in list page
+    for item in page_obj:
+        photo_list.append(ProductImage.objects.filter(product_id=item.id).last())
+
+    # bundling object with its corresponding image
+    zip_pro_img = zip(page_obj, photo_list, user_wishlist_mark)
+    # change to list
+    zip_pro_img = list(zip_pro_img)
+
     products = Product.objects.filter(categories__pk=1)
     brands = Brand.objects.filter(product__in=products).distinct()
 
-    
-    print(brands)
+    # nav_bar_categories_objects = Category.objects.filter(is_shown = True).distinct()
+
+
+    # nav_bar_brands_objects = Brand.objects.filter(product__isnull=False).distinct()
+    # nav_bar_subcategory_objects = SubCategory.objects.filter(product__isnull=False,is_shown = True).distinct()
+    # json_data = {}
+    # a = 0
+    # for i in nav_bar_categories_objects:
+    #     a += 1
+    #     json_data[a] = {}
+    #     json_data[a]["çategory_name"] = i.title
+    #     json_data[a]["çategory_slug"] = i.slug
+    #     json_data[a]["çategory_id"] = i.id
+    #     json_data[a]["subcategory"] = {}
+
+    #     b = 0
+    #     for j in nav_bar_subcategory_objects:
+    #         if i.id == j.category_id:
+    #             b += 1
+    #             json_data[a]['subcategory'][b] = {}
+    #             json_data[a]['subcategory'][b]['subcategory_name'] = j.title
+    #             json_data[a]['subcategory'][b]['subcategory_slug'] = j.slug
+    #             json_data[a]['subcategory'][b]['subcategory_id'] = j.id
+    #             json_data[a]['subcategory'][b]['brand'] = {}
+    #             c = 0
+    #             for k in nav_bar_brands_objects:
+    #                 product_check = Product.objects.filter(sub_categories_id=j.id,brands_id=k.id).first()
+    #                 if product_check:
+    #                     c += 1
+    #                     json_data[a]['subcategory'][b]['brand'][c] = {}
+    #                     json_data[a]['subcategory'][b]['brand'][c]['brand_name'] = k.title
+    #                     json_data[a]['subcategory'][b]['brand'][c]['brand_slug'] = k.slug
+    #                     json_data[a]['subcategory'][b]['brand'][c]['brand_id'] = k.id
+    #                     print(f"Brand Is {k}")
+
+    nav_bar_categories      = Category.objects.filter(is_shown=True).distinct()
+    nav_bar_subcategories   = SubCategory.objects.filter(is_shown=True, product__isnull=False).distinct()
+    nav_bar_brands          = Brand.objects.filter(product__isnull=False).distinct()
+
+    json_data = {
+        a + 1: {
+            "category_name": category.title.upper(),
+            "category_slug": category.slug,
+            "subcategory": {
+                b + 1: {
+                    "subcategory_name": subcategory.title.capitalize(),
+                    "subcategory_id": subcategory.id,
+                    "brand": {
+                        c + 1: {
+                            "brand_name": brand.title.capitalize(),
+                            "brand_id": brand.id,
+                        } for c, brand in enumerate(nav_bar_brands.filter(product__sub_categories=subcategory))
+                    }
+                } for b, subcategory in enumerate(nav_bar_subcategories.filter(category=category))
+            }
+        } for a, category in enumerate(nav_bar_categories)
+    }
+
     context = {
-        'laptop_list': snippet_filter_product_list,
         'min_price': min_price, 'max_price': max_price,
         'product_list': product_list_categories_objects,
         'laptop_brand': brands,
         'snippet_filter': snippet_filter,
-        'product_list': product_list_categories_objects,
+        'zip_pro_img': zip_pro_img,
+        'json_data': json_data,
+        # 'nav_bar_brands': nav_bar_brands_objects,
     }
     return render(request, 'client_page/product_list.html', context)
+
+def product_detail(request,slug,id):
+    slug = slug
+    product_object = Product.objects.get(id=id)
+    image_object = ProductImage.objects.filter(product_id=id)
+    product_specification = Specification.objects.filter(product_id=id)
+    context = {
+        'product': product_object,
+        'per_images': image_object,
+        'product_specs': product_specification,
+    }
+    return render(request, 'client_page/product_detail.html',context)
+
 
 
 # function executing for per item page
@@ -931,12 +1066,21 @@ def per_page(request, _product, ids):
 
 
     context = {'cart_quantity_total': order_cart_cookie['cart_total_items'],
-               'cart_total_price': order_cart_cookie['cart_total_price'], 'per_product': per_product,
-               'per_images': per_images, 'per_desc': per_desc, 'current_user': current_user,
-               'laptop_topnav': laptop_topnav, 'review_list': review_list,
-               'laptop_brand': laptop_brand, 'desktop_topnav': desktop_topnav, 'desktop_brand': desktop_brand,
-               'apple_topnav': apple_topnav, 'apple_brand': apple_brand, 'components_topnav': components_topnav,
-               'components_brand': components_brand, 'meta_images': meta_images}
+               'cart_total_price': order_cart_cookie['cart_total_price'], 
+               'per_product': per_product,
+               'per_images': per_images, 
+               'per_desc': per_desc, 
+               'current_user': current_user,
+               'laptop_topnav': laptop_topnav, 
+               'review_list': review_list,
+               'laptop_brand': laptop_brand, 
+               'desktop_topnav': desktop_topnav, 
+               'desktop_brand': desktop_brand,
+               'apple_topnav': apple_topnav, 
+               'apple_brand': apple_brand, 
+               'components_topnav': components_topnav,
+               'components_brand': components_brand, 
+               'meta_images': meta_images}
     return render(request, 'client_page/perPage/product_des.html', context)
 
 # add to cart function used in home page which return jsonresponse
@@ -1115,9 +1259,7 @@ def update_wishlist(request):
     if request.method == 'POST':
         data = json.loads(request.body)
         product_id = data['productId']
-        producttype = data['producttype']
-
-        wishlist_query = Wishlist.objects.get(product_id=product_id, user=request.user, products_type=producttype)
+        wishlist_query = Wishlist.objects.get(product_id=product_id, user=request.user)
         wishlist_query.delete()
 
         return JsonResponse({'_actr': 'True'})
@@ -1360,17 +1502,18 @@ def add_wishlist(request):
             data = json.loads(request.body)
 
             product_id = data['productId']
-            producttype = data['producttype']
 
             wishlist_query = Wishlist.objects.filter(product_id=product_id, user=request.user,
-                                                     products_type=producttype).last()
+                                                     ).last()
 
             if wishlist_query:
-                return JsonResponse({'_actr': 'False'})
-            else:
-                Wishlist.objects.create(product_id=product_id, user=request.user, products_type=producttype)
+                wishlist_query.delete()
                 return JsonResponse({'_actr': 'True'})
-
+            else:
+                Wishlist.objects.create(product_id=product_id, user=request.user)
+                return JsonResponse({'_actr': 'True'})
+        else:
+            return JsonResponse({'_actr': 'False'})
 
 # updating the orderlist of current user
 def update_orderlist(request):
