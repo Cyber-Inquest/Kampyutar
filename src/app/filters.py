@@ -36,6 +36,7 @@ class SnippetFilterProductList(django_filters.FilterSet):
                                             widget=forms.Select(attrs={'onchange': 'submit();'}))
         self.filters['show_by'] = django_filters.ChoiceFilter(choices=self.SHOW_CHOICES, method='filter_by_show',
                                             widget=forms.Select(attrs={'onchange': 'submit();'}))
+        self.filters['slider'] = django_filters.RangeFilter(method='filter_by_slider')
         
         self.filters['sub_categories'] = django_filters.ChoiceFilter(choices=sub_categories_CHOICES,
                                                     widget=forms.Select(),
@@ -44,8 +45,12 @@ class SnippetFilterProductList(django_filters.FilterSet):
                                         widget=forms.Select(),
                                         empty_label=None)
 
-    
-    
+    def filter_by_ordering(self, queryset, name, value):
+        if value == 'descending':
+            return queryset.order_by('-latest_price')
+        elif value == 'ascending':
+            return queryset.order_by('latest_price')
+
     def filter_by_slider(self, queryset, name, value):
         print('----------------------------------')
         if value:
