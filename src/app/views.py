@@ -787,12 +787,12 @@ def list_page(request, _product):
 def product_list(request,slug):
     
     product_list_categories_objects = Product.objects.filter(categories__slug=slug).all()
-
+    selected_category_object = Category.objects.filter(slug=slug).first()
 
     product_max_min = Product.objects.aggregate(Max('latest_price'), Min('latest_price'))
     min_price = product_max_min['latest_price__min']
     max_price = product_max_min['latest_price__max']
-    snippet_filter = SnippetFilterProductList(request.GET, queryset=product_list_categories_objects)
+    snippet_filter = SnippetFilterProductList(request.GET, queryset=product_list_categories_objects,category=selected_category_object)
     snippet_filter_product_list = snippet_filter.qs
 
     products = Product.objects.filter(categories__pk=1)
@@ -801,6 +801,7 @@ def product_list(request,slug):
     
     print(brands)
     context = {
+        'laptop_list': snippet_filter_product_list,
         'min_price': min_price, 'max_price': max_price,
         'product_list': product_list_categories_objects,
         'laptop_brand': brands,
