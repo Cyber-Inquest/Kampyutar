@@ -65,6 +65,9 @@
 
     {% include 'client_page/nav_bar_new/topNavBar.html' with json_data=json_data  current_user=current_user  cart_quantity_total=cart_quantity_total cart_total_price=cart_total_price %}
 
+    {% for data in nav_bar_catego.all %}
+    {{data}}
+    {% endfor %}
 
     <div class="bb_body">
         <div class="bb_product1">
@@ -116,13 +119,13 @@
 
                             <div class="bb_item_addToCart">
                                 {% if items.stock == 0 %}
-                                <button data-product={{items.id}} data-producttype={{items.categories}}
+                                <button data-product={{items.id}}
                                     data-action="add" class="bb_item_addToCart_btn_disable" disabled><i
                                         class="fas fa-shopping-cart"></i>
                                     &nbsp; OUT OF STOCK
                                 </button>
                                 {% else %}
-                                <button data-product={{items.id}} data-producttype={{items.categories}}
+                                <button data-product={{items.id}}
                                     data-action="add" class="bb_item_addToCart_btn"><i class="fas fa-shopping-cart"></i>
                                     &nbsp; ADD TO CART
                                 </button>

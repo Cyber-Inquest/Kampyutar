@@ -17,6 +17,9 @@ from django.contrib.auth.models import User
 from django.db.models import Max, Min, Q
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, redirect
+from django.db.models import Sum
+from django.db.models import Sum, OuterRef, Subquery,F
+
 
 # models
 from admin_panel.models import Category, Order, Billing, Delivery, Wishlist, Cart , Blogs
@@ -240,6 +243,9 @@ def topbar_components():
 
 # Home page of client side
 def index(request):
+    order = {'cart_total_price': 0, 'cart_total_items': 0,'cart_saved_price': 0}
+    cart_quantity_total = 0
+    cart_total_price = 0
     #for all the product that categories in front end 
     featured_products_objects = Product.objects.filter(is_featured=True, is_comming_soon=False, is_shown=True).order_by('-id')[:10]
     comming_soon_products_objects = Product.objects.filter(is_comming_soon=True,is_shown=True).order_by('-id')[:10]
@@ -271,11 +277,36 @@ def index(request):
             }
         } for a, category in enumerate(nav_bar_categories)
     }
+    #getting cart quantity and total price for individual user who are logged in 
+    current_user = request.user.id
+    if current_user: 
+        cart_details_object = Cart.objects.filter(user=current_user)
+        cart_quantity_total = cart_details_object.aggregate(total_quantity = Sum('quantity'))['total_quantity']
 
-    current_user = request.user
+        cart_total_price = Cart.objects.filter(user=current_user).annotate(
+        item_price=Subquery(Product.objects.filter(pk=OuterRef('product__id')).values('latest_price'))).aggregate(total=Sum(F('item_price')* F('quantity')))['total']
+    else:
+        try:
+            cart = json.loads(request.COOKIES['cart'])
+        except KeyError:
+            cart = None
+        if cart:
+            print(cart)
+            for i in cart:
+                product = Product.objects.get(id=i)
+                total_price = (product.latest_price * int(cart[i]["quantity"]))
+                order['cart_total_price'] += total_price
+                order['cart_total_items'] += int(cart[i]["quantity"])
+                if product.previous_price == 0:
+                    pass
+                else:
+                    order['cart_saved_price'] += ((product.previous_price - product.latest_price) * int(cart[i]["quantity"]))
+            cart_quantity_total = order['cart_total_items']
+            cart_total_price = order['cart_total_price']
 
-
+    
     context = {
+        
         'featured_product': featured_products_objects,
         'comming_soon_product': comming_soon_products_objects,
         'new_arrival_product': new_arrival_products_objects,
@@ -284,6 +315,8 @@ def index(request):
         'blog_list': blog_list,
         'json_data': json_data,
         'current_user': current_user,
+        'cart_quantity_total': cart_quantity_total,
+        'cart_total_price' : cart_total_price,
     }
 
     return render(request, 'client_page/index_m.html', context)
@@ -1084,33 +1117,31 @@ def per_page(request, _product, ids):
     return render(request, 'client_page/perPage/product_des.html', context)
 
 # add to cart function used in home page which return jsonresponse
+## markdown important
 def update_cart(request):
     if request.method == 'POST':
         if request.user.is_authenticated and request.user.is_staff and request.user.profile.authorization is False:
             current_user = request.user
             data = json.loads(request.body)
             product_id = data['productId']
-            product_type = data['producttype']
             action = data['action']
 
             if action == 'add':
 
-                cart_add_query = Cart.objects.filter(user=current_user, product_id=product_id,
-                                                     products_type=product_type).last()
+                cart_add_query = Cart.objects.filter(user=current_user, product_id=product_id).last()
                 if cart_add_query:
                     cart_add_query.quantity += 1
                     cart_add_query.save()
                     return JsonResponse({'_actr': 'True'})
                 else:
-                    new_cart_query = Cart(user=current_user, product_id=product_id, products_type=product_type)
+                    new_cart_query = Cart(user=current_user, product_id=product_id)
                     new_cart_query.save()
                     return JsonResponse({'_actr': 'True'})
 
             elif action == 'update':
                 quantity = data['quantity']
 
-                cart_add_query = Cart.objects.filter(user=current_user, product_id=product_id,
-                                                     products_type=product_type).last()
+                cart_add_query = Cart.objects.filter(user=current_user, product_id=product_id).last()
                 if cart_add_query:
                     cart_add_query.quantity = int(quantity)
                     cart_add_query.save()
@@ -1120,6 +1151,7 @@ def update_cart(request):
 # function that execute shopping_cart form topbar
 def shopping_cart(request):
     # find brands that are in laptops to show in top-bar
+    
     laptop_topnav = SubCategory.objects.filter(categories='Laptops')
     laptop_brand_id = topbar_laptops()
 
@@ -1533,9 +1565,8 @@ def update_cartlist(request):
             data = json.loads(request.body)
 
             product_id = data['productId']
-            product_type = data['producttype']
 
-            wishlist_query = Cart.objects.get(product_id=product_id, products_type=product_type, user=request.user)
+            wishlist_query = Cart.objects.get(product_id=product_id, user=request.user)
             wishlist_query.delete()
             return JsonResponse({'_actr': 'True'})
 
