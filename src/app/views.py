@@ -303,6 +303,7 @@ def index(request):
                     order['cart_saved_price'] += ((product.previous_price - product.latest_price) * int(cart[i]["quantity"]))
             cart_quantity_total = order['cart_total_items']
             cart_total_price = order['cart_total_price']
+            
 
     
     context = {
@@ -1147,144 +1148,228 @@ def update_cart(request):
                     cart_add_query.save()
                     return JsonResponse({'_actr': 'True'})
 
+from django.db.models import Value
+from django.db.models import Case, When, Value, IntegerField
+from itertools import zip_longest
 
 # function that execute shopping_cart form topbar
 def shopping_cart(request):
-    # find brands that are in laptops to show in top-bar
-    
-    laptop_topnav = SubCategory.objects.filter(categories='Laptops')
-    laptop_brand_id = topbar_laptops()
+    order = {'cart_total_price': 0, 'cart_total_items': 0,'cart_saved_price': 0}
+    current_user = request.user.id
+    if current_user: 
+        cart_details_object = Cart.objects.filter(user=current_user)
+        cart_quantity_total = cart_details_object.aggregate(total_quantity = Sum('quantity'))['total_quantity']
 
-    laptop_brand = []
-    for item in laptop_brand_id:
-        laptop_brand.append(Brands.objects.filter(id=item).last())
+        cart_total_price = Cart.objects.filter(user=current_user).annotate(
+        item_price=Subquery(Product.objects.filter(pk=OuterRef('product__id')).values('latest_price'))).aggregate(total=Sum(F('item_price')* F('quantity')))['total']
+        cart_product_list_objects = Cart.objects.filter(user = request.user).annotate(saved_amount = (F('product__previous_price') - F('product__latest_price'))*F('quantity'))
+        image_object_list = ProductImage.objects.filter(product__in = cart_product_list_objects.values_list('product',flat=True))
+        print(image_object_list.values())
+        items_total = cart_product_list_objects.aggregate(total_items = Sum('quantity'))
+        total_amount = cart_product_list_objects.aggregate(total_amount = Sum('product__latest_price'))
+        saved_amount = cart_product_list_objects.aggregate(total_saved_amount = Sum('saved_amount'))
+        print(cart_product_list_objects)
+        final_result = zip_longest(cart_product_list_objects, image_object_list,fillvalue=None)
+        print(final_result)
+        cart_list = list(cart_product_list_objects)
+        image_list = list(image_object_list)
 
-    # find brands that are in desktops to show in top-bar
-    desktop_topnav = SubCategory.objects.filter(categories='Desktops')
-    desktop_brand_id = topbar_desktops()
-
-    desktop_brand = []
-    for item in desktop_brand_id:
-        desktop_brand.append(Brands.objects.filter(id=item).last())
-
-    # find brands that are in apple to show in top-bar
-    apple_topnav = SubCategory.objects.filter(categories='Apple')
-    apple_brand_id = topbar_apple()
-
-    apple_brand = []
-    for item in apple_brand_id:
-        apple_brand.append(Brands.objects.filter(id=item).last())
-
-    # find brands that are in components to show in top-bar
-    components_topnav = SubCategory.objects.filter(categories='Components')
-    components_brand_id = topbar_components()
-
-    components_brand = []
-    for item in components_brand_id:
-        components_brand.append(Brands.objects.filter(id=item).last())
-
-    # check if user is logged-in and has is registered client
-    if request.user.is_authenticated and request.user.is_staff and request.user.profile.authorization is False:
-
-        order_cart_cookie = user_saved_cart(request, request.user)
-
-        cart_list = Cart.objects.filter(user=request.user).all()
-
-        cart_list_photo = []
-        cart_list_title = []
-        cart_list_quanity = []
-
-        # check the cartlist for the current-user
-        for items in cart_list:
-            if items.products_type == 'Laptops':
-                cart_list_photo.append(
-                    ProductsImage.objects.filter(product_id=items.product_id, products_type=items.products_type).last())
-                cart_list_title.append(LaptopProducts.objects.filter(id=items.product_id).last())
-                cart_list_quanity.append(
-                    Cart.objects.filter(product_id=items.product_id, products_type=items.products_type,
-                                        user=request.user).last().quantity)
-
-            if items.products_type == 'Desktops':
-                cart_list_photo.append(
-                    ProductsImage.objects.filter(product_id=items.product_id, products_type=items.products_type).last())
-                cart_list_title.append(DesktopsProducts.objects.filter(id=items.product_id).last())
-                cart_list_quanity.append(
-                    Cart.objects.filter(product_id=items.product_id, products_type=items.products_type,
-                                        user=request.user).last().quantity)
-
-            if items.products_type == 'Apple':
-                cart_list_photo.append(
-                    ProductsImage.objects.filter(product_id=items.product_id, products_type=items.products_type).last())
-                cart_list_title.append(AppleProducts.objects.filter(id=items.product_id).last())
-                cart_list_quanity.append(
-                    Cart.objects.filter(product_id=items.product_id, products_type=items.products_type,
-                                        user=request.user).last().quantity)
-
-            if items.products_type == 'Components':
-                cart_list_photo.append(
-                    ProductsImage.objects.filter(product_id=items.product_id, products_type=items.products_type).last())
-                cart_list_title.append(ComponentsProducts.objects.filter(id=items.product_id).last())
-                cart_list_quanity.append(
-                    Cart.objects.filter(product_id=items.product_id, products_type=items.products_type,
-                                        user=request.user).last().quantity)
-
-        # bundle item, quantity of per items and photo of the corresponding item
-        cart_obj = zip(cart_list_title, cart_list_quanity, cart_list_photo)
-
-        # current_user object
-        current_user = request.user
-
-        context = {'cart_quantity_total': order_cart_cookie['cart_total_items'],
-                   'cart_total_price': order_cart_cookie['cart_total_price'], 'cart_product_list': cart_obj,
-                   'cart_saved_price': order_cart_cookie['cart_saved_price'], 'current_user': current_user,
-                   'laptop_topnav': laptop_topnav, 'desktop_topnav': desktop_topnav, 'apple_topnav': apple_topnav,
-                   'components_topnav': components_topnav, 'laptop_brand': laptop_brand, 'desktop_brand': desktop_brand,
-                   'apple_brand': apple_brand, 'components_brand': components_brand}
-        return render(request, 'client_page/checkout.html', context)
+        # Zip the two lists together
+        zipped_list = list(zip(cart_list, image_list))
+        cookies_cart_prodcut_list = None
 
     else:
+        try:
+            cart = json.loads(request.COOKIES['cart'])
+        except KeyError:
+            cart = None
+        if cart:
+            print(cart)
+            for i in cart:
+                product = Product.objects.get(id=i)
+                total_price = (product.latest_price * int(cart[i]["quantity"]))
+                order['cart_total_price'] += total_price
+                order['cart_total_items'] += int(cart[i]["quantity"])
+                if product.previous_price == 0:
+                    pass
+                else:
+                    order['cart_saved_price'] += ((product.previous_price - product.latest_price) * int(cart[i]["quantity"]))
+            cart_quantity_total = order['cart_total_items']
+            cart_total_price = order['cart_total_price']
+            product_queryset = Product.objects.filter(id__in=cart.keys())
+            product_quantities = {int(k): v.get('quantity') for k, v in cart.items() if v is not None}
+            cookies_cart_prodcut_list = product_queryset.annotate(quantity=Case(
+                *[When(id=id, then=Value(quantity)) for id, quantity in product_quantities.items()],
+                default=Value(0),
+                output_field=IntegerField(),
+            )).annotate(saved_amount = (F('previous_price') - F('latest_price'))*F('quantity'))
+            # print(cookies_cart_prodcut_list.values())
+            items_total = cookies_cart_prodcut_list.aggregate(total_items = Sum('quantity'))
+            total_amount = cookies_cart_prodcut_list.aggregate(total_amount = Sum('latest_price'))
+            saved_amount = cookies_cart_prodcut_list.aggregate(total_saved_amount = Sum('saved_amount'))
+            cart_product_list_objects = None
+            # product_listsss = [Product.objects.annotate(quantity=Value(cart[i]["quantity"])).get(id=i)for i in cart]
+            # product_queryset = Product.objects.filter(id__in=cart.keys()).annotate(quantity=cart.get(F('id')).get('quantity'))
+            # print(cart.get('2').get('quantity'))
+            # print(product_queryset.values('id', 'quantity'))
 
-        # if user is not authenticate retrieve cart from cookie with same logic as above
-        order_cart_cookie = cookie_cart(request)
+    context = {
+        'cart_quantity_total': cart_quantity_total,
+        'cart_total_price': cart_total_price,
+        'cart_product_list': cart_product_list_objects,
+        'cookies_cart_prodcut_list': cookies_cart_prodcut_list,
+        'total_amount': total_amount['total_amount'],
+        'saved_amount': saved_amount['total_saved_amount'],
+        'items_total': items_total['total_items'],
+        'final_result': final_result,
+        'zipped_list': zipped_list,
 
-        cart = json.loads(request.COOKIES['cart'])
+    }
 
-        cart_product_list = []
-        for items in cart:
 
-            if items == 'Laptops':
-                for i in cart[items]:
-                    cart_product_list.append(
-                        (LaptopProducts.objects.filter(id=i).last(), cart[items][i]['quantity'],
-                         ProductsImage.objects.filter(product_id=i, products_type='Laptops').last()))
+#region unwanted code
 
-            if items == 'Desktops':
-                for i in cart[items]:
-                    cart_product_list.append(
-                        (DesktopsProducts.objects.filter(id=i).last(), cart[items][i]['quantity'],
-                         ProductsImage.objects.filter(product_id=i, products_type='Desktops').last()))
+    # # find brands that are in laptops to show in top-bar
+    
+    # laptop_topnav = SubCategory.objects.filter(categories='Laptops')
+    # laptop_brand_id = topbar_laptops()
 
-            if items == 'Apple':
-                for i in cart[items]:
-                    cart_product_list.append(
-                        (AppleProducts.objects.filter(id=i).last(), cart[items][i]['quantity'],
-                         ProductsImage.objects.filter(product_id=i, products_type='Apple').last()))
+    # laptop_brand = []
+    # for item in laptop_brand_id:
+    #     laptop_brand.append(Brands.objects.filter(id=item).last())
 
-            if items == 'Components':
-                for i in cart[items]:
-                    cart_product_list.append(
-                        (ComponentsProducts.objects.filter(id=i).last(), cart[items][i]['quantity'],
-                         ProductsImage.objects.filter(product_id=i, products_type='Components').last()))
+    # # find brands that are in desktops to show in top-bar
+    # desktop_topnav = SubCategory.objects.filter(categories='Desktops')
+    # desktop_brand_id = topbar_desktops()
 
-        current_user = []
-        context = {'cart_quantity_total': order_cart_cookie['cart_total_items'],
-                   'cart_total_price': order_cart_cookie['cart_total_price'], 'cart_product_list': cart_product_list,
-                   'cart_saved_price': order_cart_cookie['cart_saved_price'], 'current_user': current_user,
-                   'laptop_topnav': laptop_topnav, 'desktop_topnav': desktop_topnav, 'apple_topnav': apple_topnav,
-                   'components_topnav': components_topnav, 'laptop_brand': laptop_brand, 'desktop_brand': desktop_brand,
-                   'apple_brand': apple_brand, 'components_brand': components_brand}
-        return render(request, 'client_page/checkout.html', context)
+    # desktop_brand = []
+    # for item in desktop_brand_id:
+    #     desktop_brand.append(Brands.objects.filter(id=item).last())
 
+    # # find brands that are in apple to show in top-bar
+    # apple_topnav = SubCategory.objects.filter(categories='Apple')
+    # apple_brand_id = topbar_apple()
+
+    # apple_brand = []
+    # for item in apple_brand_id:
+    #     apple_brand.append(Brands.objects.filter(id=item).last())
+
+    # # find brands that are in components to show in top-bar
+    # components_topnav = SubCategory.objects.filter(categories='Components')
+    # components_brand_id = topbar_components()
+
+    # components_brand = []
+    # for item in components_brand_id:
+    #     components_brand.append(Brands.objects.filter(id=item).last())
+
+    # # check if user is logged-in and has is registered client
+    # if request.user.is_authenticated and request.user.is_staff and request.user.profile.authorization is False:
+
+        # order_cart_cookie = user_saved_cart(request, request.user)
+
+    #     cart_list = Cart.objects.filter(user=request.user).all()
+
+    #     print(cart_list)
+
+    #     cart_list_photo = []
+    #     cart_list_title = []
+    #     cart_list_quanity = []
+
+    #     # check the cartlist for the current-user
+    #     for items in cart_list:
+    #         if items.products_type == 'Laptops':
+    #             cart_list_photo.append(
+    #                 ProductsImage.objects.filter(product_id=items.product_id, products_type=items.products_type).last())
+    #             cart_list_title.append(LaptopProducts.objects.filter(id=items.product_id).last())
+    #             cart_list_quanity.append(
+    #                 Cart.objects.filter(product_id=items.product_id, products_type=items.products_type,
+    #                                     user=request.user).last().quantity)
+
+    #         if items.products_type == 'Desktops':
+    #             cart_list_photo.append(
+    #                 ProductsImage.objects.filter(product_id=items.product_id, products_type=items.products_type).last())
+    #             cart_list_title.append(DesktopsProducts.objects.filter(id=items.product_id).last())
+    #             cart_list_quanity.append(
+    #                 Cart.objects.filter(product_id=items.product_id, products_type=items.products_type,
+    #                                     user=request.user).last().quantity)
+
+    #         if items.products_type == 'Apple':
+    #             cart_list_photo.append(
+    #                 ProductsImage.objects.filter(product_id=items.product_id, products_type=items.products_type).last())
+    #             cart_list_title.append(AppleProducts.objects.filter(id=items.product_id).last())
+    #             cart_list_quanity.append(
+    #                 Cart.objects.filter(product_id=items.product_id, products_type=items.products_type,
+    #                                     user=request.user).last().quantity)
+
+    #         if items.products_type == 'Components':
+    #             cart_list_photo.append(
+    #                 ProductsImage.objects.filter(product_id=items.product_id, products_type=items.products_type).last())
+    #             cart_list_title.append(ComponentsProducts.objects.filter(id=items.product_id).last())
+    #             cart_list_quanity.append(
+    #                 Cart.objects.filter(product_id=items.product_id, products_type=items.products_type,
+    #                                     user=request.user).last().quantity)
+
+    #     # bundle item, quantity of per items and photo of the corresponding item
+    #     cart_obj = zip(cart_list_title, cart_list_quanity, cart_list_photo)
+
+    #     # current_user object
+    #     current_user = request.user
+
+    #     context = {'cart_quantity_total': order_cart_cookie['cart_total_items'],
+    #                'cart_total_price': order_cart_cookie['cart_total_price'], 'cart_product_list': cart_obj,
+    #                'cart_saved_price': order_cart_cookie['cart_saved_price'], 'current_user': current_user,
+    #                'laptop_topnav': laptop_topnav, 'desktop_topnav': desktop_topnav, 'apple_topnav': apple_topnav,
+    #                'components_topnav': components_topnav, 'laptop_brand': laptop_brand, 'desktop_brand': desktop_brand,
+    #                'apple_brand': apple_brand, 'components_brand': components_brand}
+    #     return render(request, 'client_page/checkout.html', context)
+
+    # else:
+
+    #     # if user is not authenticate retrieve cart from cookie with same logic as above
+    #     order_cart_cookie = cookie_cart(request)
+
+    #     cart = json.loads(request.COOKIES['cart'])
+
+    #     cart_product_list = []
+    #     for items in cart:
+
+    #         if items == 'Laptops':
+    #             for i in cart[items]:
+    #                 cart_product_list.append(
+    #                     (LaptopProducts.objects.filter(id=i).last(), cart[items][i]['quantity'],
+    #                      ProductsImage.objects.filter(product_id=i, products_type='Laptops').last()))
+
+    #         if items == 'Desktops':
+    #             for i in cart[items]:
+    #                 cart_product_list.append(
+    #                     (DesktopsProducts.objects.filter(id=i).last(), cart[items][i]['quantity'],
+    #                      ProductsImage.objects.filter(product_id=i, products_type='Desktops').last()))
+
+    #         if items == 'Apple':
+    #             for i in cart[items]:
+    #                 cart_product_list.append(
+    #                     (AppleProducts.objects.filter(id=i).last(), cart[items][i]['quantity'],
+    #                      ProductsImage.objects.filter(product_id=i, products_type='Apple').last()))
+
+    #         if items == 'Components':
+    #             for i in cart[items]:
+    #                 cart_product_list.append(
+    #                     (ComponentsProducts.objects.filter(id=i).last(), cart[items][i]['quantity'],
+    #                      ProductsImage.objects.filter(product_id=i, products_type='Components').last()))
+
+    #     current_user = []
+    #     context = {'cart_quantity_total': order_cart_cookie['cart_total_items'],
+    #                'cart_total_price': order_cart_cookie['cart_total_price'], 'cart_product_list': cart_product_list,
+    #                'cart_saved_price': order_cart_cookie['cart_saved_price'], 'current_user': current_user,
+    #                'laptop_topnav': laptop_topnav, 'desktop_topnav': desktop_topnav, 'apple_topnav': apple_topnav,
+    #                'components_topnav': components_topnav, 'laptop_brand': laptop_brand, 'desktop_brand': desktop_brand,
+    #                'apple_brand': apple_brand, 'components_brand': components_brand}
+    #     return render(request, 'client_page/checkout.html', context)
+
+#endregion
+    
+    
+    return render(request, 'client_page/checkout.html',context)
 
 # add wishlist if user is logged-in
 def update_wishlist(request):
