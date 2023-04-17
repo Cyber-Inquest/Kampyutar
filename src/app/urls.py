@@ -4,13 +4,20 @@ from . import views
 
 urlpatterns = [
      path('', views.index, name='index_app'),
-     path('shopping_cart/', views.shopping_cart, name='shopping_cart_app'),
-     path('pc-builder', views.coming_soonPC, name='comingSoon_app'),
+     path('shopping_cart/', views.shopping_cart, name='shopping_cart'),
+     path('pc-builder', views.coming_soonPC, name='comingSoon'),
+     path('order_proceed/',views.order_proceed, name='order_proceed'),
+     path('client-profile/', views.client_profile, name='client_profile'),
      
 
      path('blog_page/', views.blog_page, name='blog_page_app'),
      path('per_blog_page/<int:ids>', views.per_blog_page, name='per_blog_page_app'),
      path('blog_search', views.blog_search, name='blog_search_app'),
+     path('authenticate/', views.client_authentication, name='client_authentication'),
+     path('client_sign_in/', views.client_sign_in,
+          name='client_sign_in'),
+     path('client_sign_up/', views.client_sign_up,
+          name='client_sign_up'),
 
      #old created app 
      # path('list_page/<str:_product>', views.list_page, name='list_page_app'),
@@ -31,11 +38,6 @@ urlpatterns = [
 
      path('logged_out/', views.logged_out, name='logged_out_app'),
 
-     path('authenticate/', views.client_authentication, name='client_authentication_app'),
-     path('client_authentication_sign_in/', views.client_authentication_sign_in,
-          name='client_authentication_sign_in_app'),
-     path('client_authentication_sign_up/', views.client_authentication_sign_up,
-          name='client_authentication_sign_up_app'),
 
      path('checkout_order_save/', views.checkout_order_save,
           name='checkout_order_save_app'),

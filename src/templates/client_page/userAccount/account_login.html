@@ -45,7 +45,7 @@
 
                 <div class="column">
 
-                    <form action="{% url 'client_authentication_sign_in_app' %}" method="post">
+                    <form action="{% url 'client_sign_in' %}" method="post">
                         {% csrf_token %}
 
                         {% render_field sign_in_form.email placeholder="Enter Email" %}
@@ -83,7 +83,7 @@
             <div class="three">
 
                 <div class="column">
-                    <form action="{% url 'client_authentication_sign_up_app' %}" method="post">
+                    <form action="{% url 'client_sign_up' %}" method="post">
                         {% csrf_token %}
                         <input type="text" name="_username" placeholder="Enter Username" maxlength="15" required>
 

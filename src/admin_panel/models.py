@@ -139,6 +139,23 @@ class Profile(models.Model):
     def __str__(self):
         return self.user.username
 
+class Address(models.Model):
+    class Meta:
+        db_table = 'Address'
+
+    user                    = models.OneToOneField(User, on_delete=models.CASCADE, related_name="user_address")
+    first_name              = models.CharField(max_length=20, default='')
+    last_name               = models.CharField(max_length=20, default='')
+    company_name            = models.CharField(max_length=50, default='')
+    street_address          = models.CharField(max_length=50, default='')
+    town_city               = models.CharField(max_length=50, default='')
+    state                   = models.CharField(max_length=50, default='')
+    zip                     = models.IntegerField(default='')
+    contact                 = models.CharField(max_length=15, validators=[MinLengthValidator(7)], default='')
+
+    def __str__(self):
+        return self.user
+
  
 @receiver(post_save, sender=User)
 def create_profile(sender, instance, created, **kwargs):
@@ -156,6 +173,7 @@ class Order(models.Model):
     user                    = models.ForeignKey(User, on_delete=models.CASCADE, related_name="order_user")
     product                 = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="order_product")
     quantity                = models.IntegerField(default=1)
+    batch                   = models.IntegerField(default=0)
     date_time               = models.DateTimeField(auto_now_add=True)
     verified                = models.BooleanField(default=False)
     delivering              = models.BooleanField(default=False)
@@ -171,7 +189,6 @@ class Billing(models.Model):
         db_table = 'Billing'
 
     user                    = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user_billing")
-    order                   = models.OneToOneField(Order, on_delete=models.CASCADE, related_name="order_billing")
     first_name              = models.CharField(max_length=20, default='')
     last_name               = models.CharField(max_length=20, default='')
     company_name            = models.CharField(max_length=50, default='')
@@ -180,6 +197,7 @@ class Billing(models.Model):
     state                   = models.CharField(max_length=50, default='')
     zip                     = models.IntegerField(default='')
     contact                 = models.CharField(max_length=11, validators=[MinLengthValidator(7)], default='')
+    batch                   = models.IntegerField(default=0)
 
     def __str__(self):
         return self.user
@@ -190,7 +208,6 @@ class Delivery(models.Model):
         db_table = 'Delivery'
 
     user                    = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user_delivery")
-    order                   = models.OneToOneField(Order, on_delete=models.CASCADE, related_name="order_delivery")
     first_name              = models.CharField(max_length=20, default='')
     last_name               = models.CharField(max_length=20, default='')
     company_name            = models.CharField(max_length=50, default='')
@@ -199,6 +216,8 @@ class Delivery(models.Model):
     state                   = models.CharField(max_length=50, default='')
     zip                     = models.IntegerField(default='')
     contact                 = models.CharField(max_length=11, validators=[MinLengthValidator(7)], default='')
+    batch                   = models.IntegerField(default=0)
+
 
     def __str__(self):
         return self.user

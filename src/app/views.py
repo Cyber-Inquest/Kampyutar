@@ -22,7 +22,7 @@ from django.db.models import Sum, OuterRef, Subquery,F
 
 
 # models
-from admin_panel.models import Category, Order, Billing, Delivery, Wishlist, Cart , Blogs
+from admin_panel.models import Address, Category, Order, Billing, Delivery, Wishlist, Cart , Blogs
 from admin_panel.models import Profile, ProductImage, Specification, Product, Slideshow, SubCategory, Brand, ProductReview
 
 # forms/filters
@@ -111,6 +111,92 @@ def cookie_cart(request):
 
     return order
 
+# function for handling user sigup
+def client_sign_up(request):
+    email_exists = False
+    if request.method == 'POST':
+
+        # get credentials from the user
+        username = request.POST.get("_username")
+        email = request.POST.get("_email")
+        c_password = request.POST.get("_cpassword")
+        n_password = request.POST.get("_npassword")
+        checkbox = request.POST.get("_checkbox")
+
+        # if user accept the terms and conditions
+        if checkbox:
+            admin_all = User.objects.all()
+
+            # check if the email is already in use in other account
+            for items in admin_all:
+
+                if items.email == email:
+                    email_exists = True
+                    break
+                else:
+                    email_exists = False
+
+            # if the email is already in use show the message to the user
+            if email_exists:
+                messages.warning(request, 'Email already exists!')
+
+                sign_in_form = LoginForm()
+                context = {'sign_in_form': sign_in_form}
+                return render(request, 'client_page/userAccount/account_login.html', context)
+
+            # if the email authorized by the system for new account
+            else:
+
+                # check if the password matches
+                if n_password == c_password:
+                    try:
+                        new_user = User(username=username, email=email, is_superuser=0, is_staff=0)
+                        new_user.set_password(c_password)
+                        # new_profile = Profile(user=new_user)
+                        new_user.save()
+                        # new_profile.save()
+
+                        messages.success(request, 'Please LogIn !')
+                        sign_in_form = LoginForm()
+                        context = {'sign_in_form': sign_in_form}
+                        return render(request, 'client_page/userAccount/account_login.html', context)
+
+                    except Exception as e:
+                        print(e)
+                        messages.error(request, 'Username exists!')
+                        sign_in_form = LoginForm()
+                        context = {'sign_in_form': sign_in_form}
+                        return render(request, 'client_page/userAccount/account_login.html', context)
+                else:
+                    messages.error(request, 'password does not match!')
+                    sign_in_form = LoginForm()
+                    context = {'sign_in_form': sign_in_form}
+                    return render(request, 'client_page/userAccount/account_login.html', context)
+    if request.method == 'GET':
+        sign_in_form = LoginForm()
+        context = {'sign_in_form': sign_in_form}
+        return render(request, 'client_page/userAccount/account_login.html', context)
+    
+
+#user profile
+def client_profile(request):
+    if request.user.is_authenticated:
+        logged_in_user = request.user
+        profile_details = Profile.objects.get(user=logged_in_user)
+        address_details = Address.objects.filter(user=logged_in_user)
+        order_details = Order.objects.filter(user=logged_in_user)
+        wishlist_list = Wishlist.objects.filter(user=logged_in_user).annotate(product_image = Subquery(ProductImage.objects.filter(product_id=OuterRef('product_id')).values('image')[:1]))
+
+        context = {'profile_details': profile_details,
+                    'address_details': address_details,
+                    'order_details': order_details,
+                    'wishlist_list': wishlist_list
+                    }    
+    return render(request, 'client_page/userAccount/client_profile.html', context)
+
+def update_profile(request):
+    return render (request, 'client_page/userAccount/update_profile.html')
+
 
 # if user is logged-in show cartoonist data in shopping cart
 def user_saved_cart(request, _current_user):
@@ -175,28 +261,21 @@ def user_saved_cart(request, _current_user):
 
 # after logged-in if there is any data in cookie save the data into db and clear the cookie
 def cookie_cart_loging(request, _current_user):
-    cart = json.loads(request.COOKIES['cart'])
-
+    try:
+        cart = json.loads(request.COOKIES['cart'])
+    except:
+        cart = None
     if cart:
-
         # for each product type
         for item in cart:
-            if cart[item]:
-                # for product of each product type
-                for i in cart[item]:
-                    check_data = Cart.objects.filter(user=_current_user, products_type=item, product_id=i).last()
-                    if check_data:
-                        check_data.quantity += cart[item][i]['quantity']
-                        check_data.save()
-                    else:
-                        Cart.objects.create(user=_current_user, products_type=item, quantity=cart[item][i]['quantity'],
-                                            product_id=i)
-
+            check_data = Cart.objects.filter(user=_current_user, product_id=item).last()
+            if check_data:
+                check_data.quantity += cart[item]['quantity']
+                check_data.save()
             else:
-                pass
-    else:
-        pass
+                Cart.objects.create(user=_current_user,quantity=cart[item]['quantity'],product_id=item)
 
+          
 
 # helper function to show brand of laptop in top-bar
 def topbar_laptops():
@@ -278,12 +357,12 @@ def index(request):
         } for a, category in enumerate(nav_bar_categories)
     }
     #getting cart quantity and total price for individual user who are logged in 
-    current_user = request.user.id
-    if current_user: 
-        cart_details_object = Cart.objects.filter(user=current_user)
+    
+    if request.user.is_authenticated: 
+        cart_details_object = Cart.objects.filter(user=request.user)
         cart_quantity_total = cart_details_object.aggregate(total_quantity = Sum('quantity'))['total_quantity']
 
-        cart_total_price = Cart.objects.filter(user=current_user).annotate(
+        cart_total_price = Cart.objects.filter(user=request.user).annotate(
         item_price=Subquery(Product.objects.filter(pk=OuterRef('product__id')).values('latest_price'))).aggregate(total=Sum(F('item_price')* F('quantity')))['total']
     else:
         try:
@@ -304,7 +383,7 @@ def index(request):
             cart_quantity_total = order['cart_total_items']
             cart_total_price = order['cart_total_price']
             
-
+    
     
     context = {
         
@@ -315,7 +394,7 @@ def index(request):
         'all_products': all_products_objects,
         'blog_list': blog_list,
         'json_data': json_data,
-        'current_user': current_user,
+        'current_user': request.user,
         'cart_quantity_total': cart_quantity_total,
         'cart_total_price' : cart_total_price,
     }
@@ -1159,23 +1238,14 @@ def shopping_cart(request):
     if current_user: 
         cart_details_object = Cart.objects.filter(user=current_user)
         cart_quantity_total = cart_details_object.aggregate(total_quantity = Sum('quantity'))['total_quantity']
-
         cart_total_price = Cart.objects.filter(user=current_user).annotate(
         item_price=Subquery(Product.objects.filter(pk=OuterRef('product__id')).values('latest_price'))).aggregate(total=Sum(F('item_price')* F('quantity')))['total']
-        cart_product_list_objects = Cart.objects.filter(user = request.user).annotate(saved_amount = (F('product__previous_price') - F('product__latest_price'))*F('quantity'))
-        image_object_list = ProductImage.objects.filter(product__in = cart_product_list_objects.values_list('product',flat=True))
-        print(image_object_list.values())
+        cart_product_list_objects = Cart.objects.filter(user = request.user).annotate(saved_amount = (F('product__previous_price') - F('product__latest_price'))*F('quantity')).annotate(product_image = Subquery(ProductImage.objects.filter(product_id = OuterRef('product__id')).values('image')[:1]))
+        
         items_total = cart_product_list_objects.aggregate(total_items = Sum('quantity'))
         total_amount = cart_product_list_objects.aggregate(total_amount = Sum('product__latest_price'))
         saved_amount = cart_product_list_objects.aggregate(total_saved_amount = Sum('saved_amount'))
-        print(cart_product_list_objects)
-        final_result = zip_longest(cart_product_list_objects, image_object_list,fillvalue=None)
-        print(final_result)
-        cart_list = list(cart_product_list_objects)
-        image_list = list(image_object_list)
-
-        # Zip the two lists together
-        zipped_list = list(zip(cart_list, image_list))
+        
         cookies_cart_prodcut_list = None
 
     else:
@@ -1184,7 +1254,6 @@ def shopping_cart(request):
         except KeyError:
             cart = None
         if cart:
-            print(cart)
             for i in cart:
                 product = Product.objects.get(id=i)
                 total_price = (product.latest_price * int(cart[i]["quantity"]))
@@ -1203,15 +1272,19 @@ def shopping_cart(request):
                 default=Value(0),
                 output_field=IntegerField(),
             )).annotate(saved_amount = (F('previous_price') - F('latest_price'))*F('quantity'))
-            # print(cookies_cart_prodcut_list.values())
             items_total = cookies_cart_prodcut_list.aggregate(total_items = Sum('quantity'))
             total_amount = cookies_cart_prodcut_list.aggregate(total_amount = Sum('latest_price'))
             saved_amount = cookies_cart_prodcut_list.aggregate(total_saved_amount = Sum('saved_amount'))
             cart_product_list_objects = None
-            # product_listsss = [Product.objects.annotate(quantity=Value(cart[i]["quantity"])).get(id=i)for i in cart]
-            # product_queryset = Product.objects.filter(id__in=cart.keys()).annotate(quantity=cart.get(F('id')).get('quantity'))
-            # print(cart.get('2').get('quantity'))
-            # print(product_queryset.values('id', 'quantity'))
+           
+        else:
+            cart_quantity_total = None
+            cart_total_price = None
+            cart_product_list_objects = None
+            cookies_cart_prodcut_list = None
+            items_total = {'total_items': '0'}
+            total_amount = {'total_amount': '0'}
+            saved_amount = {'total_saved_amount': '0'}
 
     context = {
         'cart_quantity_total': cart_quantity_total,
@@ -1221,8 +1294,6 @@ def shopping_cart(request):
         'total_amount': total_amount['total_amount'],
         'saved_amount': saved_amount['total_saved_amount'],
         'items_total': items_total['total_items'],
-        'final_result': final_result,
-        'zipped_list': zipped_list,
 
     }
 
@@ -1381,7 +1452,65 @@ def update_wishlist(request):
 
         return JsonResponse({'_actr': 'True'})
 
+def order_proceed(request):
+    if request.user.id:
+        current_user = request.user
+        user_details = User.objects.filter(id=current_user.id).last()
 
+        if request.method == 'POST':
+            billing_firstname = request.POST.get('billing_firstname')
+            billing_lastname = request.POST.get('billing_lastname')
+            billing_company = request.POST.get('billing_company')
+            billing_street = request.POST.get('billing_street')
+            billing_town = request.POST.get('billing_town')
+            billing_state = request.POST.get('billing_state')
+            billing_zip = request.POST.get('billing_zip')
+            billing_number = request.POST.get('billing_number')
+
+            delivery_firstname = request.POST.get('delivery_firstname')
+            delivery_lastname = request.POST.get('delivery_lastname')
+            delivery_company = request.POST.get('delivery_company')
+            delivery_street = request.POST.get('delivery_street')
+            delivery_town = request.POST.get('delivery_town')
+            delivery_state = request.POST.get('delivery_state')
+            delivery_zip = request.POST.get('delivery_zip')
+            delivery_number = request.POST.get('delivery_number')
+
+            cart_list = Cart.objects.filter(user=user_details)
+            try:
+                batch_number = Order.objects.last().batch + 1
+            except:
+                batch_number = 1
+            for item in cart_list:
+                Order.objects.create( product=item.product, quantity=item.quantity,
+                                    user=user_details,batch = batch_number)
+
+            cart_list.delete()
+
+            Billing.objects.create(user=user_details,batch = batch_number, 
+                                   first_name=billing_firstname, last_name=billing_lastname,
+                                   company_name=billing_company, street_address=billing_street, town_city=billing_town,
+                                   state=billing_state, zip=billing_zip, contact=billing_number)
+            
+            Delivery.objects.create(user=user_details,batch = batch_number,
+                                    first_name=delivery_firstname, last_name=delivery_lastname,
+                                    company_name=delivery_company, street_address=delivery_street, town_city=delivery_town,
+                                    state=delivery_state, zip=delivery_zip, contact=delivery_number)
+            
+            return redirect('index_app')
+
+        address = Address.objects.filter(user=current_user).last()
+
+        context = {
+            'user_details': user_details,
+            'address': address,
+        }
+    
+        return render(request, 'client_page/order_proceed.html', context)
+    else:
+        sign_in_form = LoginForm()
+        context = {'sign_in_form': sign_in_form}
+        return render(request, 'client_page/userAccount/account_login.html', context)
 # user logging function
 def client_authentication(request):
     # find brands that are in laptops to show in top-bar
@@ -1507,7 +1636,9 @@ def client_authentication(request):
 
         context = {'cart_quantity_total': order_cart_cookie['cart_total_items'],
                    'cart_total_price': order_cart_cookie['cart_total_price'],
-                   'current_user': current_user, 'order_list': order_obj, 'billing_query': billing_query,
+                   'current_user': current_user, 
+                   'order_list': order_obj, 
+                   'billing_query': billing_query,
                    'delivery_query': delivery_query, 'wish_obj': wish_obj, 'cart_obj': cart_obj,
                    'laptop_topnav': laptop_topnav, 'desktop_topnav': desktop_topnav, 'apple_topnav': apple_topnav,
                    'components_topnav': components_topnav, 'laptop_brand': laptop_brand, 'desktop_brand': desktop_brand,
@@ -1523,7 +1654,7 @@ def client_authentication(request):
 
 
 # user authentication handling process
-def client_authentication_sign_in(request):
+def client_sign_in(request):
     if request.method == 'POST':
 
         # get email, password and remember_me options from the user
@@ -1533,11 +1664,11 @@ def client_authentication_sign_in(request):
 
         # check if the user email is registered
         user = User.objects.filter(email=email).last()
-
+        print(user)
         if user is not None:
 
             # check if user is client and password matches
-            if user.is_staff and check_password(password, user.password):
+            if check_password(password, user.password):
 
                 # if user credentials matches add session to the user
                 login(request, user)
@@ -1549,67 +1680,21 @@ def client_authentication_sign_in(request):
 
                 # given password does not match or the account is not client privilege
                 messages.warning(request, 'Access Denied!')
-                return redirect('client_authentication_app')
+                sign_in_form = LoginForm()
+                context = {'sign_in_form': sign_in_form}
+                return render(request, 'client_page/userAccount/account_login.html', context)
         else:
 
             # given email is not registered
             messages.warning(request, 'Wrong credentials!')
-            return redirect('client_authentication_app')
+            sign_in_form = LoginForm()
+            context = {'sign_in_form': sign_in_form}
+            return render(request, 'client_page/userAccount/account_login.html', context)
+    if request.method == 'GET':
+        sign_in_form = LoginForm()
+        context = {'sign_in_form': sign_in_form}
+        return render(request, 'client_page/userAccount/account_login.html', context)
 
-
-# function for handling user sigup
-def client_authentication_sign_up(request):
-    email_exists = False
-    if request.method == 'POST':
-
-        # get credentials from the user
-        username = request.POST.get("_username")
-        email = request.POST.get("_email")
-        c_password = request.POST.get("_cpassword")
-        n_password = request.POST.get("_npassword")
-        checkbox = request.POST.get("_checkbox")
-
-        # if user accept the terms and conditions
-        if checkbox:
-            admin_all = User.objects.all()
-
-            # check if the email is already in use in other account
-            for items in admin_all:
-
-                if items.email == email:
-                    email_exists = True
-                    break
-                else:
-                    email_exists = False
-
-            # if the email is already in use show the message to the user
-            if email_exists:
-                messages.warning(request, 'Email already exists!')
-
-                return redirect('client_authentication_app')
-
-            # if the email authorized by the system for new account
-            else:
-
-                # check if the password matches
-                if n_password == c_password:
-                    try:
-                        new_user = User(username=username, email=email, is_superuser=0, is_staff=0)
-                        new_user.set_password(c_password)
-                        # new_profile = Profile(user=new_user)
-                        new_user.save()
-                        # new_profile.save()
-
-                        messages.success(request, 'Please LogIn !')
-                        return redirect('client_authentication_app')
-
-                    except Exception as e:
-                        print(e)
-                        messages.error(request, 'Username exists!')
-                        return redirect('client_authentication_app')
-                else:
-                    messages.error(request, 'password does not match!')
-                    return redirect('client_authentication_app')
 
 
 # adding wishlist from per page
@@ -2236,14 +2321,18 @@ def product_review(request, _product, ids):
         return redirect(url)
 
 
-@client_only
 def checkout_order_save(request):
-    cart_list = Cart.objects.filter(user_id=request.user.id)
-    for item in cart_list:
-        Order.objects.create(products_type=item.products_type, product_id=item.product_id, quantity=item.quantity,
-                             user_id=item.user_id)
+    if request.user.id:
+        # cart_list = Cart.objects.filter(user_id=request.user.id)
+        # for item in cart_list:
+        #     Order.objects.create(products_type=item.products_type, product_id=item.product_id, quantity=item.quantity,
+        #                         user_id=item.user_id)
 
-    cart_list.delete()
+        # cart_list.delete()
 
-    messages.success(request, 'Order Placed')
-    return redirect('client_authentication_app')
+        messages.success(request, 'Order Placed')
+        return redirect('order_proceed')
+    else:
+        sign_in_form = LoginForm()
+        context = {'sign_in_form': sign_in_form}
+        return render(request, 'client_page/userAccount/account_login.html', context)

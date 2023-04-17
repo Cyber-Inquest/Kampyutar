@@ -8,14 +8,15 @@
         <span>multitrade@gmail.com</span>
     </div>
     <div class="cc_htopbar_right">
-        <a href="{% url 'client_authentication_app' %}">
-            {% if current_user %}
-            {{current_user}}
+        {% if request.user.is_authenticated %}
+        <a href="{% url 'client_profile' %}">
+            {{current_user}}</a>
             {% else %}
-            Sign in
-            {% endif %}</a>
+            <a href="{% url 'client_sign_in' %}">
+            Sign in </a>
+            {% endif %}
         &nbsp;&nbsp;&nbsp;&nbsp;
-        <a href="{% url 'client_authentication_app' %}"><i class="fas fa-heart"></i> &nbsp; My Wishlist</a>
+        <a href="{% url 'client_authentication' %}"><i class="fas fa-heart"></i> &nbsp; My Wishlist</a>
     </div>
 </div>
 
@@ -45,7 +46,7 @@
     </div>
 
     <div class="cc_hmiddlebar_right" id="append_here">
-        <a href="{% url 'shopping_cart_app' %}">
+        <a href="{% url 'shopping_cart' %}">
             <button>
                 <div class="cc_shoppingCartDiv">
                     <div class="cc_sc_img mcentertb">
