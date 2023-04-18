@@ -5,10 +5,12 @@ from . import views
 urlpatterns = [
      path('', views.index, name='index_app'),
      path('shopping_cart/', views.shopping_cart, name='shopping_cart'),
-     path('pc-builder', views.coming_soonPC, name='comingSoon'),
      path('order_proceed/',views.order_proceed, name='order_proceed'),
      path('client-profile/', views.client_profile, name='client_profile'),
+     path('update_client_profile', views.update_client_profile, name='update_client_profile'),
+     path('search-product/', views.search_product, name='search_product'),
      
+     # path('pc-builder', views.coming_soonPC, name='comingSoon'),
 
      path('blog_page/', views.blog_page, name='blog_page_app'),
      path('per_blog_page/<int:ids>', views.per_blog_page, name='per_blog_page_app'),
@@ -39,8 +41,9 @@ urlpatterns = [
      path('logged_out/', views.logged_out, name='logged_out_app'),
 
 
-     path('checkout_order_save/', views.checkout_order_save,
-          name='checkout_order_save_app'),
+     # path('checkout_order_save/', views.checkout_order_save,
+          # name='checkout_order_save_app'),
+
      path('client_information_billing_post/<int:ids>', views.client_information_billing_post,
           name='client_information_billing_post_app'),
      path('client_information_account_post/<int:ids>', views.client_information_account_post,

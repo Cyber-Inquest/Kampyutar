@@ -9,7 +9,8 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
-
+<script src="{% static 'js/jquery-1.9.1.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/toastr.min.js' %}"></script>
     <link rel="stylesheet" href="{% static 'css/client_css/php_m.css' %}">
     <link rel="stylesheet" href="{% static 'css/client_css/style.css' %}">
     <link rel="stylesheet" href="{% static 'css/client_css/footer.css' %}">
@@ -27,20 +28,20 @@
 
 <body>
 
-{% if messages %}
-<ul class="messages">
-    {% for message in messages %}
-            {% if message.tags == 'success'%}
-                <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
-            {% elif message.tags == 'info' %}
-                <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
-            {% elif message.tags == 'warning' %}
-                <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
-            {% elif message.tags == 'error' %}
-                <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
-            {% endif %}
-    {% endfor %}
-</ul>
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+                {% if message.tags == 'success'%}
+                    <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+                {% elif message.tags == 'info' %}
+                    <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+                {% elif message.tags == 'warning' %}
+                    <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+                {% elif message.tags == 'error' %}
+                    <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+                {% endif %}
+        {% endfor %}
+    </ul>
 {% endif %}
 
     {% include 'client_page/nav_bar_new/topNavBar.html' with current_user=current_user cart_quantity_total=cart_quantity_total cart_total_price=cart_total_price %}
@@ -96,7 +97,8 @@
                     <span>UserName: {{profile_details}}</span>
                     <span>Email: {{profile_details.user.email}}</span>
                     <span>Contact : {{profile_details.contact}}</span>
-                    <span>FullName : {{profile_details.fullname}}</span>
+                    <span>First Name : {{address_details.first.first_name}}</span>
+                    <span>Last Name : {{address_details.first.last_name}}</span>
                 </div>
             </div>
     
@@ -111,8 +113,6 @@
                 </div>
                 <hr style="margin: 0;">
                 <div class="uaContentMid ">
-                    <span>First Name : {{address_details.first.first_name}}</span><br/>
-                    <span>Last Name : {{address_details.first.last_name}}</span></br>
                     <span>Company Name : {{address_details.first.company_name}}</span></br>
                     <span>Street Address : {{address_details.first.street_address}}</span></br>
                     <span>Town : {{address_details.first.town_city}}</span></br>
@@ -221,7 +221,7 @@
             </div>
         </div>
         <div class="bb_ua_thirdDiv dnone" id="accountInfo">
-            <form action="/client_information_account_post/{{request.user.id}}" method="post">
+            <form action="{% url 'update_client_profile' %}" method="post">
                 {% csrf_token %}
                 <div class="bb_ua_thirdDivContent">
                 <h2>AccountInfo</h2>
@@ -252,7 +252,7 @@
                         <div class="bb_ua_aICleft">
                             <div class="ua_inputPerDiv">
                                 <h4 style="margin: 10px 0px;">Old Email ID</h4>
-                                <input type="email" name="account_old_email" value="{{profile_details.user.email}}" placeholder="Old Email ID">
+                                <input type="email" name="account_old_email" value="{{profile_details.user.email}}" placeholder="Old Email ID" readonly>
                             </div>
                         </div>
                         <div class="bb_ua_aICright">
@@ -307,27 +307,27 @@
                         <div class="ua_aInputContent">
                         <div class="ua_inputPerDiv">
                             <h4 style="margin: 10px 0px;">Company Name</h4>
-                            <input type="text" name="billing_company" value="{{address_details.first.company_name}}" placeholder="Company Name">
+                            <input type="text" name="account_company" value="{{address_details.first.company_name}}" placeholder="Company Name">
                         </div>
                         <div class="ua_inputPerDiv">
                             <h4 style="margin: 10px 0px;">Street Address</h4>
-                            <input type="text" name="billing_street" value="{{address_details.first.street_address}}" placeholder="Street Address">
+                            <input type="text" name="account_street" value="{{address_details.first.street_address}}" placeholder="Street Address">
                         </div>
                         <div class="ua_inputPerDiv">
                             <h4 style="margin: 10px 0px;">Town/City</h4>
-                            <input type="text" name="billing_town" value="{{address_details.first.town_city}}" placeholder="Town/City">
+                            <input type="text" name="account_town" value="{{address_details.first.town_city}}" placeholder="Town/City">
                         </div>
                         <div class="ua_inputPerDiv">
                             <h4 style="margin: 10px 0px;">State</h4>
-                            <input type="text" name="billing_state" value="{{address_details.first.state}}" placeholder="State">
+                            <input type="text" name="account_state" value="{{address_details.first.state}}" placeholder="State">
                         </div>
                         <div class="ua_inputPerDiv">
                             <h4 style="margin: 10px 0px;">ZIP</h4>
-                            <input type="text" name="billing_zip" value="{{address_details.first.zip}}" placeholder="ZIP">
+                            <input type="text" name="account_zip" value="{{address_details.first.zip}}" placeholder="ZIP">
                         </div>
                         <div class="ua_inputPerDiv">
                             <h4 style="margin: 10px 0px;">Phone Number</h4>
-                            <input type="number" name="billing_number" value="{{address_details.first.contact}}" placeholder="Phone Number">
+                            <input type="number" name="account_number" value="{{address_details.first.contact}}" placeholder="Phone Number">
                         </div>
                     </div>
 
@@ -353,8 +353,7 @@
     window.CSRF_TOKEN = "{{ csrf_token }}";
 </script>
 
-<script src="{% static 'js/jquery-1.9.1.min.js' %}"></script>
-<script src="{% static 'js/toastr.min.js' %}"></script>
+
 <script src="{% static 'js/company.js' %}"></script>
 <script src="{% static 'js/userAccount.js' %}"></script>
 <script src="{% static 'js/client_user.js' %}"></script>

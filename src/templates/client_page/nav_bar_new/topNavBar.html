@@ -31,13 +31,11 @@
     </div>
 
     <div class="cc_hmiddlebar_mid">
-        <form action="{% url 'search_btns_post_app' %}" method="post">
-            {% csrf_token %}
+        <form action="{% url 'search_product' %}" method="GET">
             <div class="cc_searchContainer centerlr">
                 <div class="cc_search_txt">
-                    <input name="_search_text" placeholder="Enter Keywords to search ...." required>
+                    <input name="query" placeholder="Enter Keywords to search ........." required>
                 </div>
-
                 <button class="bb_search_btn" type="submit">
                     <i class="fa fa-search"></i>
                 </button>
