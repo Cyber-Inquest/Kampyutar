@@ -221,7 +221,7 @@
             </div>
         </div>
         <div class="bb_ua_thirdDiv dnone" id="accountInfo">
-            <form action="{% url 'update_client_profile' %}" method="post">
+            <form action="{% url 'client_profile' %}" method="post">
                 {% csrf_token %}
                 <div class="bb_ua_thirdDivContent">
                 <h2>AccountInfo</h2>
@@ -340,10 +340,8 @@
             </form>
             </div>
     
-        </div>
-    
     </div>
-    
+   
     {% include 'client_page/footer.html' %}
     {% include 'client_page/bottom_bar.html' %}
 

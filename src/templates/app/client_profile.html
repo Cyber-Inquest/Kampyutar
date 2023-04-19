@@ -1,0 +1,302 @@
+{% extends 'base1.html' %}
+{% load static %}
+{% load social_share %}
+{% block content %}
+
+<div class="bb_ua_main">
+    <div class="bb_ua_topBar">
+        <div class="bb_ua_topBar_left">
+            <div class="bb_ltb_left">
+                <div class="bb_ltbl_ppimg">
+                    {% if profile_details.photo_img.url == '/media/default' %}
+                    <img >
+                    {% else %}
+                    <img src="{{profile_details.photo_img.url}}" alt="">
+                    {% endif %}
+                </div>
+            </div>
+            <div class="bb_ltb_right">
+                <div class="bb_ltbl_name">
+                    <h2>Welcome, {{profile_details}}</h2>
+                    <span>{{profile_details.user.email}}</span>
+                </div>
+            </div>
+        </div>
+        <div class="bb_ua_topBar_right">
+<!--            <a href="" class="cusButton blueBtn">Edit Profile</a>-->
+            <a href="{% url 'logged_out_app' %}" class="cusButton redBtn">Logout</a>
+        </div>
+    </div>
+    <div class="bb_ua_secDiv">
+        <div class="bb_ua_SecDivNavBar">
+            <ul>
+                <li class="li_tabs uaTab_active" onclick="active_tab('dashboard',this)">Details</li>
+                <li class="li_tabs" onclick="active_tab('order',this)">Orders</li>
+                <li class="li_tabs" onclick="active_tab('wishlist',this)">Wishlist</li>
+                <li class="li_tabs" onclick="active_tab('accountInfo',this)">Edit Account Info</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="bb_ua_thirdDiv" id="dashboard">
+        <div class="bb_ua_thirdDivContent">
+            <div class="uaContentTop">
+                <div class="usCT_left">
+                    <h3>Account Information</h3>
+                </div>
+                <div class="usCT_right" style="display:none;">
+                    <a href="" class="cusButton blueBtn">Edit</a>
+                </div>
+            </div>
+            <hr style="margin: 0;">
+            <div class="uaContentMid">
+                <span>UserName: {{profile_details}}</span>
+                <span>Email: {{profile_details.user.email}}</span>
+                <span>Contact : {{profile_details.contact}}</span>
+                <span>First Name : {{address_details.first.first_name}}</span>
+                <span>Last Name : {{address_details.first.last_name}}</span>
+            </div>
+        </div>
+
+        <div class="bb_ua_thirdDivContent">
+            <div class="uaContentTop">
+                <div class="usCT_left">
+                    <h3>Address Information</h3>
+                </div>
+                <div class="usCT_right" style="display:none;">
+                    <a href="" class="cusButton blueBtn">Edit</a>
+                </div>
+            </div>
+            <hr style="margin: 0;">
+            <div class="uaContentMid ">
+                <span>Company Name : {{address_details.first.company_name}}</span></br>
+                <span>Street Address : {{address_details.first.street_address}}</span></br>
+                <span>Town : {{address_details.first.town_city}}</span></br>
+                <span>Sate : {{address_details.first.state}}</span></br>
+                <span>Zip : {{address_details.first.zip}}</span></br>
+                <span>Contact : {{address_details.first.contact}}</span></br>
+              
+
+            </div>
+        </div>
+
+        <div class="bb_ua_thirdDivContent uabox" style="display:none;">
+            <div class="uaContentTop">
+                <div class="usCT_left" style="margin-left: 30px;">
+                    <h3>Newsletter Subscriptions</h3>
+                </div>
+                <div class="usCT_right">
+                    <a href="" class="cusButton greenBtn">ON</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="bb_ua_thirdDiv dnone" id="order">
+        <div class="bb_ua_thirdDivContent">
+            <h2>Order</h2>
+
+            <div class="bb_ua_orderContent">
+                <table id="ua_orderList">
+                    <tr>
+                        <th width="5%">S.N.</th>
+                        <th width="40%">Product Name</th>
+                        <th width="5%">Qty</th>
+                        <th width="5%">Batch</th>
+                        <th width="15%">Date</th>
+                        <th width="30%">Actions</th>
+                    </tr>
+                    {% for items in order_details %}
+                    <tr>
+                        <td>{{forloop.counter}}</td>
+                        <td>{{items.product.title}}</td>
+                        <td>{{items.quantity}}</td>
+                        <td>{{items.batch}}</td>
+                        <td>{{items.date_time}}</td>
+                        <td>
+                             <i class="fa-solid fa-laptop v_i tillSuccess" ></i>
+                            {% if items.1.verified == 1 %}
+                                <i class="fa-solid fa-truck-ramp-box v_i tillSuccess" ></i>
+                            {% else %}
+                                <i class="fa-solid fa-truck-ramp-box v_i " ></i>
+                            {% endif %}
+
+                            {% if items.1.delivered == 1 %}
+                                <i class="fa-solid fa-truck v_i tillSuccess" ></i>
+                            {% else %}
+                                <i class="fa-solid fa-truck v_i" ></i>
+                            {% endif %}
+
+                            {% if items.1.delivering == 1 %}
+                                <i class="fa-solid fa-circle-check v_i tillSuccess" ></i>
+                            {% else %}
+                                <i class="fa-solid fa-circle-check v_i" ></i>
+                            {% endif %}
+
+                            <i class="fa-solid fa-trash-can v_i v_di" ></i>
+
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="bb_ua_thirdDiv dnone" id="wishlist">
+        <div class="bb_ua_thirdDivContent">
+            <h2>Wish list</h2>
+            <div class="bb_ua_wishlistContent">
+
+                <!-- loop this -->
+                {% for items in wishlist_list %}
+                <div class="bb_ua_perProduct_col">
+                    <div class="bb_ua_perProduct_item">
+                        <div class="bb_ua_item_img">
+                            {% if items.1.photo_img.url == '/media/default' %}
+                            {% else %}
+                            <img src="{% get_media_prefix %}{{items.product_image}}" alt="">
+                            {% endif %}
+                            <i class="fas fa-trash-alt wish_del_btn" data-del_wish_product={{items.wishlist_product.id}} data-del_wish_productype="{{items.0.products_type}}"></i>
+                        </div>
+                        <div class="bb_ua_item_name">
+                            <h4>{{items.wishlist_product.title}}</h4>
+                        </div>
+                        <div class="bb_ua_item_addToCart">
+                            <button class="bb_ua_item_addToCart_btn"><i class="fas fa-eye"></i> &nbsp; View
+                                Details</button>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                <!-- till this -->
+
+
+            </div>
+        </div>
+    </div>
+    <div class="bb_ua_thirdDiv dnone" id="accountInfo">
+        <form action="{% url 'client_profile' %}" method="post">
+            {% csrf_token %}
+            <div class="bb_ua_thirdDivContent">
+            <h2>AccountInfo</h2>
+            <div class="ua_accountName">
+                <div class="bb_ua_accountInfoContent">
+                    <div class="bb_ua_aICleft">
+                        <div class="ua_inputPerDiv">
+                            <h4 style="margin: 10px 0px;">First Name</h4>
+                            <input type="text" name="account_first_name" value="{{address_details.first.first_name}}" placeholder="First Name">
+                        </div>
+                    </div>
+                    <div class="bb_ua_aICright">
+                        <div class="ua_inputPerDiv">
+                            <h4 style="margin: 10px 0px;">Last Name</h4>
+                            <input type="text" name="account_last_name" value="{{address_details.first.last_name}}" placeholder="Last Name">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <label for="chkBox2">
+                <input type="checkbox" id="chkBox2" name="chkBox2" onclick="ShowHideDiv(this, 'ua_accEmail')" />
+                Change Email
+            </label>
+
+            <div class="ua_accountEmail" id="ua_accEmail" style="display: none;">
+                <div class="bb_ua_accountInfoContent">
+                    <div class="bb_ua_aICleft">
+                        <div class="ua_inputPerDiv">
+                            <h4 style="margin: 10px 0px;">Old Email ID</h4>
+                            <input type="email" name="account_old_email" value="{{profile_details.user.email}}" placeholder="Old Email ID" readonly>
+                        </div>
+                    </div>
+                    <div class="bb_ua_aICright">
+                        <div class="ua_inputPerDiv">
+                            <h4 style="margin: 10px 0px;">New Email ID</h4>
+                            <input type="email" name="account_new_email" placeholder="New Email ID">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <br>
+
+            <label for="chkBox">
+                <input type="checkbox" id="chkBox" name="chkBox" onclick="ShowHideDiv(this, 'ua_accPassword')" />
+                Change Password
+            </label>
+
+            <div class="ua_accountPassword" id="ua_accPassword" style="display: none;">
+                <div class="bb_ua_accountInfoContent">
+                    <div class="bb_ua_aICleft">
+                        <div class="ua_inputPerDiv">
+                            <h4 style="margin: 10px 0px;">Old Password</h4>
+                            <input type="password" name="account_old_password" placeholder="Old Password">
+                        </div>
+                    </div>
+                    <div class="bb_ua_aICright">
+                        <div class="ua_inputPerDiv">
+                            <h4 style="margin: 10px 0px;">New Password</h4>
+                            <input type="password" name="account_new_password" placeholder="New Password">
+                        </div>
+                    </div>
+                </div>
+                <div class="bb_ua_accountInfoContent">
+                    <div class="bb_ua_aICleft">
+                        <div class="ua_inputPerDiv" style="display: none;">
+                        </div>
+                    </div>
+                    <div class="bb_ua_aICright">
+                        <div class="ua_inputPerDiv">
+                            <h4 style="margin: 10px 0px;">Confirm Password</h4>
+                            <input type="password" name="account_confirm_password" placeholder="Confirm Password">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ua_Address">
+                <h3>Change Address</h3>
+                <hr width="90%" style="float: left;">
+
+                    <div class="ua_aInputContent">
+                    <div class="ua_inputPerDiv">
+                        <h4 style="margin: 10px 0px;">Company Name</h4>
+                        <input type="text" name="account_company" value="{{address_details.first.company_name}}" placeholder="Company Name">
+                    </div>
+                    <div class="ua_inputPerDiv">
+                        <h4 style="margin: 10px 0px;">Street Address</h4>
+                        <input type="text" name="account_street" value="{{address_details.first.street_address}}" placeholder="Street Address">
+                    </div>
+                    <div class="ua_inputPerDiv">
+                        <h4 style="margin: 10px 0px;">Town/City</h4>
+                        <input type="text" name="account_town" value="{{address_details.first.town_city}}" placeholder="Town/City">
+                    </div>
+                    <div class="ua_inputPerDiv">
+                        <h4 style="margin: 10px 0px;">State</h4>
+                        <input type="text" name="account_state" value="{{address_details.first.state}}" placeholder="State">
+                    </div>
+                    <div class="ua_inputPerDiv">
+                        <h4 style="margin: 10px 0px;">ZIP</h4>
+                        <input type="text" name="account_zip" value="{{address_details.first.zip}}" placeholder="ZIP">
+                    </div>
+                    <div class="ua_inputPerDiv">
+                        <h4 style="margin: 10px 0px;">Phone Number</h4>
+                        <input type="number" name="account_number" value="{{address_details.first.contact}}" placeholder="Phone Number">
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="bb_ua_aContentSave">
+                <input type="submit" class="cusButton greenBtn" placeholder="SAVE">
+            </div>
+
+        </form>
+        </div>
+
+</div>
+
+ 
+{% endblock content %}

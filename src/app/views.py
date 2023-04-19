@@ -54,21 +54,9 @@ def cookie_cart_loging(request, _current_user):
             else:
                 Cart.objects.create(user=_current_user,quantity=cart[item]['quantity'],product_id=item)
 
-     
-# Home page of client side
-def index(request):
-    order = {'cart_total_price': 0, 'cart_total_items': 0,'cart_saved_price': 0}
-    cart_quantity_total = 0
-    cart_total_price = 0
-    #for all the product that categories in front end 
-    featured_products_objects = Product.objects.filter(is_featured=True, is_comming_soon=False, is_shown=True).order_by('-id')[:10]
-    comming_soon_products_objects = Product.objects.filter(is_comming_soon=True,is_shown=True).order_by('-id')[:10]
-    new_arrival_products_objects = Product.objects.filter(is_comming_soon=False, is_shown=True).order_by('-id')[:10]
-    category_objects = Category.objects.all()
-    all_products_objects = Product.objects.all()
-    
-    blog_list = Blogs.objects.all()
 
+# getting data for navbar which is in dictonary format and return the data
+def get_navbar_data():
     nav_bar_categories      = Category.objects.filter(is_shown=True).distinct()
     nav_bar_subcategories   = SubCategory.objects.filter(is_shown=True, product__isnull=False).distinct()
     nav_bar_brands          = Brand.objects.filter(product__isnull=False).distinct()
@@ -91,21 +79,28 @@ def index(request):
             }
         } for a, category in enumerate(nav_bar_categories)
     }
-    #getting cart quantity and total price for individual user who are logged in 
-    
+    return json_data
+     
+# get cart for individual user which return dictonary format for navbar content
+
+def get_nav_cart_data(request):
+    cart_quantity_total = 0
+    cart_total_price = 0
+    order = {
+        'cart_total_price': 0, 
+        'cart_total_items': 0,
+        'cart_saved_price': 0}
     if request.user.is_authenticated: 
         cart_details_object = Cart.objects.filter(user=request.user)
         cart_quantity_total = cart_details_object.aggregate(total_quantity = Sum('quantity'))['total_quantity']
 
-        cart_total_price = Cart.objects.filter(user=request.user).annotate(
-        item_price=Subquery(Product.objects.filter(pk=OuterRef('product__id')).values('latest_price'))).aggregate(total=Sum(F('item_price')* F('quantity')))['total']
+        cart_total_price = Cart.objects.filter(user=request.user).annotate(item_price=Subquery(Product.objects.filter(pk=OuterRef('product__id')).values('latest_price'))).aggregate(total=Sum(F('item_price')* F('quantity')))['total']
     else:
         try:
             cart = json.loads(request.COOKIES['cart'])
         except KeyError:
             cart = None
         if cart:
-            print(cart)
             for i in cart:
                 product = Product.objects.get(id=i)
                 total_price = (product.latest_price * int(cart[i]["quantity"]))
@@ -117,8 +112,28 @@ def index(request):
                     order['cart_saved_price'] += ((product.previous_price - product.latest_price) * int(cart[i]["quantity"]))
             cart_quantity_total = order['cart_total_items']
             cart_total_price = order['cart_total_price']
-            
-    context = {
+    cart_data = {
+        'cart_quantity_total': cart_quantity_total,
+        'cart_total_price': cart_total_price,
+    }
+    return cart_data
+
+
+# Home page of client side
+def index(request):
+    #for all the product that categories in front end 
+    featured_products_objects = Product.objects.filter(is_featured=True, is_comming_soon=False, is_shown=True).annotate(is_in_wishllist=Case(When(wishlist_product__user=request.user, then=Value(True)), default=Value(False))).order_by('-id')[:10]
+    print(featured_products_objects.values())
+    comming_soon_products_objects = Product.objects.filter(is_comming_soon=True,is_shown=True).annotate(is_in_wishllist=Case(When(wishlist_product__user=request.user, then=Value(True)), default=Value(False))).order_by('-id')[:10]
+    new_arrival_products_objects = Product.objects.filter(is_comming_soon=False, is_shown=True).annotate(is_in_wishllist=Case(When(wishlist_product__user=request.user, then=Value(True)), default=Value(False))).order_by('-id')[:10]
+    category_objects = Category.objects.all()
+    all_products_objects = Product.objects.all().annotate(is_in_wishllist=Case(When(wishlist_product__user=request.user, then=Value(True)), default=Value(False)))
+    
+    blog_list = Blogs.objects.all()
+    cart_data = get_nav_cart_data(request)
+    nav_bar_json_data = get_navbar_data()
+     
+    index_data = {
         
         'featured_product': featured_products_objects,
         'comming_soon_product': comming_soon_products_objects,
@@ -126,99 +141,138 @@ def index(request):
         'category': category_objects,
         'all_products': all_products_objects,
         'blog_list': blog_list,
-        'json_data': json_data,
+        'json_data': nav_bar_json_data,
         'current_user': request.user,
-        'cart_quantity_total': cart_quantity_total,
-        'cart_total_price' : cart_total_price,
     }
+    context = {**index_data, **cart_data}
 
-    return render(request, 'client_page/index_m.html', context)
+    return render(request, 'app/index.html', context)
 
 
-# function for handling user sigup
-def client_sign_up(request):
-    email_exists = False
-    if request.method == 'POST':
+# for list of products after clicking on category it takes slug as a id 
+def product_list(request,slug):
+    product_list_categories_objects = Product.objects.filter(categories__slug=slug).all()
+    selected_category_object = Category.objects.filter(slug=slug).first()
 
-        # get credentials from the user
-        username = request.POST.get("_username")
-        email = request.POST.get("_email")
-        c_password = request.POST.get("_cpassword")
-        n_password = request.POST.get("_npassword")
-        checkbox = request.POST.get("_checkbox")
+    product_max_min = Product.objects.filter(categories__slug=slug).aggregate(Max('latest_price'), Min('latest_price'))
+    min_price = product_max_min['latest_price__min']
+    max_price = product_max_min['latest_price__max']
+    snippet_filter = SnippetFilterProductList(request.GET, queryset=product_list_categories_objects,category=selected_category_object)
+    snippet_filter_product_list = snippet_filter.qs
 
-        # if user accept the terms and conditions
-        if checkbox:
-            admin_all = User.objects.all()
+    show_by_number = request.GET.get('show_by')
 
-            # check if the email is already in use in other account
-            for items in admin_all:
+    photo_list = []
+    user_wishlist_mark = []
 
-                if items.email == email:
-                    email_exists = True
-                    break
-                else:
-                    email_exists = False
+    # get the value from user for displaying required items per page
+    if show_by_number is not None:
+        if show_by_number:
+            paginated_filtered = Paginator(snippet_filter_product_list, int(show_by_number))
+        else:
+            paginated_filtered = Paginator(snippet_filter_product_list, 12)
+    else:
+        paginated_filtered = Paginator(snippet_filter_product_list, 12)
 
-            # if the email is already in use show the message to the user
-            if email_exists:
-                messages.warning(request, 'Email already exists!')
+    # pagination
+    page_number = request.GET.get('page')
+    page_obj = paginated_filtered.get_page(page_number)
 
-                sign_in_form = LoginForm()
-                context = {'sign_in_form': sign_in_form}
-                return render(request, 'client_page/userAccount/account_login.html', context)
-
-            # if the email authorized by the system for new account
+    # to mark wishlist if user is authenticated and item is in wishlist
+    for items in page_obj:
+        if request.user.is_authenticated :
+            wishlist_query_components = Wishlist.objects.filter(product_id=items.id,
+                                                                user=request.user).last()
+            if wishlist_query_components:
+                user_wishlist_mark.append('True')
             else:
+                user_wishlist_mark.append('False')
+        else:
+            user_wishlist_mark.append('False')
 
-                # check if the password matches
-                if n_password == c_password:
-                    try:
-                        new_user = User(username=username, email=email, is_superuser=0, is_staff=0)
-                        new_user.set_password(c_password)
-                        # new_profile = Profile(user=new_user)
-                        new_user.save()
-                        # new_profile.save()
+    # to show image with product in list page
+    for item in page_obj:
+        photo_list.append(ProductImage.objects.filter(product_id=item.id).last())
 
-                        messages.success(request, 'Please LogIn !')
-                        sign_in_form = LoginForm()
-                        context = {'sign_in_form': sign_in_form}
-                        return render(request, 'client_page/userAccount/account_login.html', context)
+    # bundling object with its corresponding image
+    zip_pro_img = zip(page_obj, photo_list, user_wishlist_mark)
+    # change to list
+    zip_pro_img = list(zip_pro_img)
 
-                    except Exception as e:
-                        print(e)
-                        messages.error(request, 'Username exists!')
-                        sign_in_form = LoginForm()
-                        context = {'sign_in_form': sign_in_form}
-                        return render(request, 'client_page/userAccount/account_login.html', context)
-                else:
-                    messages.error(request, 'password does not match!')
-                    sign_in_form = LoginForm()
-                    context = {'sign_in_form': sign_in_form}
-                    return render(request, 'client_page/userAccount/account_login.html', context)
+    products = Product.objects.filter(categories__pk=1)
+    brands = Brand.objects.filter(product__in=products).distinct()
+
+    cart_data = get_nav_cart_data(request)
+    nav_bar_json_data = get_navbar_data()
+
+    product_list_data = {
+        'min_price': min_price, 'max_price': max_price,
+        'product_list': product_list_categories_objects,
+        'laptop_brand': brands,
+        'snippet_filter': snippet_filter,
+        'zip_pro_img': zip_pro_img,
+        'json_data': nav_bar_json_data,
+        # 'nav_bar_brands': nav_bar_brands_objects,
+        'current_user': request.user,
+    }
+    context = {**product_list_data, **cart_data}
+    return render(request, 'app/product_list.html', context)
+
+
+
+#product details page
+def product_detail(request,slug,id):
+    logged_in_user = request.user
+    product_object = Product.objects.get(id=id)
+    image_object = ProductImage.objects.filter(product_id=id)
+    product_specification = Specification.objects.filter(product_id=id)
+    products_review_object = ProductReview.objects.filter(product_id=id).order_by('-id')
+
+    if ProductReview.objects.filter(user=logged_in_user, product=product_object).exists():
+        review_status = True
+        product_review_object = ProductReview.objects.get(user=logged_in_user, product=product_object)
+    else:
+        review_status = False
+        product_review_object = None
+
+    cart_data = get_nav_cart_data(request)
+    nav_bar_json_data = get_navbar_data()
+    product_details_data = {
+        'product': product_object,
+        'per_images': image_object,
+        'product_specs': product_specification,
+        'json_data': nav_bar_json_data,
+        'current_user': logged_in_user,
+        'products_review': products_review_object,
+        'review_status': review_status,
+        'product_review': product_review_object,
+
+
+    }
+    context = {**product_details_data, **cart_data}
+    return render(request, 'app/product_details.html',context)
+
+
+
+#searching product from navbar it will search in brands title category sub category and product title and so on 
+def search_product(request):
     if request.method == 'GET':
-        sign_in_form = LoginForm()
-        context = {'sign_in_form': sign_in_form}
-        return render(request, 'client_page/userAccount/account_login.html', context)
+        search_key = request.GET.get('query')
+        searching_result = Product.objects.filter(Q(title__icontains=search_key)|Q(short_description__icontains=search_key)|Q(description__icontains=search_key)|Q(keywords__icontains=search_key)|Q(model_number__icontains=search_key)|Q(categories__title__icontains=search_key,categories__is_shown=True)|Q(brands__title__icontains=search_key,brands__is_shown=True)|Q(sub_categories__title__icontains=search_key,sub_categories__is_shown=True))
+        cart_data = get_nav_cart_data(request)
+        nav_bar_json_data = get_navbar_data()
+        serach_result_data  = {
+                'product_searching_result_list' : searching_result, 
+                'current_user' : request.user,
+                'json_data': nav_bar_json_data,
+                    }
+        context = {**cart_data,**serach_result_data}
+        return render(request, 'app/search_product.html',context)
+
+ 
     
-
-#user profile
+# client details orders wishlist and update the profile 
 def client_profile(request):
-    if request.user.is_authenticated:
-        logged_in_user = request.user
-        profile_details = Profile.objects.get(user=logged_in_user)
-        address_details = Address.objects.filter(user=logged_in_user)
-        order_details = Order.objects.filter(user=logged_in_user)
-        wishlist_list = Wishlist.objects.filter(user=logged_in_user).annotate(product_image = Subquery(ProductImage.objects.filter(product_id=OuterRef('product_id')).values('image')[:1]))
-
-        context = {'profile_details': profile_details,
-                    'address_details': address_details,
-                    'order_details': order_details,
-                    'wishlist_list': wishlist_list
-                    }    
-    return render(request, 'client_page/userAccount/client_profile.html', context)
-
-def update_client_profile(request):
     if not request.user.is_authenticated:
         return redirect('client_sign_in') 
     else:
@@ -319,111 +373,28 @@ def update_client_profile(request):
             else:
                 messages.error(request, 'User not recognized')
                 return redirect('client_profile')
+
+        if request.method == 'GET':
+            logged_in_user = request.user
+            profile_details = Profile.objects.get(user=logged_in_user)
+            address_details = Address.objects.filter(user=logged_in_user)
+            order_details = Order.objects.filter(user=logged_in_user)
+            wishlist_list = Wishlist.objects.filter(user=logged_in_user).annotate(product_image = Subquery(ProductImage.objects.filter(product_id=OuterRef('product_id')).values('image')[:1]))
+
+            cart_data = get_nav_cart_data(request)
+            nav_bar_json_data = get_navbar_data()
+
+            profile_data = {'profile_details': profile_details,
+                        'address_details': address_details,
+                        'order_details': order_details,
+                        'wishlist_list': wishlist_list,
+                        'current_user': logged_in_user,
+                        'json_data': nav_bar_json_data,
+                        } 
+            context = {**profile_data, **cart_data}
+            return render(request, 'app/client_profile.html', context)
     
-        return redirect('client_profile')
-
-
-#replace by this
-def product_list(request,slug):
-    product_list_categories_objects = Product.objects.filter(categories__slug=slug).all()
-    selected_category_object = Category.objects.filter(slug=slug).first()
-
-    product_max_min = Product.objects.filter(categories__slug=slug).aggregate(Max('latest_price'), Min('latest_price'))
-    min_price = product_max_min['latest_price__min']
-    max_price = product_max_min['latest_price__max']
-    snippet_filter = SnippetFilterProductList(request.GET, queryset=product_list_categories_objects,category=selected_category_object)
-    snippet_filter_product_list = snippet_filter.qs
-
-    show_by_number = request.GET.get('show_by')
-
-    photo_list = []
-    user_wishlist_mark = []
-
-    # get the value from user for displaying required items per page
-    if show_by_number is not None:
-        if show_by_number:
-            paginated_filtered = Paginator(snippet_filter_product_list, int(show_by_number))
-        else:
-            paginated_filtered = Paginator(snippet_filter_product_list, 12)
-    else:
-        paginated_filtered = Paginator(snippet_filter_product_list, 12)
-
-    # pagination
-    page_number = request.GET.get('page')
-    page_obj = paginated_filtered.get_page(page_number)
-
-    # to mark wishlist if user is authenticated and item is in wishlist
-    for items in page_obj:
-        if request.user.is_authenticated and request.user.is_staff and request.user.profile.authorization is False:
-            wishlist_query_components = Wishlist.objects.filter(product_id=items.id,
-                                                                user=request.user).last()
-            if wishlist_query_components:
-                user_wishlist_mark.append('True')
-            else:
-                user_wishlist_mark.append('False')
-        else:
-            user_wishlist_mark.append('False')
-
-    # to show image with product in list page
-    for item in page_obj:
-        photo_list.append(ProductImage.objects.filter(product_id=item.id).last())
-
-    # bundling object with its corresponding image
-    zip_pro_img = zip(page_obj, photo_list, user_wishlist_mark)
-    # change to list
-    zip_pro_img = list(zip_pro_img)
-
-    products = Product.objects.filter(categories__pk=1)
-    brands = Brand.objects.filter(product__in=products).distinct()
-
-    nav_bar_categories      = Category.objects.filter(is_shown=True).distinct()
-    nav_bar_subcategories   = SubCategory.objects.filter(is_shown=True, product__isnull=False).distinct()
-    nav_bar_brands          = Brand.objects.filter(product__isnull=False).distinct()
-
-    json_data = {
-        a + 1: {
-            "category_name": category.title.upper(),
-            "category_slug": category.slug,
-            "subcategory": {
-                b + 1: {
-                    "subcategory_name": subcategory.title.capitalize(),
-                    "subcategory_id": subcategory.id,
-                    "brand": {
-                        c + 1: {
-                            "brand_name": brand.title.capitalize(),
-                            "brand_id": brand.id,
-                        } for c, brand in enumerate(nav_bar_brands.filter(product__sub_categories=subcategory))
-                    }
-                } for b, subcategory in enumerate(nav_bar_subcategories.filter(category=category))
-            }
-        } for a, category in enumerate(nav_bar_categories)
-    }
-
-    context = {
-        'min_price': min_price, 'max_price': max_price,
-        'product_list': product_list_categories_objects,
-        'laptop_brand': brands,
-        'snippet_filter': snippet_filter,
-        'zip_pro_img': zip_pro_img,
-        'json_data': json_data,
-        # 'nav_bar_brands': nav_bar_brands_objects,
-    }
-    return render(request, 'client_page/product_list.html', context)
-
-#product details page
-def product_detail(request,slug,id):
-    slug = slug
-    product_object = Product.objects.get(id=id)
-    image_object = ProductImage.objects.filter(product_id=id)
-    product_specification = Specification.objects.filter(product_id=id)
-    context = {
-        'product': product_object,
-        'per_images': image_object,
-        'product_specs': product_specification,
-    }
-    return render(request, 'client_page/product_detail.html',context)
-
-   
+  
 # execute after place product to cart 
 def order_proceed(request):
     if request.user.id:
@@ -471,26 +442,26 @@ def order_proceed(request):
                                     state=delivery_state, zip=delivery_zip, contact=delivery_number)
             
             return redirect('index_app')
-
-        address = Address.objects.filter(user=current_user).last()
-
-        context = {
-            'user_details': user_details,
-            'address': address,
-        }
-    
+        if request.method == 'GET':
+            address = Address.objects.filter(user=current_user).last()
+            cart_data = get_nav_cart_data(request)
+            nav_bar_json_data = get_navbar_data()
+            order_proceed_data = {
+                'user_details': user_details,
+                'address': address,
+                'json_data': nav_bar_json_data,
+            }
+            context = {**order_proceed_data, **cart_data}
         return render(request, 'client_page/order_proceed.html', context)
     else:
-        sign_in_form = LoginForm()
-        context = {'sign_in_form': sign_in_form}
-        return render(request, 'client_page/userAccount/account_login.html', context)
+        return redirect('client_sign_in')
     
-
 
 # function that execute shopping_cart form topbar
 def shopping_cart(request):
     order = {'cart_total_price': 0, 'cart_total_items': 0,'cart_saved_price': 0}
     current_user = request.user.id
+    nav_bar_json_data = get_navbar_data()
     if current_user: 
         cart_details_object = Cart.objects.filter(user=current_user)
         cart_quantity_total = cart_details_object.aggregate(total_quantity = Sum('quantity'))['total_quantity']
@@ -546,20 +517,95 @@ def shopping_cart(request):
         'cart_quantity_total': cart_quantity_total,
         'cart_total_price': cart_total_price,
         'cart_product_list': cart_product_list_objects,
+        'json_data': nav_bar_json_data,
         'cookies_cart_prodcut_list': cookies_cart_prodcut_list,
         'total_amount': total_amount['total_amount'],
         'saved_amount': saved_amount['total_saved_amount'],
         'items_total': items_total['total_items'],
+        'current_user': request.user,
 
     }
     return render(request, 'client_page/checkout.html',context)
 
 
 
-# user authentication handling process
-def client_sign_in(request):
+# function for handling user sigup
+def client_sign_up(request):
+    email_exists = False
+    if request.method == 'GET':
+        sign_in_form = LoginForm()
+        context = {'sign_in_form': sign_in_form}
+        return render(request, 'app/sign_up_sign_in.html', context)
     if request.method == 'POST':
 
+        # get credentials from the user
+        username = request.POST.get("_username")
+        email = request.POST.get("_email")
+        c_password = request.POST.get("_cpassword")
+        n_password = request.POST.get("_npassword")
+        checkbox = request.POST.get("_checkbox")
+
+        # if user accept the terms and conditions
+        if checkbox:
+            admin_all = User.objects.all()
+
+            # check if the email is already in use in other account
+            for items in admin_all:
+
+                if items.email == email:
+                    email_exists = True
+                    break
+                else:
+                    email_exists = False
+
+            # if the email is already in use show the message to the user
+            if email_exists:
+                messages.warning(request, 'Email already exists!')
+
+                sign_in_form = LoginForm()
+                context = {'sign_in_form': sign_in_form}
+                return render(request, 'app/sign_up_sign_in.html', context)
+
+            # if the email authorized by the system for new account
+            else:
+
+                # check if the password matches
+                if n_password == c_password:
+                    try:
+                        new_user = User(username=username, email=email, is_superuser=0, is_staff=0)
+                        new_user.set_password(c_password)
+                        # new_profile = Profile(user=new_user)
+                        new_user.save()
+                        # new_profile.save()
+
+                        messages.success(request, 'Please LogIn !')
+                        sign_in_form = LoginForm()
+                        context = {'sign_in_form': sign_in_form}
+                        return render(request, 'app/sign_up_sign_in.html', context)
+
+                    except Exception as e:
+                        print(e)
+                        messages.error(request, 'Username exists!')
+                        sign_in_form = LoginForm()
+                        context = {'sign_in_form': sign_in_form}
+                        return render(request, 'app/sign_up_sign_in.html', context)
+                else:
+                    messages.error(request, 'password does not match!')
+                    sign_in_form = LoginForm()
+                    context = {'sign_in_form': sign_in_form}
+                    return render(request, 'app/sign_up_sign_in.html', context)
+    
+    
+
+
+# user authentication handling process
+def client_sign_in(request):
+    if request.method == 'GET':
+        sign_in_form = LoginForm()
+        context = {'sign_in_form': sign_in_form}
+        return render(request, 'app/sign_up_sign_in.html', context)
+    
+    if request.method == 'POST':
         # get email, password and remember_me options from the user
         email = request.POST.get('email')
         password = request.POST.get('password')
@@ -567,7 +613,6 @@ def client_sign_in(request):
 
         # check if the user email is registered
         user = User.objects.filter(email=email).last()
-        print(user)
         if user is not None:
 
             # check if user is client and password matches
@@ -575,33 +620,37 @@ def client_sign_in(request):
 
                 # if user credentials matches add session to the user
                 login(request, user)
-
                 # save cart item to db and delete cart form cookie
                 cookie_cart_loging(request, request.user)
                 return redirect('index_app')
+            
             else:
-
                 # given password does not match or the account is not client privilege
                 messages.warning(request, 'Access Denied!')
                 sign_in_form = LoginForm()
                 context = {'sign_in_form': sign_in_form}
-                return render(request, 'client_page/userAccount/account_login.html', context)
+                return render(request, 'app/sign_up_sign_in.html', context)
         else:
-
             # given email is not registered
             messages.warning(request, 'Wrong credentials!')
             sign_in_form = LoginForm()
             context = {'sign_in_form': sign_in_form}
-            return render(request, 'client_page/userAccount/account_login.html', context)
-    if request.method == 'GET':
-        sign_in_form = LoginForm()
-        context = {'sign_in_form': sign_in_form}
-        return render(request, 'client_page/userAccount/account_login.html', context)
+            return render(request, 'app/sign_up_sign_in.html', context)
+    
+
+  
+
+# log-out functionality that release the session of the current user
+def logged_out(request):
+    logout(request)
+    return redirect('index_app')
+ 
+
 
 #adding and update cart list to database
 def update_cart(request):
     if request.method == 'POST':
-        if request.user.is_authenticated and request.user.is_staff and request.user.profile.authorization is False:
+        if request.user.is_authenticated :
             current_user = request.user
             data = json.loads(request.body)
             product_id = data['productId']
@@ -643,7 +692,7 @@ def update_wishlist(request):
 # adding wishlist from per page
 def add_wishlist(request):
     if request.method == 'POST':
-        if request.user.is_authenticated and request.user.is_staff and request.user.profile.authorization is False:
+        if request.user.is_authenticated:
             data = json.loads(request.body)
 
             product_id = data['productId']
@@ -661,20 +710,39 @@ def add_wishlist(request):
             return JsonResponse({'_actr': 'False'})
 
 
-# log-out functionality that release the session of the current user
-def logged_out(request):
-    logout(request)
-    return redirect('index_app')
- 
-def search_product(request):
-    if request.method == 'GET':
-        search_key = request.GET.get('query')
-        print(search_key)
-        searching_result = Product.objects.filter(Q(title__icontains=search_key)|Q(short_description__icontains=search_key)|Q(description__icontains=search_key)|Q(keywords__icontains=search_key)|Q(model_number__icontains=search_key)|Q(categories__title__icontains=search_key,categories__is_shown=True)|Q(brands__title__icontains=search_key,brands__is_shown=True)|Q(sub_categories__title__icontains=search_key,sub_categories__is_shown=True)).distinct()
-        print(searching_result)
-        return render(request, 'client_page/search_product.html')
 
- 
+#post a review in product description page 
+def product_review(request):
+    if not request.user.is_authenticated:
+        return redirect('client_sign_in')  
+    if request.method == 'POST':
+        logged_in_user = request.user
+        full_name = logged_in_user.username
+        rating = request.POST.get('rate')
+        review = request.POST.get('_review_box')
+        product_id = request.POST.get('product_id')
+
+        if rating:
+            star = rating
+        else:
+            star = 2
+        product_object = Product.objects.get(id=product_id)
+        order_status = Order.objects.filter(user=logged_in_user,product= product_object, delivered = False).exists()
+        if order_status:
+            print('order status is true')
+            if ProductReview.objects.filter(user=logged_in_user, product=product_object).exists():
+                print('review already exists')
+                ProductReview.objects.filter(user=logged_in_user, product=product_object).update(rating=star, review=review)
+            else:
+                ProductReview.objects.create(user = logged_in_user, product = product_object,rating=star,fullname=full_name, review=review)
+            messages.success(request, 'Thanks for The Feedback!')
+        else:
+            messages.warning(request, 'You can not review this product because you have not bought it yet!')
+        url = '/' + str(product_object.categories.slug) + '/' + str(product_id)
+        print(url)
+        return redirect(url)
+
+
 #endregion
 
 
@@ -2194,27 +2262,6 @@ def search_btns_post(request):
                            'cart_total_price': order_cart_cookie['cart_total_price'], 'page_obj': page_obj,
                            'search_name': search_name}
                 return render(request, 'client_page/search/list_products.html', context)
-
-
-def product_review(request, _product, ids):
-    if request.method == 'POST':
-        rating = request.POST.get('rate')
-        full_name = request.POST.get('_full_name')
-        user_email = request.POST.get('_user_email')
-        review = request.POST.get('_review_box')
-
-        if rating:
-            star = rating
-        else:
-            star = 2
-
-        ProductReview.objects.create(rating=star, fullname=full_name, user_email=user_email, review=review,
-                                     categories=_product, product_id=ids)
-
-        messages.success(request, 'Thanks for The Feedback!')
-        url = '/per_page' + '/' + str(_product) + '/' + str(ids)
-        print(url)
-        return redirect(url)
 
 #endregion
 

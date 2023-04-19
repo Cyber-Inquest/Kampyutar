@@ -1,0 +1,348 @@
+{% extends 'base1.html' %}
+{% load static %}
+{% block content %}
+
+<div class="bb_body">
+    <div class="bb_product1">
+        <div class="bb_product_div_name">
+            <div class="bb_product_name">
+                Featured Product
+            </div>
+        </div>
+
+        <div class="bb_product_baseRow">
+
+            <div class="bb_product_baseCol">
+                <div class="this_container owl-carousel">
+                    {% for items in featured_product %}
+                    <div class="bb_perProduct_item">
+
+                        <div class="bb_item_img">
+                            {% for images in items.product_image.all %}
+                            {% if images.is_shown %}
+                            <a href="{% url 'product_detail' slug=items.categories.slug id=items.id %}"><img
+                                    src="{{images.image.url}}" alt=""></a>
+                            {% endif %}
+                            {% endfor %}
+                            {% if items.is_in_wishllist %}
+                            <i class="fas fa-heart" style="color:red" data-wishproduct={{items.id}}
+                            data-wishproducttype={{items.categories}}></i>
+                            {% else %}
+                            <i class="fas fa-heart" data-wishproduct={{items.id}}
+                                data-wishproducttype={{items.categories}}></i>
+                            {% endif %}
+                        </div>
+
+                        <a href="{% url 'product_detail' slug=items.categories.slug id=items.id %}">
+                            <div class="bb_item_name">
+                                <h4>{{items.title}}</h4>
+                            </div>
+                        </a>
+
+                        <div class="bb_item_price">
+                            {% if items.is_featured %}
+                            <h4>NPR {{items.latest_price|floatformat:2}}</h4>
+
+                            {% if items.previous_price != 0.0 %}
+                            <h5><del>NPR {{items.previous_price}}</del></h5>
+                            {% endif %}
+                            {% else %}
+                            <h4>NPR {{items.latest_price|floatformat:2}}</h4>
+                            {% endif %}
+                        </div>
+
+                        <div class="bb_item_addToCart">
+                            {% if items.stock == 0 %}
+                            <button data-product={{items.id}} data-action="add" class="bb_item_addToCart_btn_disable"
+                                disabled><i class="fas fa-shopping-cart"></i>
+                                &nbsp; OUT OF STOCK
+                            </button>
+                            {% else %}
+                            <button data-product={{items.id}} data-action="add" class="bb_item_addToCart_btn"><i
+                                    class="fas fa-shopping-cart"></i>
+                                &nbsp; ADD TO CART
+                            </button>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+
+<div class="bb_body">
+    <div class="bb_product1">
+        <div class="bb_product_div_name">
+            <div class="bb_product_name">
+                New Arrivals
+            </div>
+        </div>
+        <div class="bb_product_baseRowNoFlex">
+
+            <div class="offers_tag">
+                <div class="offers_img">
+                    <img src="{% static 'css/images/offer.png' %}" alt="">
+                </div>
+            </div>
+
+            <div class="bb_product_baseCol">
+                <div class="this_container owl-carousel">
+
+                    {% for items in new_arrival_product %}
+                    <div class="bb_perProduct_item">
+
+                        <div class="bb_item_img">
+                            {% for images in items.product_image.all %}
+                            {% if images.is_shown %}
+                            <a href="{% url 'product_detail' slug=items.categories.slug id=items.id %}"><img
+                                    src="{{images.image.url}}" alt=""></a>
+                            {% endif %}
+                            {% endfor %}
+                            {% if items.is_in_wishllist %}
+                            <i class="fas fa-heart" style="color:red" data-wishproduct={{items.id}}
+                            data-wishproducttype={{items.categories}}></i>
+                            {% else %}
+                            <i class="fas fa-heart" data-wishproduct={{items.id}}
+                                data-wishproducttype={{items.categories}}></i>
+                            {% endif %}
+                        </div>
+
+                        <a href="{% url 'product_detail' slug=items.categories.slug id=items.id %}">
+                            <div class="bb_item_name">
+                                <h4>{{items.title}}</h4>
+                            </div>
+                        </a>
+
+                        <div class="bb_item_price">
+                            {% if items.is_featured %}
+                            <h4>NPR {{items.latest_price|floatformat:2}}</h4>
+
+                            {% if items.previous_price != 0.0 %}
+                            <h5><del>NPR {{items.previous_price}}</del></h5>
+                            {% endif %}
+                            {% else %}
+                            <h4>NPR {{items.latest_price|floatformat:2}}</h4>
+                            {% endif %}
+                        </div>
+
+                        <div class="bb_item_addToCart">
+                            {% if items.stock == 0 %}
+                            <button data-product={{items.id}} data-producttype={{items.categories}} data-action="add"
+                                class="bb_item_addToCart_btn_disable" disabled><i class="fas fa-shopping-cart"></i>
+                                &nbsp; OUT OF STOCK
+                            </button>
+                            {% else %}
+                            <button data-product={{items.id}} data-producttype={{items.categories}} data-action="add"
+                                class="bb_item_addToCart_btn"><i class="fas fa-shopping-cart"></i>
+                                &nbsp; ADD TO CART
+                            </button>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="bb_body">
+    <div class="bb_product1">
+        <div class="bb_product_div_name">
+            <div class="bb_product_name">
+                Coming Soon
+            </div>
+        </div>
+
+        <div class="bb_product_baseRow">
+
+            <div class="bb_product_baseCol">
+                <div class="this_container owl-carousel">
+                    {% for items in comming_soon_product %}
+
+                    <div class="bb_perProduct_item">
+
+                        <div class="bb_item_img">
+                            {% for images in items.product_image.all %}
+                            {% if images.is_shown %}
+                            <a href="{% url 'product_detail' slug=items.categories.slug id=items.id %}"><img
+                                    src="{{images.image.url}}" alt=""></a>
+                            {% endif %}
+                            {% endfor %}
+                            {% if items.is_in_wishllist %}
+                            <i class="fas fa-heart" style="color:red" data-wishproduct={{items.id}}
+                            data-wishproducttype={{items.categories}}></i>
+                            {% else %}
+                            <i class="fas fa-heart" data-wishproduct={{items.id}}
+                                data-wishproducttype={{items.categories}}></i>
+                            {% endif %}
+                        </div>
+
+                        <a href="{% url 'product_detail' slug=items.categories.slug id=items.id %}">
+                            <div class="bb_item_name">
+                                <h4>{{items.title}}</h4>
+                            </div>
+                        </a>
+
+                        <div class="bb_item_price">
+                            {% if items.is_featured %}
+                            <h4>NPR {{items.latest_price|floatformat:2}}</h4>
+
+                            {% if items.previous_price != 0.0 %}
+                            <h5><del>NPR {{items.previous_price}}</del></h5>
+                            {% endif %}
+                            {% else %}
+                            <h4>NPR {{items.latest_price|floatformat:2}}</h4>
+                            {% endif %}
+                        </div>
+
+                        <div class="bb_item_addToCart">
+                            {% if items.stock == 0 %}
+                            <button data-product={{items.id}} data-producttype={{items.categories}} data-action="add"
+                                class="bb_item_addToCart_btn_disable" disabled><i class="fas fa-shopping-cart"></i>
+                                &nbsp; OUT OF STOCK
+                            </button>
+                            {% else %}
+                            <button data-product={{items.id}} data-producttype={{items.categories}} data-action="add"
+                                class="bb_item_addToCart_btn"><i class="fas fa-shopping-cart"></i>
+                                &nbsp; ADD TO CART
+                            </button>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+
+{% for items in category %}
+{% if items.is_shown %}
+
+<div class="bb_body">
+    <div class="bb_product1">
+        <div class="bb_product_div_name">
+            <div class="bb_product_name">
+                {{items.title}}
+            </div>
+        </div>
+        <div class="bb_product_baseRow" id="wishlist_laptop_123">
+
+            <div class="bb_product_baseCol_right">
+                <div class="bb_perProduct_row owl-carousel">
+                    {% for product in all_products %}
+                    {% if product.categories.id == items.id %}
+                    <div class="bb_perProduct_item">
+
+                        <div class="bb_item_img">
+                            {% for images in product.product_image.all %}
+                            {% if images.is_shown %}
+                            <a href="{% url 'product_detail' slug=product.categories.slug id=items.id %}"><img
+                                    src="{{images.image.url}}" alt=""></a>
+                            {% endif %}
+                            {% endfor %}
+                            {% if product.is_in_wishllist %}
+                            <i class="fas fa-heart" style="color:red" data-wishproduct={{product.id}}
+                            data-wishproducttype={{product.categories}}></i>
+                            {% else %}
+                            <i class="fas fa-heart" data-wishproduct={{product.id}}
+                                data-wishproducttype={{product.categories}}></i>
+                            {% endif %}
+                        </div>
+
+                        <a href="{% url 'product_detail' slug=product.categories.slug id=items.id %}">
+                            <div class="bb_item_name">
+                                <h4>{{product.title}}</h4>
+                            </div>
+                        </a>
+
+                        <div class="bb_item_price">
+                            {% if product.is_featured %}
+                            <h4>NPR {{product.latest_price|floatformat:2}}</h4>
+
+                            {% if product.previous_price != 0.0 %}
+                            <h5><del>NPR {{product.previous_price}}</del></h5>
+                            {% endif %}
+                            {% else %}
+                            <h4>NPR {{product.latest_price|floatformat:2}}</h4>
+                            {% endif %}
+                        </div>
+
+                        <div class="bb_item_addToCart">
+                            {% if product.stock == 0 %}
+                            <button data-product={{product.id}} data-producttype={{product.categories}}
+                                data-action="add" class="bb_item_addToCart_btn_disable" disabled><i
+                                    class="fas fa-shopping-cart"></i>
+                                &nbsp; OUT OF STOCK
+                            </button>
+                            {% else %}
+                            <button data-product={{product.id}} data-producttype={{product.categories}}
+                                data-action="add" class="bb_item_addToCart_btn"><i class="fas fa-shopping-cart"></i>
+                                &nbsp; ADD TO CART
+                            </button>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="bb_product_baseCol_left">
+                <div class="bb_pbaseCol_left_div">
+                    {% if items.image %}
+                    <img src="{{ items.image.url }}" alt="">
+                    {% else %}
+                    <img src="{% static 'css/images/products/laptop.jpg' %}" alt="">
+                    {% endif %}
+                    <a href="{% url 'product_list' slug=items.slug %}" style="text-decoration: none;">
+                        <button class="bb_pbaseCol_left_btn">VIEW ALL</button>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endfor %}
+
+
+<div class="bb_company_main">
+    <div class="bb_company_inner">
+        <div class="bb_company_track owl-carousel" id="company_list">
+
+            <div class="bb_company_list">
+                <img src="{% static 'css/images/logos/cisco.png' %}" alt="">
+            </div>
+
+            <div class="bb_company_list">
+                <img src="{% static 'css/images/logos/colorful.png' %}" alt="">
+            </div>
+
+            <div class="bb_company_list">
+                <img src="{% static 'css/images/logos/corsair.png' %}" alt="">
+            </div>
+
+            <div class="bb_company_list">
+                <img src="{% static 'css/images/logos/cryorig.png' %}" alt="">
+            </div>
+
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+

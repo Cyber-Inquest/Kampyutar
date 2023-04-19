@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+{% load app_extras %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="title" content="Kampyuter">
+    <meta name="description" content="Kampyuter is Nepal's best laptop seller and distributer.">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.kampyuter.com">
+    <meta property="og:title" content="Kampyuter: Nepal's Best Laptop Seller and Distributor">
+    <meta property="og:description" content="Kampyuter is Nepal's best laptop seller and distributer.">
+    <meta property="og:image" content="{% static 'css/images/mainlogo.png' %}">
+
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://www.kampyuter.com">
+    <meta property="twitter:title" content="Kampyuter: Nepal's Best Laptop Seller and Distributor">
+    <meta property="twitter:description" content="Kampyuter is Nepal's best laptop seller and distributer.">
+    <meta property="twitter:image" content="{% static 'css/images/mainlogo.png' %}">
+
+    <link rel="stylesheet" href="{% static 'css/fontawesome-free-6.0.0-beta3-web/css/all.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+
+    <link rel="stylesheet" href="{% static 'css/client_css/php_m.css' %}">
+    <link rel="stylesheet" href="{% static 'css/client_css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/client_css/footer.css' %}">
+    <link rel="stylesheet" href="{% static 'css/client_css/main.css' %}">
+    <link rel="stylesheet" href="{% static 'css/client_css/blog.css' %}">
+    <link rel="stylesheet" href="{% static 'css/client_css/company.css' %}">
+    <link rel="stylesheet" href="{% static 'css/client_css/topBar.css' %}">
+    <link rel="stylesheet" href="{% static 'css/client_css/listProduct.css' %}">
+    <link rel="stylesheet" href="{% static 'css/admin_css/toastr.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/client_css/responsive.css' %}">
+
+    <title>Kampyuter</title>
+
+</head>
+
+<body>
+
+
+    {% include 'client_page/nav_bar_new/topNavBar.html' with components_brand=components_brand apple_brand=apple_brand desktop_brand=desktop_brand laptop_brand=laptop_brand components_topnav=components_topnav apple_topnav=apple_topnav desktop_topnav=desktop_topnav laptop_topnav=laptop_topnav current_user=current_user cart_quantity_total=cart_quantity_tota cart_total_price=cart_total_price %}
+
+
+    <div class="bb_listProductDiv">
+        <div class="bb_listProductInner" style="display: block;">
+
+            <div class="bb_listProductInner_left" style="display:block; width: 100%;">
+                <div class="bb_listProduct_name" style="width: 100%!important;">
+                    <h1>Search Result</h1>
+                </div>
+
+            </div>
+
+            <div class="bb_listProductInner_right">
+
+
+                <div class="bb_pro">
+
+                    <div class="bb_listAllProductDiv" id="wishlist_listpage">
+
+                        {% for item in product_searching_result_list %}
+                        <div class="bb_perProduct_col">
+
+                            <div class="bb_perProduct_item">
+                                <div class="bb_item_img">
+
+                                    {% if item.1.photo_img.url == '/media/default' %}
+
+                                    {% else %}
+                                    <a href="/per_page/{{item.0.categories}}/{{item.0.id}}"><img
+                                            src="{{item.product_image.first.image.url}}" alt=""></a>
+                                    {% endif %}
+
+                                    {% if item.2 == 'False' %}
+                                    <i class="fas fa-heart" data-wishproduct={{item.0.id}}
+                                        data-wishproducttype={{item.0.categories}}></i>
+                                    {% else %}
+                                    <i class="fas fa-heart" style="color:red" data-wishproduct={{item.0.id}}
+                                        data-wishproducttype={{item.0.categories}}></i>
+                                    {% endif %}
+
+                                </div>
+                                <div class="bb_item_name">
+                                    <a href="/per_page/{{item.0.categories}}/{{item.0.id}}">
+                                        <h4>{{item.title}}</h4>
+                                    </a>
+                                </div>
+                                <div class="bb_item_price">
+                                    <h4>NPR {{item.latest_price|floatformat:2}}</h4>
+                                    {% if item.previous_price != 0.0 %}
+                                    <h5>
+                                        <del>NPR {{item.previous_price}}</del>
+                                    </h5>
+                                    {% endif %}
+                                </div>
+                                <div class="bb_item_addToCart">
+                                    <button data-product={{item.0.id}} data-producttype={{item.0.categories}}
+                                        data-action="add" class="bb_item_addToCart_btn"><i
+                                            class="fas fa-shopping-cart"></i> &nbsp; ADD TO
+                                        CART
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="pagination_center">
+                    <div class="pagination">
+
+                        {% if page_obj.has_previous %}
+                        <a href="?pages=1&search_name={{search_name}}">&laquo;</a>
+                        <a href="?pages={{ page_obj.previous_page_number }}&search_name={{search_name}}">&lt;
+                            Previous</a>
+                        {% endif %}
+
+                        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+
+                        {% if page_obj.has_next %}
+                        <a href="?pages={{ page_obj.next_page_number }}&search_name={{search_name}}">Next </a>
+                        <a href="?pages={{ page_obj.paginator.num_pages }}&search_name={{search_name}}">&raquo; Last</a>
+                        {% endif %}
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    {% include 'client_page/footer.html' %}
+
+    <style>
+        .bb_listProductInner_right {
+            width: 98%;
+        }
+
+        .bb_listAllProductDiv {
+            display: initial;
+            padding: initial;
+        }
+
+        .bb_pro {
+            display: inline-block;
+            width: 100%;
+        }
+    </style>
+    <script>
+
+        var user = '{{request.user}}';
+        window.CSRF_TOKEN = "{{ csrf_token }}";
+    </script>
+
+    <script src="{% static 'js/_csrf_tkn.js' %}"></script>
+    <script src="{% static 'js/cart.js' %}"></script>
+    <script src="{% static 'js/client_user.js' %}"></script>
+    <script src="{% static 'js/company.js' %}"></script>
+    <script src="{% static 'js/jquery-1.9.1.min.js' %}"></script>
+    <script src="{% static 'js/toastr.min.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+</body>
+
+</html>

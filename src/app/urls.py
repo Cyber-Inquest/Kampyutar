@@ -7,8 +7,9 @@ urlpatterns = [
      path('shopping_cart/', views.shopping_cart, name='shopping_cart'),
      path('order_proceed/',views.order_proceed, name='order_proceed'),
      path('client-profile/', views.client_profile, name='client_profile'),
-     path('update_client_profile', views.update_client_profile, name='update_client_profile'),
+     # path('update_client_profile', views.update_client_profile, name='update_client_profile'),
      path('search-product/', views.search_product, name='search_product'),
+     path('product-review', views.product_review, name='product_review'),
      
      # path('pc-builder', views.coming_soonPC, name='comingSoon'),
 
@@ -26,7 +27,7 @@ urlpatterns = [
      # path('per_page/<str:_product>/<int:ids>', views.per_page, name='per_page_app'),
      #replace by 
      path ('product-list/<slug:slug>', views.product_list, name='product_list'),
-     path('per_page/<slug:slug>/<int:id>', views.product_detail, name='product_detail'),
+     path('<slug:slug>/<int:id>', views.product_detail, name='product_detail'),
      path('update_wishlist/', views.update_wishlist, name='update_wishlist_app'),
      path('add_wishlist/', views.add_wishlist, name='add_wishlist_app'),
 
@@ -50,7 +51,7 @@ urlpatterns = [
           name='client_information_account_post_app'),
 
      path('search_btns_post', views.search_btns_post, name='search_btns_post_app'),
-     path('product_review/<str:_product>/<int:ids>', views.product_review, name='product_review_app'),
+     # path('product_review/<str:_product>/<int:ids>', views.product_review, name='product_review_app'),
 
      path('reset_password/',
           auth_views.PasswordResetView.as_view(template_name="client_page/userAccount/forgetPassword.html"),

@@ -1,0 +1,260 @@
+{% extends 'base1.html' %}
+{% load static %}
+{% load social_share %}
+
+
+{% block content %}
+
+
+<div class="bb_breadcrums">
+    <ul class="bb_breadcrumb_content">
+        <li><a href="{% url 'index_app' %}">Home</a></li>
+
+        {% if product.categories %}
+        <li><a href="{% url 'product_list' slug=product.categories %}">{{product.categories}}</a></li>
+        {% endif %}
+
+        {% if product.sub_categories %}
+        <li><a
+                href="{% url 'product_list' slug=product.categories %}?brands=&sub_categories={{product.sub_categories.id}}&slider_min=&slider_max=&show_by=&sort_by=">{{product.sub_categories}}</a>
+        </li>
+        {% endif %}
+
+        {% if product.brands %}
+        <li><a
+                href="{% url 'product_list' slug=product.categories %}?brands={{product.brands.id}}&sub_categories={{product.sub_categories.id}}&slider_min=&slider_max=&show_by=&sort_by=">{{product.brands}}</a>
+        </li>
+        {% endif %}
+
+        {% if product.title %}
+        <li>{{product.title}}</li>
+        {% endif %}
+    </ul>
+</div>
+<!-- main content for description and specification start -->
+<div class="bb_product_description">
+    <!-- description session start -->
+    <div class="bb_pd_content">
+        <div class="bb_Pd_row">
+            <!-- images description on left side start -->
+            <div class="bb_pd_column1">
+                <div class="bb_images_pc">
+                    <!-- Fotorama -->
+                    <div class="fotorama" data-width="600" data-ratio="600/467" data-max-width="100%"
+                        data-nav="thumbs">
+                        {% for item in per_images %}
+                        <img src="{{item.image.url}}" width="128" height="128">
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <!-- images description on left side end -->
+
+            <!-- product description on right side start -->
+            <div class="bb_pd_column2">
+                <div class="bb_pd_text">
+                    <div class="bb_pd_textheading">
+                        <h2>{{product.title}}
+                        </h2>
+                    </div>
+                    <div class="bb_pd_textdetails">
+                        <p>
+                            {{product.description|safe}}
+                        </p>
+                    </div>
+                    <div class="bb_pd_title">
+                        <p> {{product.brand}} {{product.sub_categories}} {{product.categories}} Price in
+                            Nepal</p>
+                    </div>
+                </div>
+                <div class="bb_pd_pricediv">
+                    <div class="bb_pd_instock">
+                        {% if product.stock %}
+                        <p><span class="pp_bd_dot"></span><span class="bb_pd_stock">In Stock </span></p>
+                        {% else %}
+                        <p><span class="pp_bd_dot" style="background-color:red"></span><span class="bb_pd_stock">Out
+                                of Stock </span></p>
+                        {% endif %}
+                    </div>
+                    <div class="bb_pd_price">
+                        <p>NPR: <span>{{product.latest_price|floatformat:2}}</span></p>
+                    </div>
+                </div>
+                <div class="bb_pd_addcart">
+                    <form action="#">
+                        {% if product.stock %}
+                        <label for="quantity" class="bb_pd_qty">Quantity:</label>
+                        <input type="number" id="_quantity_per_page" name="quantity" min="1" value="1">
+                        <button class="_add_to_cart_btn" data-perproducttype={{product.categories}}
+                            data-perproduct={{product.id}} data-peraction="add"><i
+                                class="fas fa-shopping-cart"></i> &nbsp; <span>Add To Cart</span></button>
+                        {% else %}
+                        <button class="_add_to_cart_btn_disable" data-perproducttype={{product.categories}}
+                            data-perproduct={{product.id}} data-peraction="add" disabled><i
+                                class="fas fa-shopping-cart"></i> &nbsp; <span>OUT OF STOCK</span></button>
+                        {% endif %}
+                    </form>
+                </div>
+                <div class="bb_pd_likediv">
+
+                    <div class="fb-like"
+                        data-href="http://127.0.0.1:8000/per_page/{{product.categories}}/{{product.id}}"
+                        data-width="" data-layout="button" data-action="like" data-size="large" data-share="false">
+                    </div>
+                    {% post_to_twitter "KAMPYUTER" object_or_url '<button class="bb_pd_likebtn"><span><i
+                                class="fa-brands fa-twitter"></i></span> &nbsp;Tweet</button>' %}
+                    {% post_to_facebook object_or_url '<button class="bb_pd_likebtn"><span><i
+                                class="fa-solid fa-share-nodes"></i></span> &nbsp;Share</button>' %}
+
+
+                </div>
+            </div>
+            <!-- product description on right side end -->
+        </div>
+        <hr>
+    </div>
+
+    <!-- description session end -->
+
+
+
+    <!-- specification and reviews start -->
+    <div class="all">
+        <div class="bb_bd_product_info">
+            <div class="bb_bd_spec_bar">
+                <div class="bb_pd_spec_rev" onclick="openpPage('spec_tab',this)" id="defaultOpen">Specification
+                </div>
+                <div class="bb_pd_spec_rev" onclick="openpPage('review_tab',this)">Reviews</div>
+            </div>
+        </div>
+        <!-- for specification start -->
+        <div class="bb_pd_specification bb_pd_tab" id="spec_tab">
+            <div class="bb_Pd_spec_table">
+
+                <table>
+                    {% for item in product_specs %}
+                    <tr>
+                        <td>{{item.title}}</td>
+                        <td>{{item.description}}</td>
+                    </tr>
+                    {% endfor %}
+
+                </table>
+            </div>
+        </div>
+        <!-- for specification end -->
+        <!-- for review start -->
+        <div class="bb_pd_reviews bb_pd_tab" id="review_tab">
+           
+            <div class="bb_pd_container">
+                <div class="bb_container_col1">
+                    <div class="bb_bd_col_inside">
+                        {% for item in products_review %}
+                            <div class="review">
+                            <div class="profile">
+                                <div class="profile_star">
+                                    {% if item.rating == 1 %}
+                                        <i class="fas fa fa-star checked"></i>
+                                        <i class="fas fa fa-star "></i>
+                                        <i class="fas fa fa-star "></i>
+                                        <i class="fas fa fa-star "></i>
+                                        <i class="far fa fa-star"></i>
+                                    {% endif %}
+            
+                                    {% if item.rating == 2 %}
+                                        <i class="fas fa fa-star checked"></i>
+                                        <i class="fas fa fa-star checked"></i>
+                                        <i class="fas fa fa-star "></i>
+                                        <i class="fas fa fa-star "></i>
+                                        <i class="far fa fa-star"></i>
+                                    {% endif %}
+            
+                                    {% if item.rating == 3 %}
+                                        <i class="fas fa fa-star checked"></i>
+                                        <i class="fas fa fa-star checked"></i>
+                                        <i class="fas fa fa-star checked"></i>
+                                        <i class="fas fa fa-star "></i>
+                                        <i class="far fa fa-star"></i>
+                                    {% endif %}
+            
+                                    {% if item.rating == 4 %}
+                                        <i class="fas fa fa-star checked"></i>
+                                        <i class="fas fa fa-star checked"></i>
+                                        <i class="fas fa fa-star checked"></i>
+                                        <i class="fas fa fa-star checked"></i>
+                                        <i class="far fa fa-star"></i>
+                                    {% endif %}
+            
+                                    {% if item.rating == 5 %}
+                                        <i class="fas fa fa-star checked"></i>
+                                        <i class="fas fa fa-star checked"></i>
+                                        <i class="fas fa fa-star checked"></i>
+                                        <i class="fas fa fa-star checked"></i>
+                                        <i class="far fa fa-star checked"></i>
+                                    {% endif %}
+                                </div>
+                                <div class="profile_name">
+                                    By <strong>{{item.fullname}}</strong>
+                                </div>
+                            </div>
+                            <div class="des">
+                                <p style="text-align: justify;">
+                                   {{item.review}}
+                                </p>
+                            </div>
+                        </div>
+                        {% endfor %}
+            
+                    </div>
+            
+                </div>
+            
+                <div class="bb_container_col2">
+                    <h3 class="bb_bd_top">YOU'RE REVIEWING:</h3>
+                    <h3>{{product.title}}</h3>
+                    <form action="{% url 'product_review' %}" method="post">
+                        {% csrf_token %}
+                        <div class="form">
+                            <input type="hidden" name="product_id" value="{{product.id}}">
+                            <div class="rate" >
+                                <input type="radio" id="star5" name="rate" value="5" />
+                                <label for="star5" title="text">5 stars</label>
+                                <input type="radio" id="star4" name="rate" value="4" />
+                                <label for="star4" title="text">4 stars</label>
+                                <input type="radio" id="star3" name="rate" value="3" />
+                                <label for="star3" title="text">3 stars</label>
+                                <input type="radio" id="star2" name="rate" value="2" />
+                                <label for="star2" title="text">2 stars</label>
+                                <input type="radio" id="star1" name="rate" value="1" />
+                                <label for="star1" title="text">1 star</label>
+                            </div>
+                            <div class="bb_review_detail">
+                            </div>
+                            <div class="bb_review_textField">
+                                <div class="bb_review_sTextField">Place a review here</div>
+                                <hr width="98%">
+                                <div class="bb_review_dTextField">
+                                    <textarea id="review_box" maxlength="300" name="_review_box" rows="4" cols="50" required></textarea>
+                                </div>
+                            </div>
+            
+                        </div>
+                        <div class="bb_bd_review_submit">
+                            <button type="submit">Submit Review</button>
+                        </div>
+                    </form>
+            
+                </div>
+            </div>
+
+
+        </div>
+        <!-- for review end -->
+        <!-- specification and reviews end -->
+    </div>
+
+</div>
+
+
+
+{% endblock content %}

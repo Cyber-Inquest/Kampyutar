@@ -252,11 +252,10 @@ class ProductReview(models.Model):
         db_table = 'ProductReview'
     user                    = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user_review")
     product                 = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="product_review")
-    order                   = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="order_review")
     rating                  = models.BigIntegerField(default=0, null=False)
     fullname                = models.CharField(max_length=20, default='')
     review                  = models.CharField(max_length=300, default='')
-    is_verified             = models.BooleanField(default=False)
+    is_verified             = models.BooleanField(default=True)
 
     class Meta:
         unique_together = ('user', 'product')
