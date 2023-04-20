@@ -53,15 +53,16 @@
 
     var user = '{{request.user}}';
     window.CSRF_TOKEN = "{{ csrf_token }}";
-
+    
 </script>
-    <script src="{% static 'js/jquery-1.9.1.min.js' %}"></script>
-    <script src="{% static 'js/toastr.min.js' %}"></script>
-    <script src="{% static 'js/company.js' %}"></script>
+<script src="{% static 'js/jquery-1.9.1.min.js' %}"></script>
     <script src="{% static 'js/cart.js' %}"></script>
-    <script src="{% static 'js/_csrf_tkn.js' %}"></script>
-    <script src="{% static 'js/client_page/_quantity.js' %}"></script>
+    <script src="{% static 'js/company.js' %}"></script>
     <script src="{% static 'js/topNav.js' %}"></script>
+    <script src="{% static 'js/toastr.min.js' %}"></script>
+    <script src="{% static 'js/_csrf_tkn.js' %}"></script>
+
+    <script src="{% static 'js/client_page/_quantity.js' %}"></script>
 
 </body>
 

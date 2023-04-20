@@ -77,8 +77,9 @@ function addCookieItem(productId, action){
                 toastr.success('Add to Cart!')
             }else{
 
-
-                cart[productId]['quantity'] += 1
+                var caer_quantity = cart[productId]['quantity']
+                var quantity = parseInt(caer_quantity) + 1
+                cart[productId]['quantity']  = quantity
                 toastr.success('Add to Cart!')
             }
 
@@ -105,8 +106,9 @@ function addCookieItems(productId, action, quantity){
                 toastr.success('Add to Cart!')
             }else{
 
-
-                cart[productId]['quantity'] += quantity
+                var caer_quantity = cart[productId]['quantity']
+                var quantity = parseInt(caer_quantity) + parseInt(quantity)
+                cart[productId]['quantity'] = quantity
                 toastr.success('Add to Cart!')
             }
 
@@ -135,6 +137,7 @@ function deleteCookieItem(productId, action){
 
 
 function updateUserOrder(productId, action){
+
     var url = '/updateCart/'
 
     fetch(url, {
@@ -144,6 +147,30 @@ function updateUserOrder(productId, action){
             'X-CSRFToken': window.CSRF_TOKEN,
         },
         body:JSON.stringify({'productId':productId, 'action':action})
+    })
+    .then((response) => {
+        return response.json()
+    })
+    .then((data) => {
+        if (data['_actr'] == 'True'){
+            $("#append_here").load(" #append_here > *");
+            toastr.success('Add to Cart!')
+        }
+
+    })
+}
+
+function updateUserOrderDatabase(productId){
+    var cart_quantity = document.getElementById('_quantity_per_pagess').value;
+    var url = '/updateCart/'
+
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type':'application/json',
+            'X-CSRFToken': window.CSRF_TOKEN,
+        },
+        body:JSON.stringify({'productId':productId, 'action':'details_cart_button_update', 'quantity':cart_quantity})
     })
     .then((response) => {
         return response.json()

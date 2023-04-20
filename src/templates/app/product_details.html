@@ -84,13 +84,13 @@
                     <form action="#">
                         {% if product.stock %}
                         <label for="quantity" class="bb_pd_qty">Quantity:</label>
-                        <input type="number" id="_quantity_per_page" name="quantity" min="1" value="1">
-                        <button class="_add_to_cart_btn" data-perproducttype={{product.categories}}
-                            data-perproduct={{product.id}} data-peraction="add"><i
+                        <input type="number" id="_quantity_per_pagess" name="quantity" min="1" value="1">
+                        <button class="_add_to_cart_btn" onclick="updateUserOrderDatabase({{product.id}})"
+                            data-perproduct={{product.id}} data-peraction="update"><i
                                 class="fas fa-shopping-cart"></i> &nbsp; <span>Add To Cart</span></button>
                         {% else %}
-                        <button class="_add_to_cart_btn_disable" data-perproducttype={{product.categories}}
-                            data-perproduct={{product.id}} data-peraction="add" disabled><i
+                        <button class="_add_to_cart_btn_disable"
+                            data-perproduct={{product.id}} data-peraction="update" disabled><i
                                 class="fas fa-shopping-cart"></i> &nbsp; <span>OUT OF STOCK</span></button>
                         {% endif %}
                     </form>
@@ -149,23 +149,23 @@
             <div class="bb_pd_container">
                 <div class="bb_container_col1">
                     <div class="bb_bd_col_inside">
-                        {% for item in products_review %}
+                        {% for item in products_review_list %}
                             <div class="review">
                             <div class="profile">
                                 <div class="profile_star">
                                     {% if item.rating == 1 %}
                                         <i class="fas fa fa-star checked"></i>
-                                        <i class="fas fa fa-star "></i>
-                                        <i class="fas fa fa-star "></i>
-                                        <i class="fas fa fa-star "></i>
+                                        <i class="far fa fa-star "></i>
+                                        <i class="far fa fa-star "></i>
+                                        <i class="far fa fa-star "></i>
                                         <i class="far fa fa-star"></i>
                                     {% endif %}
             
                                     {% if item.rating == 2 %}
                                         <i class="fas fa fa-star checked"></i>
                                         <i class="fas fa fa-star checked"></i>
-                                        <i class="fas fa fa-star "></i>
-                                        <i class="fas fa fa-star "></i>
+                                        <i class="far fa fa-star "></i>
+                                        <i class="far fa fa-star "></i>
                                         <i class="far fa fa-star"></i>
                                     {% endif %}
             
@@ -173,7 +173,7 @@
                                         <i class="fas fa fa-star checked"></i>
                                         <i class="fas fa fa-star checked"></i>
                                         <i class="fas fa fa-star checked"></i>
-                                        <i class="fas fa fa-star "></i>
+                                        <i class="far fa fa-star "></i>
                                         <i class="far fa fa-star"></i>
                                     {% endif %}
             
@@ -190,11 +190,11 @@
                                         <i class="fas fa fa-star checked"></i>
                                         <i class="fas fa fa-star checked"></i>
                                         <i class="fas fa fa-star checked"></i>
-                                        <i class="far fa fa-star checked"></i>
+                                        <i class="fas fa fa-star checked"></i>
                                     {% endif %}
                                 </div>
                                 <div class="profile_name">
-                                    By <strong>{{item.fullname}}</strong>
+                                    By <strong>{{item.fullname}}{{item.rating}}</strong>
                                 </div>
                             </div>
                             <div class="des">
@@ -208,7 +208,45 @@
                     </div>
             
                 </div>
+                {% if review_status %}
+                <div class="bb_container_col2">
+                    <h3 class="bb_bd_top">YOU'RE REVIEWING:</h3>
+                    <h3>{{product.title}}</h3> 
+                    <form action="{% url 'product_review' %}" method="post">
+                        {% csrf_token %}
+                        <div class="form">
+                            <input type="hidden" name="product_id" value="{{product.id}}">
+                            <div class="rate" >
+                                
+                                <input type="radio" id="star5" name="rate" {% if product_review.rating == 5 %} checked{% endif %} value="5" />
+                                <label for="star5"  title="text">5 stars</label>
+                                <input type="radio" id="star4" name="rate" {% if product_review.rating == 4 %} checked{% endif %} value="4" />
+                                <label for="star4" title="text">4 stars</label>
+                                <input type="radio" id="star3" name="rate" {% if product_review.rating == 3 %} checked{% endif %} value="3" />
+                                <label for="star3" title="text">3 stars</label>
+                                <input type="radio" id="star2" name="rate" {% if product_review.rating == 2 %} checked{% endif %} value="2" />
+                                <label for="star2" title="text">2 stars</label>
+                                <input type="radio" id="star1" name="rate" {% if product_review.rating == 1 %} checked{% endif %} value="1" />
+                                <label for="star1" title="text">1 star</label>
+                            </div>
+                            <div class="bb_review_detail">
+                            </div>
+                            <div class="bb_review_textField">
+                                <div class="bb_review_sTextField">Place a review here</div>
+                                <hr width="98%">
+                                <div class="bb_review_dTextField">
+                                    <textarea id="review_box" maxlength="300" name="_review_box" rows="4" cols="50" required>{{product_review.review}}</textarea>
+                                </div>
+                            </div>
             
+                        </div>
+                        <div class="bb_bd_review_submit">
+                            <button type="submit">Update Review</button>
+                        </div>
+                    </form>
+            
+                </div>
+                {% else %}
                 <div class="bb_container_col2">
                     <h3 class="bb_bd_top">YOU'RE REVIEWING:</h3>
                     <h3>{{product.title}}</h3>
@@ -245,6 +283,7 @@
                     </form>
             
                 </div>
+                {% endif %}
             </div>
 
 
@@ -256,5 +295,6 @@
 </div>
 
 
+<script src="{% static 'js/product_description.js' %}"></script>
 
 {% endblock content %}

@@ -25,11 +25,9 @@
                             {% endif %}
                             {% endfor %}
                             {% if items.is_in_wishllist %}
-                            <i class="fas fa-heart" style="color:red" data-wishproduct={{items.id}}
-                            data-wishproducttype={{items.categories}}></i>
+                            <i class="fas fa-heart" style="color:red" data-wishproduct={{items.id}}></i>
                             {% else %}
-                            <i class="fas fa-heart" data-wishproduct={{items.id}}
-                                data-wishproducttype={{items.categories}}></i>
+                            <i class="fas fa-heart" data-wishproduct={{items.id}}></i>
                             {% endif %}
                         </div>
 

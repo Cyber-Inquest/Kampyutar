@@ -1,0 +1,185 @@
+{% extends 'base1.html' %}
+{% load static %}
+{% load mathfilters %}
+
+
+{% block content %}
+
+
+<div class="bb_heading">
+    <div class="heading_L" id="_cart_heading">
+        {% if request.user %}
+        {% if cart_quantity_total %}
+        <h2>{{cart_quantity_total}} Items in your cart!</h2>
+        {% else %}
+        <h2>Your cart is empty!</h2>
+        {% endif %}
+        {% else %}
+        {% if cart_product_list %}
+        <h2>{{cart_quantity_total}} Items in your cart!</h2>
+        {% else %}
+        <h2>Your cart is empty!</h2>
+        {% endif %}
+        {% endif %}
+
+    </div>
+    <a href="{% url 'index_app' %}">
+        <div class="heading_R ">continue shopping <div class="fa-solid fa-chevron-right"></div>
+        </div>
+    </a>
+</div>
+<div class="bb_container" id="_cart_list">
+    {% if request.user.id %}
+    <div class="col1">
+        <div class="top">
+            <span>Your Cart</span>
+        </div>
+
+        {% if cart_product_list %}
+
+        {% for items in cart_product_list %}
+
+        <div class="mid">
+            <div class="photo">
+                <div class="photo1"><img class="photos" src="{% get_media_prefix %}{{items.product_image}}"></div>
+            </div>
+            <div class="content" id="cart_list_append">
+                <div class="content_L">
+                    <span>{{items.product.title}}</span>
+                    <div class="qty">
+                        <label for="quantity">Qty: </label>
+                        <div class="icon">
+                            <a onclick="cart_update({{items.id}},{{items.product.id}},'{{current_user}}','sub')" style="margin-right: 5px;">
+                                <i class="fa-solid fa-minus" style="color: #ff0000;"></i>
+                            </a>
+                            <input type="number" id="_quantity_cart{{items.id}}" value="{{items.quantity}}"
+                                onchange="cart_update({{items.id}},{{items.product.id}},'{{current_user}}','manual_input')"
+                                name="quantity"
+                                min="1" max="10">
+                            <a onclick="cart_update({{items.id}},{{items.product.id}},'{{current_user}}','add')" style="margin-left: 5px; ">
+                                <i class="fa-solid fa-plus" style="color: green;"></i>
+                            </a>
+                            <div class="forremove">
+                                <a onclick="deleteCart({{items.product.id}},'{{current_user}}')"><i class="fa-solid fa-trash" style="color: brown;"></i></a>
+                                <!-- <button data-raction="delete" style="border:0px; font-size: 20px;" data-rproducttype={{items.0.categories}}
+                                    data-rdeletion={{items.0.id}} class="_remove_cart_btn"><i class="fa-solid fa-trash" ></i></button> -->
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="content_R">
+                    <span>Rs. {{items.product.latest_price|floatformat:2}}</span> <br>
+
+                    {% if items.product.previous_price != 0.0 %}
+                    <span class="price">Rs. {{items.product.previous_price|floatformat:2}}</span><br>
+                    <span class="saving">You save Rs. {{items.saved_amount|floatformat:2}}</span>
+                    {% endif %}
+                </div>
+
+            </div>
+
+        </div>
+        {% endfor %}
+
+        {% else %}
+        {% endif %}
+
+    </div>
+    {% else %}
+    <div class="col1">
+        <div class="top">
+            <span>Your Cart</span>
+        </div>
+
+        {% if cookies_cart_prodcut_list %}
+
+        {% for items in cookies_cart_prodcut_list %}
+
+        <div class="mid">
+            <div class="photo">
+                {% if items.2.photo_img.url == '/media/default' %}
+                {% else %}
+                <div class="photo1"><img class="photos" src="{{ items.product_image.first.image.url }}"></div>
+                {% endif %}
+
+            </div>
+            <div class="content" id="cart_list_append">
+                <div class="content_L">
+                    <span>{{items.title}}</span>
+                    <div class="qty">
+                        <label for="quantity">Qty: </label>
+                        <div class="icon">
+                            <a onclick="cart_update({{items.id}},{{items.id}},'{{current_user}}','sub')" style="margin-right: 5px;">
+                                <i class="fa-solid fa-minus" style="color: #ff0000;"></i>
+                            </a>
+                            <input type="number" id="_quantity_cart{{items.id}}" value="{{items.quantity}}"
+                                onchange="cart_update({{items.id}},{{items.id}},'{{current_user}}','manual_input')"
+                                name="quantity"
+                                min="1" max="10">
+                            <a onclick="cart_update({{items.id}},{{items.id}},'{{current_user}}','add')" style="margin-left: 5px; ">
+                                <i class="fa-solid fa-plus" style="color: green;"></i>
+                            </a>
+                            <div class="forremove">
+                                <a onclick="deleteCart({{items.id}},'{{current_user}}')"><i class="fa-solid fa-trash" style="color: brown;"></i></a>
+                                <!-- <button data-raction="delete" style="border:0px; font-size: 20px;" data-rproducttype={{items.0.categories}}
+                                    data-rdeletion={{items.0.id}} class="_remove_cart_btn"><i class="fa-solid fa-trash" ></i></button> -->
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="content_R">
+                    <span>Rs. {{items.latest_price|floatformat:2}}</span> <br>
+
+                    {% if items.previous_price != 0.0 %}
+                    <span class="price">Rs. {{items.previous_price|floatformat:2}}</span><br>
+                    <span class="saving">You save Rs.
+                        {{items.saved_amount|floatformat:2}}</span>
+                    {% endif %}
+                </div>
+
+            </div>
+
+        </div>
+        {% endfor %}
+
+        {% else %}
+        {% endif %}
+
+
+    </div>
+    {% endif %}
+    <div class="col2" id="_cart_summ">
+        <div class="top">
+            <span>Cart Summary</span>
+        </div>
+        <div class="summary">
+            <div class="one">
+                <span class="one1">Subtotal({{cart_quantity_total}} items)</span>
+                <span class="one2">Rs. {{cart_total_price}}</span>
+            </div>
+            <div class="two">
+                <span class="two1">Estimated Shipping</span>
+                <span class="two2">See in checkout</span>
+            </div>
+            <div class="three">
+                <span class="three1">Taxes & Fees</span>
+                <span class="three2">See in checkout</span>
+            </div>
+            <hr>
+            <div class="subtotal">
+                <span class="subtotal1">Cart Subtotal</span>
+                <span class="subtotal2">Rs. {{cart_total_price}}</span><br>
+                <span class="subtotal3">You save Rs. {{saved_amount|floatformat:2}}🙀</span>
+            </div>
+            <div class="but">
+                <a href="{% url 'order_proceed' %}" class="button">Proceed to checkout</a>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+{% endblock content %}
