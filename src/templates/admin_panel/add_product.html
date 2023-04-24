@@ -1,0 +1,365 @@
+{% extends 'base2.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% block content %}
+{% include 'admin_panel/snippets/side_nav_bar.html' with selected_menu=3 %}
+
+<style>
+   .input_img {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.upim {
+  font-size: 14px;
+  font-weight: bold;
+  color: #555;
+  background-color: #f3f3f3;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+#preview {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+#preview img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  margin: 10px;
+  position: relative;
+}
+
+#preview img:hover::after {
+  content: "x";
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  font-size: 14px;
+  line-height: 20px;
+  width: 20px;
+  height: 20px;
+  text-align: center;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+#lolme2 {
+  display: none;
+  margin-top: 20px;
+}
+
+#lolme2 div {
+  font-size: 14px;
+  font-weight: bold;
+  color: #555;
+  background-color: #f3f3f3;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+.delete-all-button {
+    background-color: #FF3838;
+    color: #FFFFFF;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    cursor: pointer;
+    border-radius: 4px;
+    width: fit-content;
+}
+
+
+</style>
+
+<div class="sc_staff_nav">
+    <div class="sc_staffs_topbar">
+        <div class="sc_staffs_status" onclick="openPage('addProducts_tab', this)" id="defaultOpen">Add Products</div>
+    </div>
+</div>
+
+<!-- staff details topbar end -->
+
+<div class="sc_content_container_noBorder sc_cc_tab" id="addProducts_tab">
+
+    <!--start container for order and storage  -->
+    <div class="sc_container2">
+        <div class="sc_div_row">
+            <h3>Selected Category: {{selected_category}}</h3>
+            <div class="admin_addProduct_main">
+                <form action="{% url 'admin_product_add' id=selected_category.id %}" method="post"
+                    enctype="multipart/form-data">
+                    
+                    {% csrf_token %}
+                    <div id="_sle_so">
+                        <div class="add_contentDiv">
+                            <div class="add_title margin_tb_auto" for="subcategory">Sub Categories</div>
+                            <div class="add_description">
+                                <select name="selected_sub_category" >
+                                    <option selected disabled value="">-select sub category-</option>
+                                    {% for item in sub_category_list %}
+                                    <option value="{{item.id}}">{{item}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="add_contentDiv">
+                            <div class="add_title margin_tb_auto" for="brand">Brand</div>
+                            <div class="add_description">
+                                <select name="selected_brand" >
+                                    <option disabled selected value="">-select brand-</option>
+                                    {% for item in brand_list %}
+                                    <option value="{{item.id}}">{{item}}</option>
+                                    {% endfor %}
+
+                                </select>
+
+                            </div>
+                        </div>
+
+                        <div class="add_contentDiv">
+                            <div class="add_title margin_tb_auto" for="product_title">Title</div>
+                            <div class="add_description_text">
+                                <input type="text" name="product_title" id="product_title" 
+                                    placeholder="Enter Product Title">
+                            </div>
+                        </div>
+                        <div class="add_contentDiv">
+                            <div class="add_title margin_tb_auto" for="product_short_description"> Short Descriptions</div>
+                            <div class="add_description_text">
+                                <input name="product_short_description" id="product_short_description"
+                                    placeholder="Enter Product short Description" >
+                            </div>
+                        </div>
+                        <div class="add_contentDiv">
+                            <div class="add_title margin_tb_auto" for="product_keywords"> Keywords</div>
+                            <div class="add_description_text">
+                                <input name="product_keywords" id="product_keywords"
+                                    placeholder="Seperate by comma eg: cooling,power" >
+                            </div>
+                        </div>
+                        <div class="add_contentDiv">
+                            <div class="add_title margin_tb_auto" for="product_model_no"> Model No</div>
+                            <div class="add_description_text">
+                                <input name="product_model_no" id="product_model_no"
+                                    placeholder="RTX-2-2-3323" >
+                            </div>
+                        </div>
+
+                        <div class="add_contentDiv">
+                            <div class="add_title margin_tb_auto" for="product_description">Descriptions</div>
+                            <div class="add_description_textarea">
+                                <textarea name="product_description" id="product_description"
+                                    placeholder="Enter Product Description" rows="6" cols="80"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="add_contentDiv">
+                            <div class="add_title margin_tb_auto" for="product_qty">Quantity</div>
+                            <div class="add_description_text">
+                                <input type="number" name="product_qty" id="product_qty"
+                                    placeholder="Enter Product Quantity">
+                            </div>
+                        </div>
+
+                        <div class="add_contentDiv">
+                            <div class="add_title margin_tb_auto" for="product_lprice">Latest Price</div>
+                            <div class="add_description_price">
+                                <input type="number" name="product_lprice" id="product_lprice"
+                                    placeholder="Enter Product Latest Price">
+                            </div>
+                        </div>
+
+                        <div class="add_contentDiv">
+                            <div class="add_title margin_tb_auto" for="product_oprice">Old Price</div>
+                            <div class="add_description_price">
+                                <input type="number" name="product_oprice" id="product_oprice"
+                                    placeholder="Enter Product Old Price">
+                            </div>
+                        </div>
+                        <h3>comming soon</h3>
+                        <input type="checkbox" name="is_commingsoon" id="comming_soon" >
+
+                        <h3>featured product</h3>
+                        <input type="checkbox" name="is_featured" id="featured_product">
+                        <div id="preview">
+                        </div>
+                        <h3>Is Shown</h3>
+                        <input type="checkbox" name="is_shown" id="shown" checked>
+                        <div id="preview">
+                        </div>
+
+                        <div id="image-uploader" >
+                            <div class="input_img" style="margin: 10px;">
+                                <label for="file-input" class="upim">Upload Image</label>
+                                <input id="file-input" type="file" name="product_image" onchange="previewImages(this)"
+                                    multiple>
+                            </div>
+
+                            <div id="image-preview" style="display: flex;"></div>
+                            <div id="image-actions">
+                                <div class="delete-all-button" style="display: none;"  id="delete-all" onclick="deleteAllImages()">Delete All</div>
+                            </div>
+                        </div>
+
+
+                        <div class="add_SpecDiv" style="margin: 50px 0px;">
+                            <h2 style="margin: 0;">Product Specification</h2>
+                            <hr>
+                            <!-- run this in loop for multiple spec list -->
+                            <div class="hidden_div" id="empty_form">
+                                <div class="add_contentDiv spec_table">
+                                    <div class="add_title proSpecDropDown">
+                                        <input type="text" name="spec_title" id="spec_title"
+                                            placeholder="Enter Specification Title" required>
+
+                                    </div>
+                                    <div class="add_description_text">
+
+                                        <input type="text" name="spec_description" id="spec_description"
+                                            placeholder="Enter Specification Description" required>
+
+                                    </div>
+
+                                    <div class="del_description_tab">
+                                        <i class="fa-solid fa-xmark" onclick="deletespecification(event)"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <!-- run this in loop for multiple spec list -->
+                            <div id="specSheet">
+
+                            </div>
+
+                            <div class="addSpecDivBtn">
+                                <div class="add_product_submit" onclick="addMoreFeature()">Add More</div>
+                            </div>
+
+                        </div>
+
+                        <div class="add_contentDiv_submit">
+                            <input class="add_product_submit" type="submit">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- end container for order and storage-->
+
+</div>
+
+
+<script>
+
+
+    window.CSRF_TOKEN = "{{ csrf_token }}";
+
+</script>
+
+<script>
+    function addMoreFeature() {
+        // Clone the empty form and remove the "hidden_div" class to show it
+        var newForm = document.getElementById("empty_form").cloneNode(true);
+        newForm.classList.remove("hidden_div");
+
+        // Reset the values of the input fields
+        newForm.querySelector("#spec_title").value = "";
+        newForm.querySelector("#spec_description").value = "";
+
+        // Append the new form to the "specSheet" div
+        document.getElementById("specSheet").appendChild(newForm);
+    }
+
+    function deletespecification(event) {
+        // Get the parent element of the clicked delete button
+        var parent = event.target.parentElement.parentElement.parentElement;
+
+        // Remove the parent element (the entire set of input fields)
+        parent.remove();
+    }
+
+
+    function previewImages(event) {
+        var preview = document.getElementById('image-preview');
+        if (this.files) {
+            [].forEach.call(this.files, readAndPreview);
+        }
+        
+        function readAndPreview(file) {
+            // Make sure `file.name` matches our extensions criteria
+            if (!/\.(jpe?g|png|gif)$/i.test(file.name)) {
+                return alert(file.name + " is not an image");
+            } // else...
+            var reader = new FileReader();
+            reader.addEventListener("load", function () {
+                var imageWrapper = document.createElement('div');
+                imageWrapper.style.margin = "10px";
+                imageWrapper.classList.add('image-wrapper');
+                imageWrapper.style.display = "flex";
+
+                var image = new Image();
+                image.height = 100;
+                image.title = file.name;
+                image.src = this.result;
+                image.style.margin = "10px";
+                image.className = "image_list";
+
+                var deleteBtn = document.createElement('div');
+                deleteBtn.classList.add('delete-image');
+                deleteBtn.innerHTML = '<i class="fa fa-times"></i>';
+                deleteBtn.style.color = "red";
+                deleteBtn.addEventListener('click', function () {
+                    imageWrapper.remove();
+                    if (preview.children.length == 0) {
+                        document.getElementById("image-uploader").classList.remove('has-images');
+                        document.getElementById('delete-all').style.display = "none";
+                    }
+                });
+
+                imageWrapper.appendChild(image);
+                imageWrapper.appendChild(deleteBtn);
+                preview.appendChild(imageWrapper);
+                preview.style.display = "flex";
+            });
+            reader.readAsDataURL(file);
+        }
+        document.getElementById("image-uploader").classList.add('has-images');
+        document.getElementById('delete-all').style.display = "block";
+
+    }
+
+    document.querySelector('#file-input').addEventListener("change", previewImages);
+
+    function deleteAllImages() {
+        var preview = document.getElementById('image-preview');
+        preview.innerHTML = '';
+        document.getElementById("file-input").value = '';
+        document.getElementById("image-uploader").classList.remove('has-images');
+        document.getElementById('delete-all').style.display = "none";
+    }
+
+
+</script>
+
+<script src="{% static 'js/tabs.js' %}"></script>
+<script src="{% static 'js/admin_page/allproduct.js' %}"></script>
+<script src="{% static 'js/admin_page/sle.js' %}"></script>
+<script src="{% static 'js/subBottomBar.js' %}"></script>
+
+{% endblock content %}

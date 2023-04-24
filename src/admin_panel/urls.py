@@ -3,9 +3,20 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('', views.admin_login, name='admin_login_admin'),
-    path('admin_login_post/', views.admin_login_post, name='admin_login_post_admin'),
-    path('dashboard/', views.index, name='index_admin'),
+    
+
+     path('', views.index, name='index_admin'),
+     path('admin-login/', views.admin_login, name='admin_login'),
+     path('admin-product/',views.admin_product,name='admin_product'),
+     path('admin-product-add/<int:id>',views.admin_product_add,name='admin_product_add'),
+
+
+
+
+    #region old Code
+    path('login/', views.admin_login, name='admin_login_admin'),
+#     path('admin_login_post/', views.admin_login_post, name='admin_login_post_admin'),
+#     path('dashboard/', views.index, name='index_admin'),
 
     path('product/', views.sb_product, name='sb_product_admin'),
     path('sb_product_add_product_post/', views.sb_product_add_product_post, name='sb_product_add_product_post_admin'),
@@ -49,5 +60,5 @@ urlpatterns = [
 
     path('del_product/', views.del_product, name='del_product_admin'),
     path('product_selected/', views.product_selected, name='product_selected_admin'),
-
+     #endregion
 ]

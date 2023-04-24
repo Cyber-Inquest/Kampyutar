@@ -8,6 +8,8 @@ from django.forms.models import modelformset_factory
 from django.http import JsonResponse
 from django.shortcuts import redirect
 from django.shortcuts import render
+from .models import Specification
+
 
 from .decorators import admin_only
 from admin_panel.forms import LoginForm
@@ -16,53 +18,169 @@ try:
 except:
     pass
 
-from .models import Brand, Order, SubCategory, Slideshow, Profile, Specification, Product, ProductImage, Blogs
+from .models import Brand, Category, Order, SubCategory, Slideshow, Profile, Specification, Product, ProductImage, Blogs
 
 
-@login_required(login_url='admin_login_admin')
-def logged_out(request):
-    logout(request)
-    return redirect('admin_login_admin')
+def index(request):
+    return render(request, 'admin_panel/index.html')
 
+def admin_product(request):
+    product_list_objects = Product.objects.filter(is_shown = True).order_by('-id')
+    featured_product_list_objects = Product.objects.filter(is_featured = True).order_by('-id')
+    comming_soon_list_objects = Product.objects.filter(is_comming_soon = True).order_by('-id')
+    
+    category_list_objects = Category.objects.filter(is_shown = True)
+    context = {
+        'featured_product_list': featured_product_list_objects,
+        'comming_soon_list': comming_soon_list_objects,
+        'product_list': product_list_objects,
+        'category_list': category_list_objects
+        }
+    return render(request, 'admin_panel/product.html',context)
+
+
+def admin_product_add(request,id):
+    if request.method == 'GET':
+        selected_category_object = Category.objects.get(id=id)
+        sub_category_list_objects = SubCategory.objects.filter(category=selected_category_object,is_shown = True)
+        brand_list_objects = Brand.objects.filter(is_shown = True)
+        context = {
+
+            'selected_category': selected_category_object,
+            'sub_category_list': sub_category_list_objects,
+            'brand_list': brand_list_objects
+            }
+        return render(request, 'admin_panel/add_product.html',context)
+    if request.method == 'POST':
+        sub_category = request.POST.get('selected_sub_category')
+        brand = request.POST.get('selected_brand')
+        title = request.POST.get('product_title')
+        short_description = request.POST.get('product_short_description')
+        description = request.POST.get('product_description')
+        keywords = request.POST.get('product_keywords')
+        model_number = request.POST.get('product_model_no')
+        product_quantity = request.POST.get('product_qty')
+        product_latest_price = request.POST.get('product_lprice')
+        product_previous_price = request.POST.get('product_oprice')
+        is_commingsoon = request.POST.get('is_commingsoon')
+        is_featured = request.POST.get('is_featured')
+        is_shown = request.POST.get('is_shown')
+
+        is_featured = False if is_featured == None else True
+        is_commingsoon = False if is_commingsoon == None else True
+        is_shown = False if is_shown == None else True
+
+        product_save = Product(
+
+            categories = Category.objects.get(id=id),
+            sub_categories = SubCategory.objects.get(id=sub_category),
+            brands = Brand.objects.get(id=brand),
+            title = title,
+            short_description = short_description,
+            description = description,
+            keywords = keywords,
+            model_number = model_number,
+            stock = product_quantity,
+            latest_price = product_latest_price,
+            previous_price = product_previous_price,
+            is_featured = is_featured,
+            is_comming_soon = is_commingsoon,
+            is_shown = is_shown,
+        )
+        product_save.save()
+        latest_product = Product.objects.latest('id')
+
+        product_specification_title = request.POST.getlist('spec_title')
+        product_specification_description = request.POST.getlist('spec_description')
+        
+
+        specifications = []
+        for i in range(len(product_specification_title)):
+            title = product_specification_title[i]
+            description = product_specification_description[i]
+            specification = Specification(product = latest_product, title=title, description=description)
+            specifications.append(specification)
+
+        Specification.objects.bulk_create(specifications)
+
+        product_image_list = request.FILES.getlist('product_image')
+
+        for image in product_image_list:
+            new_image = ProductImage(product = latest_product, image=image)
+            new_image.save()
+
+        return redirect('admin_product')
+
+    
 
 def admin_login(request):
-    if request.user.is_authenticated and request.user.is_superuser:
-        return redirect('index_admin')
-    else:
+    if request.method == 'GET':
+        if request.user.is_authenticated and request.user.is_staff:
+            return redirect('dashboard_admin')
         form = LoginForm()
         context = {'form': form}
-        return render(request, "admin_page/login_page.html", context)
-
-
-def admin_login_post(request):
+        return render(request, "admin_panel/login_page.html", context)
     if request.method == 'POST':
-
         user_name = request.POST.get('username')
         password = request.POST.get('password')
 
         user = authenticate(request, username=user_name, password=password)
         if user is not None:
-            if user.is_superuser:
+            if user.is_staff:
                 login(request, user)
-                return redirect('index_admin')
+                return redirect('dashboard_admin')
             else:
                 messages.warning(request, 'Access Denied!')
-                return redirect('admin_login_admin')
+                return redirect('admin_login')
         else:
             messages.warning(request, 'Wrong credentials!')
-            return redirect('admin_login_admin')
+            return redirect('admin_login')
+
+def logged_out(request):
+    logout(request)
+    return redirect('admin_login_admin')
 
 
-@admin_only
-@login_required(login_url='admin_login_admin')
-def index(request):
 
-    # not delivered not verified and product list for admin to verify
+#region Old Code
+# def admin_login(request):
+#     if request.user.is_authenticated and request.user.is_superuser:
+#         return redirect('index_admin')
+#     else:
+#         form = LoginForm()
+#         context = {'form': form}
+#         return render(request, "admin_page/login_page.html", context)
 
-    order_list = Order.objects.filter(verified=False, delivering=False,delivered=False)
-    context = {'order_list': order_list}
 
-    return render(request, 'admin_page/index.html', context)
+# def admin_login_post(request):
+#     if request.method == 'POST':
+
+#         user_name = request.POST.get('username')
+#         password = request.POST.get('password')
+
+#         user = authenticate(request, username=user_name, password=password)
+#         if user is not None:
+#             if user.is_superuser:
+#                 login(request, user)
+#                 return redirect('index_admin')
+#             else:
+#                 messages.warning(request, 'Access Denied!')
+#                 return redirect('admin_login_admin')
+#         else:
+#             messages.warning(request, 'Wrong credentials!')
+#             return redirect('admin_login_admin')
+
+
+# @admin_only
+# @login_required(login_url='admin_login_admin')
+# def index(request):
+
+#     # not delivered not verified and product list for admin to verify
+
+#     order_list = Order.objects.filter(verified=False, delivering=False,delivered=False)
+#     context = {'order_list': order_list}
+
+#     return render(request, 'admin_page/index.html', context)
 
 
 @admin_only
@@ -1705,7 +1823,7 @@ def sb_add_brand_product_post(request):
 @login_required(login_url='admin_login_admin')
 def sb_images(request):
     slideshow_list = Slideshow.objects.all()
-
+    
     context = {'slideshow_list': slideshow_list}
     return render(request, 'admin_page/images.html', context)
 
@@ -2046,3 +2164,5 @@ def product_selected(request):
     elif producttype == 'Components':
         desktop_sub_category_list = SubCategory.objects.filter(categories='Components')
         return JsonResponse(list(desktop_sub_category_list.values('id', 'title', 'categories')), safe=False)
+
+#endregion

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/fontawesome-free-6.0.0-beta3-web/css/all.css' %}">
+    <link rel="stylesheet" href="{% static 'css/admin_css/main_copy.css' %}">
+    <link rel="stylesheet" href="{% static 'css/admin_css/products.css' %}">
+    <link rel="stylesheet" href="{% static 'css/admin_css/addProducts.css' %}">
+    <link rel="stylesheet" href="{% static 'css/admin_css/brands.css' %}">
+    <link rel="stylesheet" href="{% static 'css/admin_css/perItem.css' %}">
+    <link rel="stylesheet" href="{% static 'css/admin_css/account.css' %}">
+    <link rel="stylesheet" href="{% static 'css/admin_css/collapseCSSZ.css' %}">
+    <link rel="stylesheet" href="{% static 'css/admin_css/toastr.min.css' %}">
+    <script src="{% static 'js/jquery-1.9.1.min.js' %}"></script>
+    <script src="{% static 'js/toastr.min.js' %}"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.25/datatables.min.css"/>
+    <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.25/datatables.min.js"></script>
+
+
+    <title>Admin Panel</title>
+</head>
+
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+            {% if message.tags == 'success'%}
+                <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+            {% elif message.tags == 'info' %}
+                <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+            {% elif message.tags == 'warning' %}
+                <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+            {% elif message.tags == 'error' %}
+                <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+            {% endif %}
+    {% endfor %}
+</ul>
+{% endif %}
+
+<body>
+
+<!-- navigation bar start -->
+<div class="sc_navbar">
+    <div class="sc_header">
+        <div class="sc_header_right">
+            <a href="#home" class="admin_hello">Hello {{request.user}}</a>
+            <a href="{% url 'index_vendor_admin_page' %}" class="admin_hello" style="margin: 0px 5px;">Go to Vendor Portal</a>
+            <a href="{% url 'logged_out_admin' %}" class="logout_btn">Logout</a>
+        </div>
+    </div>
+</div>
+{% block content %}
+
+
+{% endblock %}
+
+<script src="{% static 'js/tabs.js' %}"></script>
+
+</body>
+
+</html>

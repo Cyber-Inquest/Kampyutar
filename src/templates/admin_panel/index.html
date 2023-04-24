@@ -1,0 +1,40 @@
+{% extends 'base2.html' %}
+{% load static %}
+{% block content %}
+{% include 'admin_panel/snippets/side_nav_bar.html' with selected_menu=1 %}
+<div class="sc_content_container" id="order_tab">
+    <h1>Dashboard</h1>
+    <div class="admin_userpanel_content">
+        <table id="admin_customers">
+            <tr>
+                <th width="5%">S.N.</th>
+                <th width="35%">Product Name</th>
+                <th width="20%">Qty</th>
+                <th width="20%">Date</th>
+                <th width="20%">Actions</th>
+            </tr>
+            {% comment %}
+            {% for items in order_list %}
+            {{items}}
+            <tr>
+                <td>{{forloop.counter}}</td>
+                <td>{{items.products_type}}</td>
+                <td>{{items.quantity}}</td>
+                <td>{{items.date_time}}</td>
+                <td>
+                    <button class="td_edit">Verify</button>
+                    <button class="td_delete">Cancel</button>
+                </td>
+                
+            </tr>
+            {% endfor %}
+            {% endcomment %}
+
+        </table>
+    </div>
+
+</div>
+
+{% endblock content %}
+
+
