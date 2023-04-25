@@ -95,25 +95,24 @@
 <div class="sc_content_container_noBorder sc_cc_tab" id="addProducts_tab">
     <div class="admin_addbrand_title">
         <a href="{% url 'admin_product' %}"><i class="far fa-arrow-alt-circle-left"></i></a>
-        <h1>Add Product</h1>
+        <h1>Edit Product</h1>
     </div>
     <!--start container for order and storage  -->
     <div class="sc_container2">
         <div class="sc_div_row">
-            <h3>Selected Category: {{selected_category|title}}</h3>
+            <h3>Selected Category: {{product_details.categories|title}}</h3>
             <div class="admin_addProduct_main">
-                <form action="{% url 'admin_product_add' id=selected_category.id %}" method="post"
+                <form action="" method="post"
                     enctype="multipart/form-data">
                     
                     {% csrf_token %}
                     <div id="_sle_so">
                         <div class="add_contentDiv">
-                            <div class="add_title margin_tb_auto" for="subcategory">Sub Categories</div>
+                            <div class="add_title margin_tb_auto" for="subcategory"> Sub Categories </div>
                             <div class="add_description_text">
                                 <select name="selected_sub_category" >
-                                    <option selected disabled value="">-select sub category-</option>
-                                    {% for item in sub_category_list %}
-                                    <option value="{{item.id}}">{{item}}</option>
+                                    {% for item in subcategory_list %}
+                                    <option value="{{item.id}}" {% if item == product_details.sub_categories %} selected {% endif %}>{{item}}</option>
                                     {% endfor %}
                                 </select>
                             </div>
@@ -123,9 +122,8 @@
                             <div class="add_title margin_tb_auto" for="brand">Brand</div>
                             <div class="add_description_text">
                                 <select name="selected_brand" >
-                                    <option disabled selected value="">-select brand-</option>
                                     {% for item in brand_list %}
-                                    <option value="{{item.id}}">{{item}}</option>
+                                    <option value="{{item.id}}"  {% if item == product_details.brands %} selected {% endif %}>{{item}}</option>
                                     {% endfor %}
 
                                 </select>
@@ -136,14 +134,14 @@
                         <div class="add_contentDiv">
                             <div class="add_title margin_tb_auto " for="product_title">Title</div>
                             <div class="add_description_text">
-                                <input type="text" name="product_title" id="product_title" 
+                                <input type="text" name="product_title" id="product_title"  value="{{product_details.title}}"
                                     placeholder="Enter Product Title">
                             </div>
                         </div>
                         <div class="add_contentDiv">
                             <div class="add_title margin_tb_auto" for="product_short_description"> Short Descriptions</div>
                             <div class="add_description_text">
-                                <input name="product_short_description" id="product_short_description"
+                                <input name="product_short_description" id="product_short_description" value="{{product_details.short_description}}"
                                     placeholder="Enter Product short Description" >
                             </div>
                         </div>
@@ -153,14 +151,14 @@
                         <div class="add_contentDiv">
                             <div class="add_title margin_tb_auto" for="product_keywords"> Keywords</div>
                             <div class="add_description_text">
-                                <input name="product_keywords" id="product_keywords"
+                                <input name="product_keywords" id="product_keywords" value="{{product_details.keywords}}"
                                     placeholder="Seperate by comma eg: cooling,power" >
                             </div>
                         </div>
                         <div class="add_contentDiv">
                             <div class="add_title margin_tb_auto" for="product_model_no"> Model No</div>
                             <div class="add_description_text">
-                                <input name="product_model_no" id="product_model_no"
+                                <input name="product_model_no" id="product_model_no" value="{{product_details.model_number}}"
                                     placeholder="RTX-2-2-3323" >
                             </div>
                         </div>
@@ -169,14 +167,14 @@
                             <div class="add_title margin_tb_auto" for="product_description">Descriptions</div>
                             <div class="add_description_textarea">
                                 <textarea name="product_description" id="product_description"
-                                    placeholder="Enter Product Description" rows="6" cols="80"></textarea>
+                                    placeholder="Enter Product Description" rows="6" cols="80"> {{product_details.description}} </textarea>
                             </div>
                         </div>
 
                         <div class="add_contentDiv">
                             <div class="add_title margin_tb_auto" for="product_qty">Quantity</div>
                             <div class="add_description_text">
-                                <input type="number" name="product_qty" id="product_qty"
+                                <input type="number" name="product_qty" id="product_qty" value="{{product_details.stock}}"
                                     placeholder="Enter Product Quantity">
                             </div>
                         </div>
@@ -184,7 +182,7 @@
                         <div class="add_contentDiv">
                             <div class="add_title margin_tb_auto" for="product_lprice">Latest Price</div>
                             <div class="add_description_price">
-                                <input type="number" name="product_lprice" id="product_lprice"
+                                <input type="number" name="product_lprice" id="product_lprice" value="{{product_details.latest_price}}"
                                     placeholder="Enter Product Latest Price">
                             </div>
                         </div>
@@ -192,19 +190,19 @@
                         <div class="add_contentDiv">
                             <div class="add_title margin_tb_auto" for="product_oprice">Old Price</div>
                             <div class="add_description_price">
-                                <input type="number" name="product_oprice" id="product_oprice"
+                                <input type="number" name="product_oprice" id="product_oprice" value="{{product_details.previous_price}}"
                                     placeholder="Enter Product Old Price">
                             </div>
                         </div>
                         <h3>comming soon</h3>
-                        <input type="checkbox" name="is_commingsoon" id="comming_soon" >
+                        <input type="checkbox" name="is_commingsoon" id="comming_soon" {% if product_details.is_comming_soon %}checked{% endif %} >
 
                         <h3>featured product</h3>
-                        <input type="checkbox" name="is_featured" id="featured_product">
+                        <input type="checkbox" name="is_featured" id="featured_product" {% if product_details.is_featured %} checked {% endif %} >
                         <div id="preview">
                         </div>
                         <h3>Is Shown</h3>
-                        <input type="checkbox" name="is_shown" id="shown" checked>
+                        <input type="checkbox" name="is_shown" id="shown" {% if product_details.is_shown %}checked {% endif %}>
                         <div id="preview">
                         </div>
 
@@ -215,7 +213,14 @@
                                     multiple>
                             </div>
 
-                            <div id="image-preview" style="display: flex;"></div>
+                            <div id="image-preview" style="display: flex;">
+                                {% for item in product_details.product_image.all %}
+                                <div class="image-preview-div">
+                                    <img src="{{item.image.url}}" class="image-preview" height="100">
+                                    <div class="delete-image" onclick="deleteImage(this)">Delete</div>
+                                </div>
+                                {% endfor %}
+                            </div>
                             <div id="image-actions">
                                 <div class="delete-all-button" style="display: none;"  id="delete-all" onclick="deleteAllImages()">Delete All</div>
                             </div>
@@ -226,7 +231,7 @@
                             <h2 style="margin: 0;">Product Specification</h2>
                             <hr>
                             <!-- run this in loop for multiple spec list -->
-                            <div class="hidden_div" id="empty_form">
+                            <div class="hidden_div" id="empty_form" style="display: none;">
                                 <div class="add_contentDiv spec_table">
                                     <div class="add_title proSpecDropDown">
                                         <input type="text" name="spec_title" id="spec_title"
@@ -245,6 +250,27 @@
                                     </div>
                                 </div>
                             </div>
+                            {% for specification in product_details.specification_set.all %}
+                            <div class="hidden_div1" id="empty_form__{{specification.id}}">
+                                <div class="add_contentDiv spec_table">
+                                    <div class="add_title proSpecDropDown">
+                                        <input type="text" name="spec_title" id="spec_title__{{specification.id}}"
+                                            value="{{specification.title}}" required>
+                                        
+
+                                    </div>
+                                    <div class="add_description_text">
+
+                                        <input type="text" name="spec_description" id="spec_description__{{specification.id}}"
+                                          value = "{{specification.description}}" required>
+                                    </div>
+
+                                    <div class="del_description_tab">
+                                        <i class="fa-solid fa-xmark" onclick="deletespecification(event)"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
 
 
                             <!-- run this in loop for multiple spec list -->
@@ -283,6 +309,8 @@
         // Clone the empty form and remove the "hidden_div" class to show it
         var newForm = document.getElementById("empty_form").cloneNode(true);
         newForm.classList.remove("hidden_div");
+        newForm.style.display="block";
+
 
         // Reset the values of the input fields
         newForm.querySelector("#spec_title").value = "";

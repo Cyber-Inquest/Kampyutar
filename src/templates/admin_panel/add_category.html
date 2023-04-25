@@ -1,0 +1,198 @@
+{% extends 'base2.html' %}
+{% load static %}
+{% block content %}
+{% include 'admin_panel/snippets/side_nav_bar.html' with selected_menu=2 %}
+
+<style>
+    .input_img {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .upim {
+        font-size: 14px;
+        font-weight: bold;
+        color: #555;
+        background-color: #f3f3f3;
+        border-radius: 5px;
+        padding: 10px 20px;
+        cursor: pointer;
+    }
+
+    #preview {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    #preview img {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+        margin: 10px;
+        position: relative;
+    }
+
+    #preview img:hover::after {
+        content: "x";
+        position: absolute;
+        top: 0;
+        right: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        color: #fff;
+        font-size: 14px;
+        line-height: 20px;
+        width: 20px;
+        height: 20px;
+        text-align: center;
+        border-radius: 50%;
+        cursor: pointer;
+    }
+
+    #lolme2 {
+        display: none;
+        margin-top: 20px;
+    }
+
+    #lolme2 div {
+        font-size: 14px;
+        font-weight: bold;
+        color: #555;
+        background-color: #f3f3f3;
+        border-radius: 5px;
+        padding: 10px 20px;
+        cursor: pointer;
+    }
+
+    .delete-all-button {
+        background-color: #FF3838;
+        color: #FFFFFF;
+        border: none;
+        padding: 10px 20px;
+        font-size: 16px;
+        font-weight: bold;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        cursor: pointer;
+        border-radius: 4px;
+        width: fit-content;
+    }
+</style>
+
+
+<div class="sc_content_container" id="sub_tab">
+
+    <div class="sc_staff_nav">
+        <div class="sc_staffs_topbar">
+            <div class="sc_staffs_status" onclick="openPage('add_category_tab', this)" id="defaultOpen">Add Category
+            </div>
+
+        </div>
+    </div>
+
+    <!-- staff details topbar end -->
+
+
+    <div class=" sc_cc_tab" style="margin-top:0px;" id="add_category_tab">
+        <div class="admin_addbrand_title">
+            <a href="{% url 'admin_sets' %}"><i class="far fa-arrow-alt-circle-left"></i></a>
+            <h1>Go Back</h1>
+        </div>
+        <div class="sc_container2">
+            <div class="sc_div_row">
+                <h3>Add Category</h3>
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="add_contentDiv">
+                        <div class="add_title margin_tb_auto" for="category_title">Category Title :</div>
+                        <div class="add_description_text">
+                            <input type="text" name="category_title" id="category_title"
+                                placeholder="Enter Product Title">
+                        </div>
+                    </div>
+                    <h3>Is Shown</h3>
+                    <input type="checkbox" name="category_is_shown" id="category_is_shown" checked>
+                    <div id="preview">
+                    </div>
+
+                    <div id="image-uploader">
+                        <div id="image-preview"></div>
+                        <div class="input_img" style="margin: 10px;">
+                            <label for="file-input" class="upim">Upload Image</label>
+                            <input id="file-input" type="file" name="category_image" onchange="previewImage(this)">
+                        </div>
+
+                    </div>
+                    <div class="add_contentDiv_submit">
+                        <input class="add_product_submit" type="submit" value="Submit" style="margin: 5px 0px 50px 0px;">
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+    function previewImage(event) {
+        var file = event.files[0];
+        // Make sure `file.name` matches our extensions criteria
+        if (!/\.(jpe?g|png|gif)$/i.test(file.name)) {
+            return alert(file.name + " is not an image");
+        } // else...
+        var reader = new FileReader();
+        reader.addEventListener("load", function () {
+            var preview = document.getElementById('image-preview');
+            var imageWrapper = preview.querySelector('.image-wrapper');
+            if (imageWrapper) {
+                imageWrapper.querySelector('img').src = this.result;
+            } else {
+                imageWrapper = document.createElement('div');
+                imageWrapper.style.margin = "10px";
+                imageWrapper.classList.add('image-wrapper');
+                imageWrapper.style.display = "flex";
+
+                var image = new Image();
+                image.height = 100;
+                image.title = file.name;
+                image.src = this.result;
+                image.style.margin = "10px";
+                image.className = "image_list";
+
+                var deleteBtn = document.createElement('div');
+                deleteBtn.classList.add('delete-image');
+                deleteBtn.innerHTML = '<i class="fa fa-times"></i>';
+                deleteBtn.style.color = "red";
+                deleteBtn.addEventListener('click', function () {
+                    imageWrapper.remove();
+                    document.getElementById("file-input").value = '';
+                    document.getElementById("image-uploader").classList.remove('has-images');
+                    document.getElementById('delete-all').style.display = "none";
+                });
+
+                imageWrapper.appendChild(image);
+                imageWrapper.appendChild(deleteBtn);
+                preview.appendChild(imageWrapper);
+                preview.style.display = "flex";
+                preview.style.justifyContent = "center";
+                document.getElementById("image-uploader").classList.add('has-images');
+            }
+        });
+        reader.readAsDataURL(file);
+    }
+
+    document.querySelector('#file-input').addEventListener("change", previewImage);
+
+
+
+
+</script>
+
+
+
+{% endblock content %}

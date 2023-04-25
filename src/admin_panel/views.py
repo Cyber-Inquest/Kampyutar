@@ -136,6 +136,241 @@ def admin_login(request):
             messages.warning(request, 'Wrong credentials!')
             return redirect('admin_login')
 
+def admin_sets(request):
+    category_list_objects = Category.objects.all()
+    sub_category_list_objects = SubCategory.objects.all()
+    brand_list_objects = Brand.objects.all()
+
+    context = {
+        'category_list': category_list_objects,
+        'brand_list': brand_list_objects,
+        'sub_category_list': sub_category_list_objects
+        }
+    return render(request, 'admin_panel/sets.html',context)
+
+def admin_category_add(request):
+    if request.method == 'GET':
+        return render(request, 'admin_panel/add_category.html')
+    if request.method == 'POST':
+        category_title = request.POST.get('category_title')
+        category_is_shown = request.POST.get('category_is_shown')
+        category_image = request.FILES.get('category_image')
+
+        category_is_shown = False if category_is_shown == None else True
+
+        category_save = Category(
+            title = category_title,
+            is_shown = category_is_shown,
+            image = category_image
+        )
+        category_save.save()
+        return redirect('admin_sets')
+    
+def admin_subcategory_add(request,id):
+    if request.method == 'GET':
+        category_list_objects = Category.objects.get(id=id)
+        context = {'category_list': category_list_objects}
+        return render(request, 'admin_panel/add_sub_category.html',context)
+    if request.method == 'POST':
+        category = request.POST.get('product_title_id')
+        sub_category_title = request.POST.get('sub_category_title')
+        sub_category_is_shown = request.POST.get('sub_category_is_shown')
+        sub_category_image = request.FILES.get('sub_category_image')
+
+        sub_category_is_shown = False if sub_category_is_shown == None else True
+
+        sub_category_save = SubCategory(
+            category = Category.objects.get(id=category),
+            title = sub_category_title,
+            image = sub_category_image,
+            is_shown = sub_category_is_shown
+        )
+        sub_category_save.save()
+        return redirect('admin_sets')
+
+def admin_brand_add(request):
+    if request.method == 'GET':
+        return render(request, 'admin_panel/add_brand.html')
+    if request.method == 'POST':
+        brand_title = request.POST.get('brand_title')
+        brand_is_shown = request.POST.get('brand_is_shown')
+        brand_image = request.FILES.get('brand_image')
+
+        brand_is_shown = False if brand_is_shown == None else True
+
+        brand_save = Brand(
+            title = brand_title,
+            image = brand_image,
+            is_shown = brand_is_shown
+        )
+        brand_save.save()
+        return redirect('admin_sets')
+
+def admin_user_account(request):
+    staff_list_object = User.objects.filter(is_superuser=0, is_staff=1)
+    customer_list_object = User.objects.filter(is_superuser=0, is_staff=0)
+    context = {
+        'staff_list': staff_list_object, 
+        'customer_list': customer_list_object
+        }
+    return render(request, 'admin_panel/user_account.html', context)
+
+def admin_staff_add(request):
+    if request.method == 'GET':
+        return render(request, 'admin_panel/staff_add.html')
+    email_exists = False
+    if request.method == 'POST':
+
+        contact = request.POST.get("contact")
+        fullname = request.POST.get("fullname")
+        photo_img = request.FILES.get("photo_img")
+        location = request.POST.get("location")
+        email = request.POST.get("email")
+        username = request.POST.get("username")
+        c_password = request.POST.get("c_password")
+        password = request.POST.get("password")
+
+        
+        email_exists = User.objects.filter(email=email).exists()
+        username_exists = User.objects.filter(username=username).exists()
+
+        if email_exists:
+            messages.warning(request, 'Email already exists!')
+            return redirect('admin_staff_add')
+        if username_exists:
+            return redirect('admin_staff_add')
+
+        else:
+
+            if password == c_password:
+                try:
+                    new_user = User(username=username, email=email, is_staff=1, is_superuser=0)
+                    new_user.set_password(password)
+                    new_user.save()
+                    if photo_img:
+                        Profile.objects.filter(user=new_user).update(contact=contact, photo_img=photo_img, fullname=fullname,
+                                                location=location,authorization=True)
+                        
+                    else:
+                        Profile.objects.filter(user=new_user).update(contact=contact, fullname=fullname,
+                                                location=location,authorization=True)
+                    messages.success(request, 'User Added!')
+                    return redirect('admin_user_account')
+                except Exception as e:
+                    print(e)
+                    messages.error(request, 'Error Occured!')
+                    return redirect('admin_staff_add')
+            else:
+                messages.error(request, 'password does not match!')
+                return redirect('admin_staff_add')
+
+def admin_staff_edit(request, id):
+    if request.method == 'GET':
+        user_list = Profile.objects.get(user_id=id)
+        context = {'ids': id, 'user_list': user_list}
+        return render(request, 'admin_panel/staff_edit.html', context)
+    if request.method == 'POST':
+        url = f'/admin-staff-edit/{id}/'
+        admin_all = False
+        user_name_all = False
+        contact = request.POST.get("contact")
+        fullname = request.POST.get("fullname")
+        photo_img = request.FILES.get("photo_img")
+        location = request.POST.get("location")
+        email = request.POST.get("email")
+        username = request.POST.get("username")
+        c_password = request.POST.get("c_password")
+        password = request.POST.get("password")
+
+        admin_all = User.objects.all().exclude(id=id)
+        user_name_all = User.objects.all().exclude(id=id)
+        for items in admin_all:
+
+            if items.email == email:
+                email_exists = True
+                break
+            else:
+                email_exists = False
+        for items in user_name_all:
+
+            if items.username == username:
+                email_exists = True
+                break
+            else:
+                email_exists = False
+
+        if email_exists:
+            messages.warning(request, 'Email already exists!')
+
+            return redirect(url)
+        if email_exists:
+            messages.warning(request, 'Username already exists!')
+
+            return redirect(url)
+
+        else:
+            user_query = User.objects.get(id=id)
+
+            if password == c_password:
+                try:
+                    image_del = user_query.profile.photo_img
+                    if photo_img:
+                        if image_del:
+                            image_del.delete()
+
+                        user_query.username = username
+                        user_query.profile.fullname = fullname
+                        user_query.email = email
+                        user_query.profile.contact = contact
+                        user_query.profile.location = location
+                        user_query.profile.photo_img = photo_img
+                        user_query.set_password(password)
+                        user_query.save()
+                        user_query.profile.save()
+
+                        messages.success(request, 'User Updated!')
+                        return redirect('admin_user_account')
+                    else:
+                        user_query.username = username
+                        user_query.profile.fullname = fullname
+                        user_query.email = email
+                        user_query.profile.contact = contact
+                        user_query.profile.location = location
+                        user_query.set_password(password)
+                        user_query.save()
+                        user_query.profile.save()
+
+                        messages.success(request, 'User Updated!')
+                        return redirect('admin_user_account')
+                except:
+                    messages.error(request, 'Username exists!')
+                    return redirect(url)
+            else:
+                messages.error(request, 'password does not match!')
+                return redirect(url)
+
+def admin_product_detail(request, id):
+    product_details = Product.objects.get(id=id)
+    context = {'product': product_details}
+    return render(request, 'admin_panel/product_details.html', context)
+
+def admin_product_edit(request, id):
+    if request.method == 'GET':
+        product_details = Product.objects.get(id=id)
+        subcategory_list_object = SubCategory.objects.filter(category__id=product_details.categories.id,is_shown=True)
+        
+        brand_list_object = Brand.objects.filter(is_shown=True)
+        # print(product_details.specification_set.all())
+        context = {
+            'product_details': product_details,
+            'subcategory_list': subcategory_list_object,
+            'brand_list': brand_list_object,
+            }
+        return render(request, 'admin_panel/product_edit.html', context)
+    if request.method == 'POST':
+        return True
+
+
 def logged_out(request):
     logout(request)
     return redirect('admin_login_admin')
@@ -1900,7 +2135,6 @@ def sb_account(request):
     context = {'user_list': user_list, 'customer_list': customer_list}
     return render(request, 'admin_page/account.html', context)
 
-
 @admin_only
 @login_required(login_url='admin_login_admin')
 def sb_view_admin_account(request, ids):
@@ -1981,6 +2215,8 @@ def sb_view_admin_account_post(request, ids):
             else:
                 messages.error(request, 'password does not match!')
                 return redirect(url)
+
+
 
 
 @admin_only

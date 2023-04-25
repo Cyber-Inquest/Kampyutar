@@ -45,7 +45,11 @@
                     <td>{{ product.stock }}</td>
                     <td>{{ product.latest_price }}</td>
                     <td>{% if product.is_shown %}<i style="color: green;" class="fa-solid fa-check"></i>{% else %} <i style="color: red;" class="fa-solid fa-xmark"></i> {% endif %}</td>
-                    <td></td>
+                    <td>
+                        <a href="{% url 'admin_product_details' id=product.id %}"><button class="td_view">View</button></a>
+                        <a href="{% url 'admin_product_edit' id=product.id %}"><button class="td_edit">Edit</button></a>
+                        <a href="#"><button class="td_delete">Delete</button></a>
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -76,7 +80,11 @@
                     <td>{{ product.stock }}</td>
                     <td>{{ product.latest_price }}</td>
                     <td>{% if product.is_shown %}<i style="color: green;" class="fa-solid fa-check"></i>{% else %} <i style="color: red;" class="fa-solid fa-xmark"></i> {% endif %}</td>
-                    <td></td>
+                    <td>
+                        <a href="{% url 'admin_product_details' id=product.id %}"><button class="td_view">View</button></a>
+                        <a href="{% url 'admin_product_edit' id=product.id %}"><button class="td_edit">Edit</button></a>
+                        <a href="#"><button class="td_delete">Delete</button></a>
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -107,7 +115,11 @@
                     <td>{{ product.stock }}</td>
                     <td>{{ product.latest_price }}</td>
                     <td>{% if product.is_shown %}<i style="color: green;" class="fa-solid fa-check"></i>{% else %} <i style="color: red;" class="fa-solid fa-xmark"></i> {% endif %}</td>
-                    <td></td>
+                    <td>
+                        <a href="{% url 'admin_product_details' id=product.id %}"><button class="td_view">View</button></a>
+                        <a href="{% url 'admin_product_edit' id=product.id %}"><button class="td_edit">Edit</button></a>
+                        <a href="#"><button class="td_delete">Delete</button></a>
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
