@@ -18,6 +18,9 @@ urlpatterns = [
      path('admin-user-account/',views.admin_user_account,name='admin_user_account'),
      path('admin-staff-add/',views.admin_staff_add,name='admin_staff_add'),
      path('admin-staff-edit/<int:id>',views.admin_staff_edit,name='admin_staff_edit'),
+     path('admin-category-edit/<int:id>',views.admin_category_edit,name='admin_category_edit'),
+     path('admin-subcategory-edit/<int:id>',views.admin_subcategory_edit,name='admin_subcategory_edit'),
+     path('admin-brand-edit/<int:id>',views.admin_brand_edit,name='admin_brand_edit'),
      
 
 

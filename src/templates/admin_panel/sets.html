@@ -22,9 +22,9 @@
 
         <div class="sc_container2">
             <div class="sc_div_row">
-
                 {% for item in category_list %}
-                <div class="sc_div_col">
+                <div class="sc_div_col" style="position: relative;">
+                   <a href="{% url 'admin_category_edit' id=item.id %}"><i class="fa-solid fa-pen-to-square" style="font-size: 20px; position: absolute; top: 22px;right: 18px; z-index: 999; "></i></a>
                     <div class="sc_perDiv sc_perDiv_img_hover">
                         {% if item.image %}
                         <img src="{{ item.image.url }}">
@@ -63,7 +63,8 @@
                 {% for items in sub_category_list %}
 
                 {% if items.category == category_item %}
-                <div class="sc_div_col">
+                <div class="sc_div_col" style="position: relative;">
+                   <a href="{% url 'admin_subcategory_edit' id=items.id %}"><i class="fa-solid fa-pen-to-square" style="font-size: 20px; position: absolute; top: 22px;right: 18px; z-index: 999; "></i></a>
                     <div class="sc_perDiv sc_perDiv_img_hover">
                         {% if items.image %}
                         <img src="{{ items.image.url }}" alt="">
@@ -99,7 +100,8 @@
             <div class="sc_div_row">
 
                 {% for item in brand_list %}
-                <div class="sc_div_col">
+                <div class="sc_div_col" style="position: relative;">
+                   <a href="{% url 'admin_brand_edit' id=item.id %}"><i class="fa-solid fa-pen-to-square" style="font-size: 20px; position: absolute; top: 22px;right: 18px; z-index: 999; "></i></a>
                     <div class="sc_perDiv sc_perDiv_img_hover">
                         {% if item.image %}
                         <img src="{{item.image.url}}">

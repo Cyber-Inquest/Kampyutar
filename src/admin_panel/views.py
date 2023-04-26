@@ -368,7 +368,143 @@ def admin_product_edit(request, id):
             }
         return render(request, 'admin_panel/product_edit.html', context)
     if request.method == 'POST':
-        return True
+        product_details = Product.objects.get(id=id)
+        product_sub_category = request.POST.get("selected_sub_category")
+        product_brand = request.POST.get("selected_brand")
+        product_title = request.POST.get("product_title")
+        product_short_description = request.POST.get("product_short_description")
+        product_keywords = request.POST.get("product_keywords")
+        product_model_no = request.POST.get("product_model_no")
+        product_description = request.POST.get("product_description")
+        product_qty = request.POST.get("product_qty")
+        product_latest_price = request.POST.get("product_lprice")
+        product_previous_price = request.POST.get("product_oprice")
+        product_is_featured = request.POST.get("is_featured")
+
+        product_is_commingsoon = request.POST.get("is_commingsoon")
+        product_is_shown = request.POST.get("is_shown")	
+
+        is_featured = False if product_is_featured == None else True
+        is_comming_soon = False if product_is_commingsoon == None else True
+        is_shown = False if product_is_shown == None else True
+
+        Product.objects.filter(id=id).update(
+            sub_categories = SubCategory.objects.get(id=product_sub_category),
+            brands = Brand.objects.get(id=product_brand),
+            title = product_title,
+            short_description = product_short_description,
+            keywords = product_keywords,
+            model_number = product_model_no,
+            description = product_description,
+            stock = product_qty,
+            latest_price = product_latest_price,
+            previous_price = product_previous_price,
+            is_featured = is_featured,
+            is_comming_soon = is_comming_soon,
+            is_shown = is_shown,
+            )
+        product_specification_title_list = request.POST.getlist("spec_title")
+        product_specification_description_list = request.POST.getlist("spec_description")
+        Specification.objects.filter(product=product_details).delete()
+        for i in range(len(product_specification_title_list)):
+            if product_specification_title_list[i] == '':
+                pass
+            else:
+                title = product_specification_title_list[i]
+                description = product_specification_description_list[i]
+                Specification.objects.create(product = product_details, title=title, description=description)
+                print(title, description)
+
+        deleted_image_ids = request.POST.getlist('deleted_image_ids')
+        if len(deleted_image_ids) == 1 and deleted_image_ids[0] == '':
+            pass
+        else:
+            ids = [int(id) for id in deleted_image_ids[0].split(',')]
+            ProductImage.objects.filter(id__in=ids).delete()
+        product_image_list = request.FILES.getlist('product_image')
+
+        for image in product_image_list:
+            new_image = ProductImage(product = product_details, image=image)
+            new_image.save()
+        return redirect(admin_product_detail, id=id)
+
+def admin_category_edit(request, id):
+    if request.method == 'GET':
+        category_details = Category.objects.get(id=id)
+        context = {'category': category_details}
+        return render(request, 'admin_panel/edit_category.html', context)
+    if request.method == 'POST':
+        category_details = Category.objects.get(id=id)
+        category_title = request.POST.get("category_title")
+        category_is_shown = request.POST.get("category_is_shown")
+        category_image = request.FILES.get("image_list")
+        print(category_image)
+        is_shown = False if category_is_shown == None else True
+        if category_image == None:
+            Category.objects.filter(id=id).update(
+                title = category_title,
+                is_shown = is_shown,
+                )
+        else:
+            Category.objects.filter(id=id).update(
+                title = category_title,
+                is_shown = is_shown,
+                image = category_image,
+                )
+        return redirect(admin_sets)  
+    
+def admin_subcategory_edit(request, id):
+    if request.method == 'GET':
+        subcategory_details = SubCategory.objects.get(id=id)
+        context = {
+            'subcategory': subcategory_details,
+            }
+        return render(request, 'admin_panel/edit_sub_category.html', context)
+    if request.method == 'POST':
+        subcategory_details = SubCategory.objects.get(id=id)
+        subcategory_title = request.POST.get("subcategory_title")
+        subcategory_category = request.POST.get("selected_category")
+        subcategory_is_shown = request.POST.get("is_shown")
+        subcategory_image = request.FILES.get("subcategory_image")
+        is_shown = False if subcategory_is_shown == None else True
+        if subcategory_image == None:
+            SubCategory.objects.filter(id=id).update(
+                title = subcategory_title,
+                is_shown = is_shown,
+                category = Category.objects.get(id=subcategory_category),
+                )
+        else:
+            SubCategory.objects.filter(id=id).update(
+                title = subcategory_title,
+                is_shown = is_shown,
+                category = Category.objects.get(id=subcategory_category),
+                image = subcategory_image,
+                )
+        return redirect(admin_sets)
+    
+def admin_brand_edit(request, id):
+    if request.method == 'GET':
+        brand_details = Brand.objects.get(id=id)
+        context = {'brand': brand_details}
+        return render(request, 'admin_panel/edit_brands.html', context)
+    if request.method == 'POST':
+        brand_details = Brand.objects.get(id=id)
+        brand_title = request.POST.get("brand_title")
+        brand_is_shown = request.POST.get("is_shown")
+        brand_image = request.FILES.get("brand_image")
+        is_shown = False if brand_is_shown == None else True
+        if brand_image == None:
+            Brand.objects.filter(id=id).update(
+                title = brand_title,
+                is_shown = is_shown,
+                )
+        else:
+            Brand.objects.filter(id=id).update(
+                title = brand_title,
+                is_shown = is_shown,
+                image = brand_image,
+                )
+        return redirect(admin_sets)
 
 
 def logged_out(request):

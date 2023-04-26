@@ -101,8 +101,7 @@
         <div class="sc_div_row">
             <h3>Selected Category: {{product_details.categories|title}}</h3>
             <div class="admin_addProduct_main">
-                <form action="" method="post" enctype="multipart/form-data">
-
+                <form id = "image-form" method = 'post' enctype="multipart/form-data">
                     {% csrf_token %}
                     <div id="_sle_so">
                         <div class="add_contentDiv">
@@ -133,7 +132,7 @@
                             <div class="add_title margin_tb_auto " for="product_title">Title</div>
                             <div class="add_description_text">
                                 <input type="text" name="product_title" id="product_title"
-                                    value="{{product_details.title}}" placeholder="Enter Product Title">
+                                    value="{{product_details.title}}" >
                             </div>
                         </div>
                         <div class="add_contentDiv">
@@ -142,7 +141,7 @@
                             <div class="add_description_text">
                                 <input name="product_short_description" id="product_short_description"
                                     value="{{product_details.short_description}}"
-                                    placeholder="Enter Product short Description">
+                                    >
                             </div>
                         </div>
 
@@ -204,7 +203,7 @@
                         <div id="preview">
                         </div>
                         <h3>Is Shown</h3>
-                        <input type="checkbox" name="is_shown" id="shown" {% if product_details.is_shown %}checked {% endif %}>
+                        <input type="checkbox" name="is_shown" id="shown" {% if product_details.is_shown %} checked {% endif %}>
                         <div id="preview">
                         </div>
 
@@ -212,14 +211,17 @@
                             <div id="image-uploader" class="has-images">
                                 <div class="input_img" style="margin: 10px;">
                                     <label for="file-input" class="upim">Upload Image</label>
-                                    <input id="file-input" type="file" name="product_image" onchange="previewImages(this)" multiple="">
+                                    <input id="file-input" type="file" name="product_image"
+                                        onchange="previewImages(this)" multiple="">
                                 </div>
 
                                 <div id="image-preview" style="display: flex;">
                                     {% for item in product_details.product_image.all %}
-                                    <div class="image-wrapper" style="margin: 10px; display: flex;"><img height="100" src="{{item.image.url}}" class="image_list"
-                                            style="margin: 10px;">
-                                        <div class="delete-image" style="color: red;"><i class="fa fa-times"></i></div>
+                                    <div class="image-wrapper" style="margin: 10px; display: flex;"><img height="100"
+                                            src="{{item.image.url}}" class="image_list" style="margin: 10px;">
+                                           <input type="hidden" name="image_id" value="{{item.id}}">
+                                        <div class="delete-image" style="color: red;"><i class="fa fa-times"
+                                                onclick="deleteIndividualImage(event)"></i></div>
                                     </div>
                                     {% endfor %}
                                 </div>
@@ -227,8 +229,9 @@
                                     <div class="delete-all-button" style="display: block;" id="delete-all"
                                         onclick="deleteAllImages()">Delete All</div>
                                 </div>
+                                <input type="hidden" name="deleted_image_ids" id ="deleted_image_ids" value="{{ deletedImageIds }}">
                             </div>
-                            
+
                         </div>
 
 
@@ -240,13 +243,13 @@
                                 <div class="add_contentDiv spec_table">
                                     <div class="add_title proSpecDropDown">
                                         <input type="text" name="spec_title" id="spec_title"
-                                            placeholder="Enter Specification Title" required>
+                                            placeholder="Enter Specification Title" >
 
                                     </div>
                                     <div class="add_description_text">
 
                                         <input type="text" name="spec_description" id="spec_description"
-                                            placeholder="Enter Specification Description" required>
+                                            placeholder="Enter Specification Description" >
 
                                     </div>
 
@@ -261,7 +264,7 @@
                                     <div class="add_title proSpecDropDown">
                                         <input type="text" name="spec_title" id="spec_title__{{specification.id}}"
                                             value="{{specification.title}}" required>
-
+                                        
 
                                     </div>
                                     <div class="add_description_text">
@@ -311,6 +314,8 @@
 </script>
 
 <script>
+
+
     function addMoreFeature() {
         // Clone the empty form and remove the "hidden_div" class to show it
         var newForm = document.getElementById("empty_form").cloneNode(true);
@@ -382,13 +387,33 @@
         document.getElementById("image-uploader").classList.add('has-images');
         document.getElementById('delete-all').style.display = "block";
 
-    }
 
+    }
+    var deletedImageIds = [];
     document.querySelector('#file-input').addEventListener("change", previewImages);
+    function deleteIndividualImage(event) {
+        var parent = event.target.parentElement.parentElement;
+        var imageId = parent.querySelector('input[name="image_id"]').value;
+        parent.remove();
+        deletedImageIds.push(imageId);
+        var preview = document.getElementById('image-preview');
+        document.getElementById("deleted_image_ids").value = deletedImageIds;
+        if (preview.children.length == 0) {
+            document.getElementById("image-uploader").classList.remove('has-images');
+            document.getElementById('delete-all').style.display = "none";
+
+        }
+    }
 
     function deleteAllImages() {
         var preview = document.getElementById('image-preview');
+        var imageId = preview.querySelectorAll('input[name="image_id"]');
+        imageId.forEach(function (element) {
+            deletedImageIds.push(element.value);
+        });
+        console.log(deletedImageIds);
         preview.innerHTML = '';
+        document.getElementById("deleted_image_ids").value = deletedImageIds;
         document.getElementById("file-input").value = '';
         document.getElementById("image-uploader").classList.remove('has-images');
         document.getElementById('delete-all').style.display = "none";
