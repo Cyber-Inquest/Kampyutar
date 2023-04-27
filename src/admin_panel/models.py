@@ -180,7 +180,7 @@ class Order(models.Model):
     delivered               = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.products_type
+        return str(self.batch)
 
 
 

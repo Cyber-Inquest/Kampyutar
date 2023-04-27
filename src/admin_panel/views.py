@@ -9,6 +9,8 @@ from django.http import JsonResponse
 from django.shortcuts import redirect
 from django.shortcuts import render
 from .models import Specification
+from django.db.models import Sum, F
+from django.db.models import Sum, OuterRef, Subquery,F,Value,Case,When,IntegerField
 
 
 from .decorators import admin_only
@@ -22,7 +24,36 @@ from .models import Brand, Category, Order, SubCategory, Slideshow, Profile, Spe
 
 
 def index(request):
-    return render(request, 'admin_panel/index.html')
+
+    completed_order_list_objects = Order.objects.filter(verified=True,delivering = True,delivered=True).order_by('-id')
+    recent_order_list_objects = Order.objects.exclude(verified=True,delivering = True,delivered=True).order_by('-id')  
+    
+    batch_orders = Order.objects.values('batch').annotate(
+        total_quantity=Subquery(
+            Order.objects.filter(batch=OuterRef('batch')).values('batch').annotate(
+                total_qty=Sum('quantity')
+            ).values('total_qty')
+        )
+    ).annotate(
+        total_amount=Subquery(
+            Order.objects.filter(batch=OuterRef('batch')).values('batch').annotate(
+                total_amnt=Sum(F('quantity') * F('product__latest_price'))
+            ).values('total_amnt')
+        )
+    ).annotate(
+        ordered_date = Subquery(Order.objects.filter(batch=OuterRef('batch')).values('batch').annotate(
+        ordered_date=F('date_time')).values('ordered_date'))
+               ).distinct().values('batch','total_quantity','total_amount','user__username','ordered_date')
+    
+    recent_order_list_objects = batch_orders.exclude(verified=True,delivering = True,delivered=True)
+    completed_order_list_objects = batch_orders.filter(verified=True,delivering = True,delivered=True)
+    context = {
+        'recent_order_list': recent_order_list_objects,
+        'completed_order_list': completed_order_list_objects,
+    }
+
+
+    return render(request, 'admin_panel/index.html', context)
 
 def admin_product(request):
     product_list_objects = Product.objects.filter(is_shown = True).order_by('-id')
@@ -434,10 +465,11 @@ def admin_category_edit(request, id):
         context = {'category': category_details}
         return render(request, 'admin_panel/edit_category.html', context)
     if request.method == 'POST':
+        print(request.POST)
         category_details = Category.objects.get(id=id)
         category_title = request.POST.get("category_title")
         category_is_shown = request.POST.get("category_is_shown")
-        category_image = request.FILES.get("image_list")
+        category_image = request.FILES.get("category_image")
         print(category_image)
         is_shown = False if category_is_shown == None else True
         if category_image == None:
@@ -446,11 +478,12 @@ def admin_category_edit(request, id):
                 is_shown = is_shown,
                 )
         else:
-            Category.objects.filter(id=id).update(
-                title = category_title,
-                is_shown = is_shown,
-                image = category_image,
-                )
+            
+            category_object =  Category.objects.get(id=id)
+            category_object.title = category_title
+            category_object.is_shown = is_shown
+            category_object.image = category_image
+            category_object.save()
         return redirect(admin_sets)  
     
 def admin_subcategory_edit(request, id):
@@ -462,24 +495,24 @@ def admin_subcategory_edit(request, id):
         return render(request, 'admin_panel/edit_sub_category.html', context)
     if request.method == 'POST':
         subcategory_details = SubCategory.objects.get(id=id)
-        subcategory_title = request.POST.get("subcategory_title")
-        subcategory_category = request.POST.get("selected_category")
-        subcategory_is_shown = request.POST.get("is_shown")
-        subcategory_image = request.FILES.get("subcategory_image")
+        subcategory_title = request.POST.get("sub_category_title")
+        category_id = request.POST.get("category_title_id")
+        subcategory_is_shown = request.POST.get("sub_category_is_shown")
+        subcategory_image = request.FILES.get("sub_category_image")
         is_shown = False if subcategory_is_shown == None else True
         if subcategory_image == None:
             SubCategory.objects.filter(id=id).update(
                 title = subcategory_title,
                 is_shown = is_shown,
-                category = Category.objects.get(id=subcategory_category),
+                category = Category.objects.get(id=category_id),
                 )
         else:
-            SubCategory.objects.filter(id=id).update(
-                title = subcategory_title,
-                is_shown = is_shown,
-                category = Category.objects.get(id=subcategory_category),
-                image = subcategory_image,
-                )
+            sub_category_object = SubCategory.objects.get(id=id)
+            sub_category_object.title = subcategory_title
+            sub_category_object.is_shown = is_shown
+            sub_category_object.category = Category.objects.get(id=category_id)
+            sub_category_object.image = subcategory_image
+            sub_category_object.save()
         return redirect(admin_sets)
     
 def admin_brand_edit(request, id):
@@ -490,7 +523,7 @@ def admin_brand_edit(request, id):
     if request.method == 'POST':
         brand_details = Brand.objects.get(id=id)
         brand_title = request.POST.get("brand_title")
-        brand_is_shown = request.POST.get("is_shown")
+        brand_is_shown = request.POST.get("brand_is_shown")
         brand_image = request.FILES.get("brand_image")
         is_shown = False if brand_is_shown == None else True
         if brand_image == None:
@@ -499,11 +532,12 @@ def admin_brand_edit(request, id):
                 is_shown = is_shown,
                 )
         else:
-            Brand.objects.filter(id=id).update(
-                title = brand_title,
-                is_shown = is_shown,
-                image = brand_image,
-                )
+            brand_objects = Brand.objects.get(id=id)
+            brand_objects.title = brand_title
+            brand_objects.is_shown = is_shown
+            brand_objects.image = brand_image
+            brand_objects.save()
+            
         return redirect(admin_sets)
 
 

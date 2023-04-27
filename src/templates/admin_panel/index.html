@@ -4,36 +4,81 @@
 {% include 'admin_panel/snippets/side_nav_bar.html' with selected_menu=1 %}
 <div class="sc_content_container" id="order_tab">
     <h1>Dashboard</h1>
-    <div class="admin_userpanel_content">
-        <table id="admin_customers">
+    <h2>Recent Order:</h2>
+    <table id="recent-order-list" class="tabel-style display " style=" padding-top: 16px; margin-top: 45px;">
+        <thead>
             <tr>
-                <th width="5%">S.N.</th>
-                <th width="35%">Product Name</th>
-                <th width="20%">Qty</th>
-                <th width="20%">Date</th>
-                <th width="20%">Actions</th>
-            </tr>
-            {% comment %}
-            {% for items in order_list %}
-            {{items}}
-            <tr>
-                <td>{{forloop.counter}}</td>
-                <td>{{items.products_type}}</td>
-                <td>{{items.quantity}}</td>
-                <td>{{items.date_time}}</td>
-                <td>
-                    <button class="td_edit">Verify</button>
-                    <button class="td_delete">Cancel</button>
-                </td>
+                <th>SN</th>
+                <th>Batch No</th>
+                <th>Total Items</th>
+                <th>Total Amount</th>
+                <th>Order By</th>
+                <th>Date</th>
+                <th>Action</th>
                 
             </tr>
+        </thead>
+        <tbody>
+            <!-- Loop through each product in the queryset and add it to the table rows -->
+            {% for order in recent_order_list %}
+            <tr>
+                <td>{{forloop.counter}}</td>
+                <td>{{ order.batch }}</td>
+                <td>{{ order.total_quantity }}</td>
+                <td>{{ order.total_amount }}</td>
+                <td>{{ order.user__username }}</td>
+                <td>{{ order.ordered_date }}</td>
+                <td>
+                    <a href=""><button class="td_view">View</button></a>
+                   
+                </td>
+            </tr>
             {% endfor %}
-            {% endcomment %}
-
-        </table>
-    </div>
+        </tbody>
+    </table>
+    <h1>Completed Order</h1>
+    <table id="complete-order-list" class="tabel-style display " style=" padding-top: 16px; margin-top: 45px;">
+        <thead>
+            <tr>
+                <th>SN</th>
+                <th>Batch No</th>
+                <th>Total Items</th>
+                <th>Total Amount</th>
+                <th>Order By</th>
+                <th>Date</th>
+                <th>Action</th>
+                
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Loop through each product in the queryset and add it to the table rows -->
+            {% for order in completed_order_list %}
+            <tr>
+                <td>{{forloop.counter}}</td>
+                <td>{{ order.batch }}</td>
+                <td>{{ order.total_quantity }}</td>
+                <td>{{ order.total_amount }}</td>
+                <td>{{ order.user__username }}</td>
+                <td>{{ order.ordered_date }}</td>
+                <td>
+                    <a href=""><button class="td_view">View</button></a>
+                   
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 
 </div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#recent-order-list').DataTable();
+    });
+    $(document).ready(function () {
+        $('#complete-order-list').DataTable();
+    });
+   
+</script>
 
 {% endblock content %}
 

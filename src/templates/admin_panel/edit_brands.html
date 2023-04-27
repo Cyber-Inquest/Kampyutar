@@ -138,57 +138,57 @@
 
 
 <script>
-    function previewImage(event) {
-           var file = event.files[0];
-           // Make sure `file.name` matches our extensions criteria
-           if (!/\.(jpe?g|png|gif)$/i.test(file.name)) {
-               return alert(file.name + " is not an image");
-           } // else...
-           var reader = new FileReader();
-           reader.addEventListener("load", function () {
-               document.getElementById('brand_image').style.display = "none";
-               var preview = document.getElementById('image-preview');
-               var imageWrapper = preview.querySelector('.image-wrapper');
-               if (imageWrapper) {
-                   imageWrapper.querySelector('img').src = this.result;
-               } else {
-                   imageWrapper = document.createElement('div');
-                   imageWrapper.style.margin = "10px";
-                   imageWrapper.classList.add('image-wrapper');
-                   imageWrapper.style.display = "flex";
-   
-                   var image = new Image();
-                   image.height = 100;
-                   image.title = file.name;
-                   image.src = this.result;
-                   image.style.margin = "10px";
-                   image.className = "image_list";
-   
-                   var deleteBtn = document.createElement('div');
-                   deleteBtn.classList.add('delete-image');
-                   deleteBtn.innerHTML = '<i class="fa fa-times"></i>';
-                   deleteBtn.style.color = "red";
-                   deleteBtn.addEventListener('click', function () {
-                       imageWrapper.remove();
-                       document.getElementById("file-input").value = '';
-                       document.getElementById("image-uploader").classList.remove('has-images');
-                       document.getElementById('brand_image').style.display = "block";
-                   });
-   
-                   imageWrapper.appendChild(image);
-                   imageWrapper.appendChild(deleteBtn);
-                   preview.appendChild(imageWrapper);
-                   preview.style.display = "flex";
-                   preview.style.justifyContent = "center";
-                   document.getElementById("image-uploader").classList.add('has-images');
-               }
-           });
-           reader.readAsDataURL(file);
-       }
-   
-       document.querySelector('#file-input').addEventListener("change", previewImage);
-   
-   
+   function previewImage(event) {
+        var file = event.files[0];
+        // Make sure `file.name` matches our extensions criteria
+        if (!/\.(jpe?g|png|gif)$/i.test(file.name)) {
+            return alert(file.name + " is not an image");
+        } // else...
+        var reader = new FileReader();
+        reader.addEventListener("load", function () {
+            document.getElementById('sub_category_image').style.display = "none";
+            var preview = document.getElementById('image-preview');
+            var imageWrapper = preview.querySelector('.image-wrapper');
+            if (imageWrapper) {
+                imageWrapper.querySelector('img').src = this.result;
+            } else {
+                imageWrapper = document.createElement('div');
+                imageWrapper.style.margin = "10px";
+                imageWrapper.classList.add('image-wrapper');
+                imageWrapper.style.display = "flex";
+
+                var image = new Image();
+                image.height = 100;
+                image.title = file.name;
+                image.src = this.result;
+                image.style.margin = "10px";
+                image.className = "image_list";
+
+                var deleteBtn = document.createElement('div');
+                deleteBtn.classList.add('delete-image');
+                deleteBtn.innerHTML = '<i class="fa fa-times"></i>';
+                deleteBtn.style.color = "red";
+                deleteBtn.addEventListener('click', function () {
+                    imageWrapper.remove();
+                    document.getElementById("file-input").value = '';
+                    document.getElementById("image-uploader").classList.remove('has-images');
+                    document.getElementById('sub_category_image').style.display = "block";
+                });
+
+                imageWrapper.appendChild(image);
+                imageWrapper.appendChild(deleteBtn);
+                preview.appendChild(imageWrapper);
+                preview.style.display = "flex";
+                preview.style.justifyContent = "center";
+                document.getElementById("image-uploader").classList.add('has-images');
+            }
+        });
+        reader.readAsDataURL(file);
+    }
+
+    document.querySelector('#file-input').addEventListener("change", previewImage);
+
+
    
    
    </script>

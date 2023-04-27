@@ -107,10 +107,10 @@
                 <form method="post" enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class="add_contentDiv">
-                        <div class="add_title margin_tb_auto" for="product_title">Category :</div>
+                        <div class="add_title margin_tb_auto" for="category_title">Category :</div>
                         <div class="add_description_text">
-                            <input type="text" name="product_title" id="product_title" value="{{subcategory.category.title}}" readonly>
-                            <input type="hidden" name="product_title_id" value="{{subcategory.category.id}}">
+                            <input type="text" name="category_title" id="category_title" value="{{subcategory.category.title}}" readonly>
+                            <input type="hidden" name="category_title_id" value="{{subcategory.category.id}}">
                         </div>
                     </div>
                     <div class="add_contentDiv">

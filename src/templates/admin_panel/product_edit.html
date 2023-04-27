@@ -101,7 +101,7 @@
         <div class="sc_div_row">
             <h3>Selected Category: {{product_details.categories|title}}</h3>
             <div class="admin_addProduct_main">
-                <form id = "image-form" method = 'post' enctype="multipart/form-data">
+                <form method = 'post' enctype="multipart/form-data">
                     {% csrf_token %}
                     <div id="_sle_so">
                         <div class="add_contentDiv">
@@ -144,8 +144,6 @@
                                     >
                             </div>
                         </div>
-
-
 
                         <div class="add_contentDiv">
                             <div class="add_title margin_tb_auto" for="product_keywords"> Keywords</div>

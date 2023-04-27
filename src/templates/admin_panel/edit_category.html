@@ -115,7 +115,7 @@
                     <h3>Is Shown</h3>
                     <input type="checkbox" name="category_is_shown" id="category_is_shown" {% if category.is_shown %} checked {% endif %}>
                     <div id="preview">
-                        <img src="{{category.image.url}}" alt="" id="category_image">
+                        <img src="{{category.image.url}}"  id="category_image">
                     </div>
 
                     <div id="image-uploader">
@@ -140,11 +140,20 @@
 <script>
 
     function previewImage(event) {
-        var file = event.target.files[0];
-        // Make sure `file.name` matches our extensions criteria
-        if (!/\.(jpe?g|png|gif)$/i.test(file.name)) {
-            return alert(file.name + " is not an image");
-        } // else...
+        var preview = document.getElementById('image-preview');
+
+        // Check if any file has been selected
+    if (!this.files || !this.files[0]) {
+        return;
+    }
+
+    var file = this.files[0];
+
+    // Make sure `file.name` matches our extensions criteria
+    if (!/\.(jpe?g|png|gif)$/i.test(file.name)) {
+        return alert(file.name + " is not an image");
+    }
+
         var reader = new FileReader();
         reader.addEventListener("load", function () {
             document.getElementById('category_image').style.display = "none";
@@ -164,7 +173,7 @@
                 image.src = this.result;
                 image.style.margin = "10px";
                 image.className = "image_list";
-                image.name = "image_list";
+                image.name = "image";
 
                 var deleteBtn = document.createElement('div');
                 deleteBtn.classList.add('delete-image');
