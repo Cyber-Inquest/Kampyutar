@@ -4,15 +4,12 @@ var delwishlist = document.getElementsByClassName('wish_del_btn');
 for (i=0; i < addwishlistbtns.length; i++){
     addwishlistbtns[i].addEventListener('click', function(){
         var wishproduct = this.dataset.wishproduct;
-        var wishproducttype = this.dataset.wishproducttype;
-        console.log('wishproduct:',wishproduct, 'wishproducttype:',wishproducttype)
-        console.log('user:',user)
         if (user == 'AnonymousUser'){
             console.log('User is not authenticated ')
             toastr.warning('You must login first!')
         }else{
             console.log('User is authenticated, sending data ... ')
-            add_wishlist(wishproducttype, wishproduct)
+            add_wishlist( wishproduct)
         }
     })
 }
@@ -20,20 +17,17 @@ for (i=0; i < addwishlistbtns.length; i++){
 for (i=0; i < delwishlist.length; i++){
     delwishlist[i].addEventListener('click', function(){
         var product_id = this.dataset.del_wish_product;
-        var product_type = this.dataset.del_wish_productype;
-        console.log('product_id:',product_id, 'product_type:',product_type)
-        console.log('user:',user)
         if (user == 'AnonymousUser'){
             console.log('User is not authenticated ')
             toastr.warning('You must login first!')
         }else{
             console.log('User is authenticated, sending data ... ')
-            delete_wishlist(product_id, product_type)
+            delete_wishlist(product_id)
         }
     })
 }
 
-function delete_wishlist(productId, producttype){
+function delete_wishlist(productId){
     var url = '/update_wishlist/'
 
     fetch(url, {
@@ -42,7 +36,7 @@ function delete_wishlist(productId, producttype){
             'Content-Type':'application/json',
             'X-CSRFToken': window.CSRF_TOKEN,
         },
-        body:JSON.stringify({'productId':productId, 'producttype': producttype})
+        body:JSON.stringify({'productId':productId})
     })
     .then((response) => {
         return response.json()
@@ -55,7 +49,7 @@ function delete_wishlist(productId, producttype){
     })
 }
 
-function add_wishlist(producttype, productId){
+function add_wishlist( productId){
     var url = '/add_wishlist/'
 
     fetch(url, {
@@ -64,7 +58,7 @@ function add_wishlist(producttype, productId){
             'Content-Type':'application/json',
             'X-CSRFToken': window.CSRF_TOKEN,
         },
-        body:JSON.stringify({'productId':productId, 'producttype':producttype})
+        body:JSON.stringify({'productId':productId})
     })
     .then((response) => {
         return response.json()

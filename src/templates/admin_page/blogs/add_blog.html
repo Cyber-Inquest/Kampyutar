@@ -1,9 +1,0 @@
-{% load static %}
-{% load widget_tweaks %}
-
-<form action="{% url 'sb_blog_post_admin' %}" method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{form.as_p}}
-    {{form.media}}
-    <BUTTON type="submit">Upload</BUTTON>
-</form>

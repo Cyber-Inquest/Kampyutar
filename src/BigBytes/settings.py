@@ -45,8 +45,6 @@ INSTALLED_APPS = [
     'django_social_share',
     'ckeditor',
     'ckeditor_uploader',
-    'vendor',
-    'vendor_admin_panel',
 ]
 
 MIDDLEWARE = [

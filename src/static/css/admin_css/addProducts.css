@@ -22,7 +22,7 @@
     padding: 0px 10px;
 }
 
-.proSpecDropDown input{
+.proSpecDropDown input {
     padding: 10px 5px;
     width: 95%;
 }
@@ -49,18 +49,22 @@
     padding: 0px 10px;
 }
 
-.add_description select {
-    width: 95%;
+.add_description_text select {
+    width: 70%;
     height: 100%;
 }
 
-.add_description_text input {
+.add_description_text input,
+.add_description_textarea textarea {
     width: 70%;
+}
+
+.add_description_text input {
     height: 80%;
 }
 
 .add_description_price input {
-    width: 65%;
+    width: 70%;
     height: 80%;
 }
 
@@ -189,7 +193,7 @@
     width: 94.5%;
 }
 
-.del_description_tab{
+.del_description_tab {
     width: 5%;
     text-align: center;
     margin-bottom: auto;
@@ -198,41 +202,44 @@
     cursor: pointer;
 }
 
-.del_description_tab:hover{
+.del_description_tab:hover {
     color: red;
 }
 
 /* image */
 
-#file-input{
+#file-input {
     display: none;
     cursor: pointer;
 }
-.input_img{
+
+.input_img {
     height: auto;
     width: auto;
-text-align: center;
+    text-align: center;
 
 }
-.upim{
+
+.upim {
     cursor: pointer;
     color: black;
     background-color: black;
     color: white;
     cursor: pointer;
-   padding: 10px;
-   border-radius: 5px;
-   font-weight: bold;
+    padding: 10px;
+    border-radius: 5px;
+    font-weight: bold;
 }
-#preview{
+
+#preview {
     width: 40%;
     margin: 20px auto;
 
 }
 
-#lolme2{
-display:none;
-height: auto;
+#lolme2 {
+    display: none;
+    height: auto;
     width: 300px;
     text-align: center;
     margin-right: auto;
@@ -245,7 +252,7 @@ height: auto;
     font-weight: bold;
 }
 
-.lolme3{
+.lolme3 {
     padding: 20px;
     font-size: 14px;
     color: red;
