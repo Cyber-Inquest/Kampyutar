@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+{% load widget_tweaks %}
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Login page</title>
+    <link rel="stylesheet" href="{% static 'css/admin_css/admin_login.css' %}">
+    <link rel="stylesheet" href="{% static 'css/admin_css/toastr.min.css' %}">
+    <link href="{% static 'css/fontawesome-free-6.0.0-beta3-web/css/fontawesome.css' %}" rel="stylesheet">
+    <link href="{% static 'css/fontawesome-free-6.0.0-beta3-web/css/brands.css' %}" rel="stylesheet">
+    <link href="{% static 'css/fontawesome-free-6.0.0-beta3-web/css/solid.css' %}" rel="stylesheet">
+    <script src="{% static 'js/jquery-1.9.1.min.js' %}"></script>
+    <script src="{% static 'js/toastr.min.js' %}"></script>
+    <link rel="icon" href="{% static 'images/icon.png' %}" type="image/x-icon" />
+</head>
+
+<body>
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+            {% if message.tags == 'success'%}
+                <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+            {% elif message.tags == 'info' %}
+                <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+            {% elif message.tags == 'warning' %}
+                <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+            {% elif message.tags == 'error' %}
+                <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+            {% endif %}
+    {% endfor %}
+</ul>
+{% endif %}
+
+<img class="wave" src="{% static 'css/images/Path_62.png' %}">
+<div class="container">
+    <div class="img">
+        <img src="{% static 'css/images/Group_4.png' %}">
+    </div>
+    <div class="login_container">
+        <form  action="{% url 'admin_login' %}" method="post">
+            {% csrf_token %}
+            <h2>Login</h2>
+            <div class="input_div one">
+                <div class="i">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div>
+                    <h5>Email</h5>
+                    <input type="text" class="input" placeholder="Username" name="username">
+                    
+                </div>
+            </div>
+            <div class="input_div two">
+                <div class="i">
+                    <i class="fas fa-lock"></i>
+                </div>
+                <div>
+                    <h5>Password</h5>
+                    <input type="password" class="input" placeholder="Password" name="password">
+                </div>
+            </div>
+            <input type="submit" class="btn" value="Login">
+        </form>
+    </div>
+</div>
+
+
+
+</body>
+
+</html>

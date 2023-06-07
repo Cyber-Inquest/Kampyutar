@@ -1,0 +1,97 @@
+{% extends 'base2.html' %}
+{% load static %}
+{% block content %}
+{% include 'admin_panel/snippets/side_nav_bar.html' with selected_menu=4 %}
+
+
+<div class="sc_staff_nav">
+    <div class="sc_staffs_topbar">
+        <div class="sc_staffs_status" onclick="openPage('adminAcc_tab', this)" id="defaultOpen">Admin User</div>
+        <div class="sc_staffs_status" onclick="openPage('customerAcc_tab', this)">Customer Account</div>
+    </div>
+</div>
+
+<!-- staff details topbar end -->
+
+<div class="sc_content_container sc_cc_tab" id="adminAcc_tab">
+    
+<div class="admin_user_div">
+    <div class="admin_userpanel_header">
+        <div class="admin_uph_left"> 
+            <h2>Admin User</h2>
+        </div>
+        <div class="admin_uph_right">
+            <a href="{% url 'admin_staff_add' %}"><button>Add Admin User</button></a>
+        </div>
+    </div>
+
+    <div class="admin_userpanel_content">
+        <table id="admin_customers">
+            <tr>
+                <th width="5%">S.N.</th>
+                <th width="30%">Full Name</th>
+                <th width="30%">Email</th>
+                <th width="15%">Phone</th>
+                <th width="20%">Actions</th>
+            </tr>
+            {% for item in staff_list %}
+            <tr>
+                <td>{{forloop.counter}}</td>
+                <td>{{item.username}}</td>
+                <td>{{item.email}}</td>
+                <td>{{item.profile.contact}}</td>
+                <td>
+                    <a href="{% url 'admin_staff_edit' id=item.id %}"><button class="td_edit">View</button></a>
+                    <a href="#"><button class="td_delete">Delete</button></a>
+                </td>
+            </tr>
+            {% endfor %}
+
+        </table>
+    </div>
+
+</div>
+</div>
+
+<div class="sc_content_container sc_cc_tab" id="customerAcc_tab">
+    <div class="admin_user_div">
+        <div class="admin_userpanel_header">
+            <div class="admin_cah_left">
+                <h2>Customer Account</h2>
+            </div>
+        </div>
+    
+        <div class="admin_userpanel_content">
+            <table id="admin_customers">
+                <tr>
+                    <th width="5%">S.N.</th>
+                    <th width="30%">Full Name</th>
+                    <th width="30%">Email</th>
+                    <th width="15%">Phone</th>
+                    <th width="20%">Actions</th>
+                </tr>
+                {% for item in customer_list%}
+                <tr>
+                    <td>{{forloop.counter}}</td>
+                    <td>{{item.username}}</td>
+                    <td>{{item.email}}</td>
+                    <td>{{item.profile.contact}}</td>
+                    <td>
+                        <button class="td_edit">View</button>
+                        <button class="td_delete">Delete</button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    
+    </div>
+
+</div>
+
+<script src="{% static 'js/tabs.js' %}"></script>
+
+
+
+
+{% endblock content %}

@@ -1,0 +1,130 @@
+{% extends 'base1.html' %}
+{% load static %}
+{% load mathfilters %}
+
+
+{% block content %}
+
+<div class="bb_ua_thirdDiv" id="dashboard">
+    <div class="bb_ua_thirdDivContent">
+        <div class="uaContentTop">
+            <div class="usCT_left">
+                <h3>Account Information</h3>
+            </div>
+            <div class="usCT_right" style="display:none;">
+                <a href="" class="cusButton blueBtn">Edit</a>
+            </div>
+        </div>
+        <hr style="margin: 0;">
+        <div class="uaContentMid">
+            <span>{{user_details.username}}</span>
+            <span>{{user_details.email}}</span>
+        </div>
+    </div>
+    <div class="bb_ua_thirdDivContent">
+        <form method="post">
+            {% csrf_token %}
+            <div class="bb_ua_addressContent">
+                <div class="ua_billingAddress">
+                    <h3>Billing Address</h3>
+                    <hr width="90%" style="float: left;">
+
+                    <div class="ua_aInputContent">
+                        <div class="ua_inputPerDiv">
+                            <h4 style="margin: 10px 0px;">First Name</h4>
+                            <input type="text" name="billing_firstname" value="{{address.first_name}}"
+                                placeholder="First Name">
+                        </div>
+                        <div class="ua_inputPerDiv">
+                            <h4 style="margin: 10px 0px;">Last Name</h4>
+                            <input type="text" name="billing_lastname" value="{{address.last_name}}"
+                                placeholder="Last Name">
+                        </div>
+                        <div class="ua_inputPerDiv">
+                            <h4 style="margin: 10px 0px;">Company Name</h4>
+                            <input type="text" name="billing_company" value="{{address.company_name}}"
+                                placeholder="Company Name">
+                        </div>
+                        <div class="ua_inputPerDiv">
+                            <h4 style="margin: 10px 0px;">Street Address</h4>
+                            <input type="text" name="billing_street" value="{{address.street_address}}"
+                                placeholder="Street Address">
+                        </div>
+                        <div class="ua_inputPerDiv">
+                            <h4 style="margin: 10px 0px;">Town/City</h4>
+                            <input type="text" name="billing_town" value="{{address.town_city}}"
+                                placeholder="Town/City">
+                        </div>
+                        <div class="ua_inputPerDiv">
+                            <h4 style="margin: 10px 0px;">State</h4>
+                            <input type="text" name="billing_state" value="{{address.state}}"
+                                placeholder="State">
+                        </div>
+                        <div class="ua_inputPerDiv">
+                            <h4 style="margin: 10px 0px;">ZIP</h4>
+                            <input type="text" name="billing_zip" value="{{address.zip}}" placeholder="ZIP">
+                        </div>
+                        <div class="ua_inputPerDiv">
+                            <h4 style="margin: 10px 0px;">Phone Number</h4>
+                            <input type="number" name="billing_number" value="{{address.contact}}"
+                                placeholder="Phone Number">
+                        </div>
+                    </div>
+
+                </div>
+                <div class="ua_deliveryAddress">
+                    <h3>Delivery Address</h3>
+                    <hr width="90%" style="float: left;">
+                    <div class="ua_aInputContent">
+                        <div class="ua_inputPerDiv">
+                            <h4 style="margin: 10px 0px;">First Name</h4>
+                            <input type="text" name="delivery_firstname" value="{{address.first_name}}"
+                                placeholder="First Name">
+                        </div>
+                        <div class="ua_inputPerDiv">
+                            <h4 style="margin: 10px 0px;">Last Name</h4>
+                            <input type="text" name="delivery_lastname" value="{{address.last_name}}"
+                                placeholder="Last Name">
+                        </div>
+                        <div class="ua_inputPerDiv">
+                            <h4 style="margin: 10px 0px;">Company Name</h4>
+                            <input type="text" name="delivery_company" value="{{address.company_name}}"
+                                placeholder="Company Name">
+                        </div>
+                        <div class="ua_inputPerDiv">
+                            <h4 style="margin: 10px 0px;">Street Address</h4>
+                            <input type="text" name="delivery_street" value="{{address.street_address}}"
+                                placeholder="Street Address">
+                        </div>
+                        <div class="ua_inputPerDiv">
+                            <h4 style="margin: 10px 0px;">Town/City</h4>
+                            <input type="text" name="delivery_town" value="{{address.town_city}}"
+                                placeholder="Town/City">
+                        </div>
+                        <div class="ua_inputPerDiv">
+                            <h4 style="margin: 10px 0px;">State</h4>
+                            <input type="text" name="delivery_state" value="{{address.state}}"
+                                placeholder="State">
+                        </div>
+                        <div class="ua_inputPerDiv">
+                            <h4 style="margin: 10px 0px;">ZIP</h4>
+                            <input type="number" name="delivery_zip" value="{{address.zip}}"
+                                placeholder="ZIP">
+                        </div>
+                        <div class="ua_inputPerDiv">
+                            <h4 style="margin: 10px 0px;">Phone Number</h4>
+                            <input type="number" name="delivery_number" value="{{address.contact}}"
+                                placeholder="Phone Number">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="bb_ua_aContentSave">
+                <button class="cusButton greenBtn" type="submit">Send Order</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+{% endblock content %}

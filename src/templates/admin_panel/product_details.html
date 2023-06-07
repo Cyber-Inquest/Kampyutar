@@ -1,0 +1,196 @@
+{% extends 'base2.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% block content %}
+{% include 'admin_panel/snippets/side_nav_bar.html' with selected_menu=3 %}
+<style>
+    .container {
+        max-width: 960px;
+        margin: 0 auto;
+        padding: 1rem;
+    }
+
+    table {
+        border-collapse: collapse;
+        margin: 0 auto;
+        font-size: 24px;
+        width: 100%;
+        color: #000000;
+    }
+
+    th,
+    td {
+        padding: 10px;
+        border: 1px solid #ddd;
+    }
+
+    th {
+        background-color: #f2f2f2;
+        font-weight: bold;
+        text-align: left;
+    }
+
+    ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    ul li {
+        display: inline-block;
+        margin-right: 10px;
+        margin-bottom: 10px;
+        padding: 5px 10px;
+        border: 1px solid #ddd;
+        border-radius: 20px;
+    }
+
+    .keywords__list {
+        margin-top: 10px;
+    }
+
+    .keywords__item {
+        display: inline-block;
+        margin-right: 10px;
+        margin-bottom: 10px;
+        padding: 5px 10px;
+        background-color: #f2f2f2;
+        border: 1px solid #ddd;
+        border-radius: 20px;
+    }
+
+    ul.list-unstyled {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    ul.list-unstyled li {
+        margin-bottom: 10px;
+        font-size: 18px;
+    }
+
+    ul.list-unstyled li .title {
+        font-weight: bold;
+        margin-right: 10px;
+        
+    }
+
+    ul.list-unstyled li .description {
+        font-style: italic;
+        font-size: 18px;
+    }
+    td.title
+    {
+        font-weight: bold;
+        margin-right: 10px;
+    }
+    p.desc
+    {
+        font-size: 20px;
+    }
+    
+    
+</style>
+
+
+<div class="sc_staff_nav">
+    <div class="sc_staffs_topbar">
+        <div class="sc_staffs_status" onclick="openPage('addProducts_tab', this)" id="defaultOpen">Product Details</div>
+    </div>
+</div>
+
+<!-- staff details topbar end -->
+
+<div class="sc_content_container_noBorder sc_cc_tab" id="addProducts_tab">
+    <div class="admin_addbrand_title">
+        <a href="{% url 'admin_product' %}"><i class="far fa-arrow-alt-circle-left"></i></a>
+        <h1>Product List</h1>
+    </div>
+    <!--start container for order and storage  -->
+    <div class="sc_container2">
+
+        
+        <div class="container">
+            <div class="col-lg-4">
+                <img src="{{ product.product_image.first.image.url }}" alt="{{ product.title }}" height="200">
+              </div>
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <h1 class="mb-4">{{ product.title }}</h1>
+                    <table class="table table-bordered table-striped">
+                        <thead class="bg-light">
+                            <tr>
+                                <th class="py-3 px-4 text-uppercase" scope="col">Specifications</th>
+                                <th class="py-3 px-4 text-uppercase" scope="col">Details</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="title py-3 px-4">Category:</td>
+                                <td class="description py-3 px-4">{{ product.categories }}</td>
+                            </tr>
+                            <tr>
+                                <td class="title py-3 px-4">Sub-Category:</td>
+                                <td class="description py-3 px-4">{{ product.sub_categories }}</td>
+                            </tr>
+                            <tr>
+                                <td class="title py-3 px-4">Brand:</td>
+                                <td class="description py-3 px-4">{{ product.brands }}</td>
+                            </tr>
+                            <tr>
+                                <td class="title py-3 px-4">Model Number:</td>
+                                <td class="description py-3 px-4">{{ product.model_number }}</td>
+                            </tr>
+                            <tr>
+                                <td class="title py-3 px-4">Stock:</td>
+                                <td class="description py-3 px-4">{{ product.stock }}</td>
+                            </tr>
+                            <tr>
+                                <td class="title py-3 px-4">Latest Price:</td>
+                                <td class="description py-3 px-4">{{ product.latest_price }}</td>
+                            </tr>
+                            <tr>
+                                <td class="title py-3 px-4">Previous Price:</td>
+                                <td class="description py-3 px-4">{{ product.previous_price }}</td>
+                            </tr>
+                            <tr>
+                                <td class="title py-3 px-4">Other Specifications:</td>
+                                <td class="description py-3 px-4">
+                                    <ul class="list-unstyled">
+                                        {% for item in product.specification_set.all %}
+                                        <li><span class="title">{{ item.title }}</span>: <span
+                                                class="description">{{item.description}}</span></li><br>
+                                        {% endfor %}
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="title py-3 px-4">Keywords:</td>
+                                <td class="description py-3 px-4">{{ product.keywords }}</td>
+                                
+                            </tr>
+                        </tbody>
+                    </table>
+                    <h2 class="mt-4">Product Description</h2>
+                    <p class="desc text-justify">{{ product.description|safe }}</p>
+                </div>
+            </div>
+        </div>
+
+
+
+    </div>
+    <!-- end container for order and storage-->
+
+</div>
+
+
+<script>
+
+
+    window.CSRF_TOKEN = "{{ csrf_token }}";
+
+</script>
+
+{% endblock content %}

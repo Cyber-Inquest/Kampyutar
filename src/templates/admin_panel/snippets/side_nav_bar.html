@@ -1,0 +1,12 @@
+
+
+
+
+<div class="sc_sidebar_list">
+    <div class="sc_sidebar">
+        <a {% if selected_menu == 1 %}class="active" {% endif %} href="{% url 'index_admin' %}"><i class="fas fa-rupee-sign"></i>Dashboard</a>
+        <a {% if selected_menu == 2 %}class="active" {% endif %} href="{% url 'admin_sets' %}"><i class="fas fa-plus-circle"></i>Sets</a>
+        <a {% if selected_menu == 3 %}class="active" {% endif %} href="{% url 'admin_product' %}"><i class="fas fa-barcode"></i>Products</a>
+        <a {% if selected_menu == 4 %}class="active" {% endif %} href="{% url 'admin_user_account' %}"><i class="fas fa-users"></i>User Accounts</a>
+    </div>
+</div>

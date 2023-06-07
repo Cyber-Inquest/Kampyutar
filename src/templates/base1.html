@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/fontawesome-free-6.0.0-beta3-web/css/all.css' %}">
+
+    <meta name="title" content="Multitrade">
+    <meta name="description" content="Multitrade is Nepal's best laptop seller and distributer.">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.multitrade.com.np">
+    <meta property="og:title" content="Multitrade: Nepal's Best Laptop Seller and Distributor">
+    <meta property="og:description" content="Multitrade is Nepal's best laptop seller and distributer.">
+    <meta property="og:image" content="https://www.multitrade.com.np{% static 'css/images/mainlogo.png' %}">
+
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://www.multitrade.com.np">
+    <meta property="twitter:title" content="Multitrade: Nepal's Best Laptop Seller and Distributor">
+    <meta property="twitter:description" content="Multitrade is Nepal's best laptop seller and distributer.">
+    <meta property="twitter:image" content="https://www.multitrade.com.np{% static 'css/images/mainlogo.png' %}">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+
+    
+    <link rel="stylesheet" href="{% static 'css/client_css/php_m.css' %}">
+    <link rel="stylesheet" href="{% static 'css/client_css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/client_css/footer.css' %}">
+    <link rel="stylesheet" href="{% static 'css/client_css/main.css' %}">
+    <link rel="stylesheet" href="{% static 'css/client_css/blog.css' %}">
+    <link rel="stylesheet" href="{% static 'css/client_css/company.css' %}">
+    <link rel="stylesheet" href="{% static 'css/client_css/userAccount.css' %}">
+    <link rel="stylesheet" href="{% static 'css/client_css/topBar.css' %}">
+    <link rel="stylesheet" href="{% static 'css/client_css/responsive.css' %}">
+    <link rel="stylesheet" href="{% static 'css/admin_css/toastr.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/client_css/listProduct.css' %}">
+    
+    <link rel="stylesheet" href="{% static 'css/client_css/product_description.css' %}">
+    <link rel="stylesheet" href="{% static 'css/client_css/review.css' %}">
+    <link rel="stylesheet" href="{% static 'css/client_css/checkout.css' %}">
+
+
+
+
+    <title>Multitrade</title>
+
+</head>
+
+<style>
+    .one {
+        display: none;
+    }
+</style>
+
+<body>
+
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        {% if message.tags == 'success'%}
+        <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+        {% elif message.tags == 'info' %}
+        <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+        {% elif message.tags == 'warning' %}
+        <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+        {% elif message.tags == 'error' %}
+        <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+        {% endif %}
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+
+    <div class="cc_header_topbar">
+        <div class="cc_htopbar_left">
+            <a href="">Further Query</a>
+            <span class="verLine">||</span>
+            <span>Contact: 9874985858</span>
+            <span class="verLine">||</span>
+            <span>multitrade@gmail.com</span>
+        </div>
+        <div class="cc_htopbar_right">
+            {% if request.user.is_authenticated %}
+            <a href="{% url 'client_profile' %}">
+                {{current_user}}</a>
+            {% else %}
+            <a href="{% url 'client_sign_in' %}">
+                Sign in </a>
+            {% endif %}
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <a href="{% url 'client_profile' %}"><i class="fas fa-heart"></i> &nbsp; My Wishlist</a>
+        </div>
+    </div>
+
+    <div class="cc_header_middlebar">
+
+        <div class="cc_hmiddlebar_left">
+            <div class="cc_mainlogo centerlr mcentertb">
+                <a href="{% url 'index_app' %}">
+                    <img src="{% static 'css/images/mainlogo.png' %}" alt="">
+                </a>
+            </div>
+        </div>
+
+        <div class="cc_hmiddlebar_mid">
+            <form action="{% url 'search_product' %}" method="GET">
+                <div class="cc_searchContainer centerlr">
+                    <div class="cc_search_txt">
+                        <input name="query" placeholder="Enter Keywords to search ........." required>
+                    </div>
+                    <button class="bb_search_btn" type="submit">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <div class="cc_hmiddlebar_right" id="append_here">
+            <a href="{% url 'shopping_cart' %}">
+                <button>
+                    <div class="cc_shoppingCartDiv">
+                        <div class="cc_sc_img mcentertb">
+                            <img src="{% static 'css/images/share/shopping_cart.png' %}" alt="">
+                        </div>
+                        <div class="cc_sc_text">
+                            <span class="sctitle">SHOPPING CART</span>
+                            <br>
+                            <span class="sc_item">{{cart_quantity_total}} item</span> - <span class="sc_price">NPR
+                                {{cart_total_price|floatformat:2}}</span>
+                        </div>
+                    </div>
+                </button>
+            </a>
+        </div>
+    </div>
+
+
+    <div class="topnav" id="myTopnav">
+        <div class="dropdown toActive">
+            <a href="{% url 'index_app' %}">
+                <button class="dropbtn">
+                    <i class="fa-solid fa-house"></i> HOME
+                </button>
+            </a>
+        </div>
+
+        {% for category_id,category_data in json_data.items %}
+        <div class="dropdown">
+            <a href="{% url 'product_list' slug=category_data.category_slug %}">
+                <button class="dropbtn">
+                    <i class="fas fa-laptop"></i> {{category_data.category_name}}
+                </button>
+            </a>
+            {% if category_data.subcategory %}
+            <div class="dropdown-content">
+                <div class="row">
+                    {% for subcategory_id,subcategory_data in category_data.subcategory.items %}
+                    <div class="column">
+                        <h3>
+                            <a
+                                href="{% url 'product_list' slug=category_data.category_slug %}?brands=&sub_categories={{subcategory_data.subcategory_id}}&slider_min=&slider_max=&show_by=&sort_by=">{{subcategory_data.subcategory_name}}</a>
+                        </h3>
+                        <ul>
+                            {% for brand_id,brand_data in subcategory_data.brand.items %}
+                            <li>
+                                <a
+                                    href="{% url 'product_list' slug=category_data.category_slug %}?brands={{brand_data.brand_id}}&sub_categories={{subcategory_data.subcategory_id}}&slider_min=&slider_max=&show_by=&sort_by=">{{brand_data.brand_name}}</a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        {% endfor %}
+
+        <a href="javascript:void(0);" style="font-size:15px; color:white; padding:14px;" class="bb_home_icon"
+            onclick="myFunction()">&#9776;</a>
+
+    </div>
+
+
+    {% block content %}
+
+    {% endblock %}
+
+
+    <div class="footer_main">
+        <div class="bb_email_div">
+            <h2 style="display:none;">Get Coupons & Offers in Inbox</h2>
+            <div class="bb_emailbox_main" style="display:none;">
+                <div class="bb_email_txt">
+                    <input placeholder="Your email address">
+                </div>
+                <div class="bb_submit_btn">
+                    GET YOURS
+                </div>
+            </div>
+        </div>
+
+        <div class="bb_footer_div">
+            <div class="bb_footer_topDiv">
+                <div class="bb_footer_aboutus">
+                    <h2>ABOUT US</h2>
+                    <div class="bb_footer_aboutusContent">
+                        Buy a laptop in Nepal can be a tough job. Due to the small market, computer stores always bring
+                        just a few models of laptops and all with limited stock. So chances of finding a laptop that
+                        fits your requirements are feeble. And if you further look at the laptop price in Nepal, you
+                        will be shocked to see it being exorbitantly high. Limited availability and the high price of
+                        the laptops has definitely created an inconvenience amongst the customers. With a view to
+                        solving this problem, Multitrade Pvt Ltd was established.
+                    </div>
+                </div>
+                <div class="bb_footer_topleft">
+                    <h3>We Accept</h3>
+                    <div class="bb_footer_paymentMain">
+
+                        <div class="bb_footer_payment">
+                            <div class="bb_footer_pay_per">
+                                <img src="{% static 'css/images/payment/COD.png' %}">
+                            </div>
+                        </div>
+
+                        <div class="bb_footer_payment">
+                            <div class="bb_footer_pay_per">
+                                <img src="{% static 'css/images/payment/BT.png' %}">
+                            </div>
+                        </div>
+
+                        <div class="bb_footer_payment">
+                            <div class="bb_footer_pay_per">
+                                <img src="{% static 'css/images/payment/Khalti_m.png' %}">
+                            </div>
+                        </div>
+
+                        <div class="bb_footer_payment">
+                            <div class="bb_footer_pay_per">
+                                <img src="{% static 'css/images/payment/eSewa_m.png' %}">
+                            </div>
+                        </div>
+
+                        <div class="bb_footer_payment">
+                            <div class="bb_footer_pay_per padding_extra_pay">
+                                <img src="{% static 'css/images/payment/fonepay.png' %}">
+                            </div>
+                        </div>
+
+                        <div class="bb_footer_payment">
+                            <div class="bb_footer_pay_per">
+                                <img src="{% static 'css/images/payment/connectIPS_m.png' %}">
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="bb_footer_middle">
+                <div class="bb_fm_txt">
+                    <h3>Follow Us On :</h3>
+                </div>
+                <div class="bb_fm_share">
+                    <a href="//www.facebook.com" target="_blank"><i class="fab fa-facebook"></i></a>
+                    <a href="//twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>
+                    <a href="//instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+
+            <div class="bb_footer_bottom">
+                <div class="bb_fbtm_col1">
+                    <h3>ABOUT Multitrade</h3>
+                    <div class="bb_fbtm_content">
+                        <li><a href="">About Multitrade</a></li>
+                        <li><a href="">Terms & Condition</a></li>
+                        <li><a href="">Warrenty</a></li>
+                        <li><a href="">Privacy Poilcy</a></li>
+                        <li><a href="">Blog</a></li>
+                    </div>
+                </div>
+                <div class="bb_fbtm_col2">
+                    <h3>CUSTOMER SERVICE</h3>
+                    <div class="bb_fbtm_content">
+                        <li><a href="">Shipping & Return Poilcy</a></li>
+                        <li><a href="">My Account</a></li>
+                        <li><a href="">Contact Us</a></li>
+                    </div>
+                </div>
+                <div class="bb_fbtm_col3">
+                    <h3>CONTACT US</h3>
+                    <div class="bb_fbtm_content">
+                        <li>Email : contact@multitrade.com.np</li>
+                        <li>Phone: +977-01-987654123</li>
+                        <li>Address: Putalisadak, Kathmandu</li>
+                    </div>
+                </div>
+            </div>
+
+            <hr width="90%">
+
+            <div class="bb_footer_copyright">
+                Copyright &copy; 2023. Multitrade Pvt. Ltd.
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="bb_mainContainerBB">
+        <div class="bb_bottomBarContent">
+            <div class="bb_bottomBarPerContent">
+                <a href="{% url 'index_app' %}"><i class="fa-solid fa-house"></i></a>
+            </div>
+
+            <div class="bb_bottomBarPerContent">
+                <a href="{% url 'client_profile' %}"><i class="fas fa-heart"></i></a>
+            </div>
+
+            <div class="bb_bottomBarPerContent">
+                <a href="{% url 'shopping_cart' %}"><i class="fa-solid fa-cart-shopping"></i></a>
+            </div>
+
+            <div class="bb_bottomBarPerContent">
+                
+                    {% if request.user.is_authenticated %}
+                    <a href="{% url 'client_profile' %}">
+                    <i class="fa-solid fa-user"></i></a>
+                    {% else %}<a href="{% url 'client_sign_in' %}">
+                    <i class="fa-solid fa-user"></i></a>
+                    {% endif %}
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+
+        if ((navigator.userAgent.match(/iPhone/)) || (navigator.userAgent.match(/iPod/))) {
+            var head = document.getElementsByTagName('HEAD')[0];
+            var link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.type = 'text/css';
+            link.href = "{% static 'css/client_css/responsive_mobile.css' %}";
+            head.appendChild(link);
+        }
+
+    </script>
+    <div class="one">
+        <script type="text/javascript">
+
+            var user = '{{request.user}}';
+
+            window.CSRF_TOKEN = "{{ csrf_token }}";
+            var cart_selection = "{{ cart_selection }}";
+
+        </script>
+    </div>
+    <div style="display:none;">
+        <h1>asdasdas</h1>
+    </div>
+    <script src="{% static 'js/jquery-1.9.1.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/toastr.min.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+
+    <script type="text/javascript" src="{% static 'js/cart.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/company.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/topNav.js' %}"></script>
+    <script src="{% static 'js/userAccount.js' %}"></script>
+
+    <script src="{% static 'js/client_page/_quantity.js' %}"></script>
+
+
+    <script type="text/javascript" type="text/javascript" src="{% static 'js/_csrf_tkn.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/client_user.js' %}"></script>
+
+
+    <script>
+        if (cart_selection == '_tr_del_g') {
+            cart = {}
+            document.cookie = 'cart=' + JSON.stringify(cart) + ";domain=;path=/"
+        }
+    </script>
+</body>
+
+
+</html>
