@@ -4,6 +4,9 @@
 
 
 {% block content %}
+<style>
+
+</style>
 
 
 <div class="bb_breadcrums">
@@ -38,9 +41,9 @@
         <div class="bb_Pd_row">
             <!-- images description on left side start -->
             <div class="bb_pd_column1">
-                <div class="bb_images_pc">
+                <div class="bb_images_pc ">
                     <!-- Fotorama -->
-                    <div class="fotorama" data-width="600" data-ratio="600/467" data-max-width="100%"
+                    <div class="fotorama bb_pd_mainimg" data-width="600" data-ratio="600/467" id ="product-images" data-max-width="100%"
                         data-nav="thumbs">
                         {% for item in per_images %}
                         <img src="{{item.image.url}}" width="128" height="128">
@@ -81,7 +84,7 @@
                     </div>
                 </div>
                 <div class="bb_pd_addcart">
-                    <form action="#">
+                    
                         {% if product.stock %}
                         <label for="quantity" class="bb_pd_qty">Quantity:</label>
                         <input type="number" id="_quantity_per_pagess" name="quantity" min="1" value="1">
@@ -93,7 +96,7 @@
                             data-perproduct={{product.id}} data-peraction="update" disabled><i
                                 class="fas fa-shopping-cart"></i> &nbsp; <span>OUT OF STOCK</span></button>
                         {% endif %}
-                    </form>
+                    
                 </div>
                 <div class="bb_pd_likediv">
 
@@ -293,8 +296,30 @@
     </div>
 
 </div>
+<script>
+    var images = document.querySelectorAll('#product-images img');
+    var currentIndex = 0;
+    var interval = 3000; // Change slide every 3 seconds
 
+    function showImage(index) {
+        for (var i = 0; i < images.length; i++) {
+            images[i].style.display = 'none';
+        }
+        images[index].style.display = 'block';
+    }
 
+    function nextSlide() {
+        showImage(currentIndex);
+        currentIndex++;
+        if (currentIndex >= images.length) {
+            currentIndex = 0;
+        }
+    }
+
+    // Start the slideshow
+    showImage(currentIndex);
+    setInterval(nextSlide, interval);
+</script>
 <script src="{% static 'js/product_description.js' %}"></script>
 
 {% endblock content %}

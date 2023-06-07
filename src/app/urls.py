@@ -29,12 +29,6 @@ urlpatterns = [
 
 
 
-     path('blog_page/', views.blog_page, name='blog_page_app'),
-     path('per_blog_page/<int:ids>', views.per_blog_page, name='per_blog_page_app'),
-     path('blog_search', views.blog_search, name='blog_search_app'),
-
-
-
      path('reset_password/',
           auth_views.PasswordResetView.as_view(template_name="client_page/userAccount/forgetPassword.html"),
           name="reset_password"),
@@ -48,28 +42,6 @@ urlpatterns = [
           auth_views.PasswordResetCompleteView.as_view(
                template_name='client_page/userAccount/password_recent_sent.html'),
           name="password_reset_complete"),
-
-
-     # path('authenticate/', views.client_authentication, name='client_authentication'),
-     # path('update_client_profile', views.update_client_profile, name='update_client_profile'),
-     # path('pc-builder', views.coming_soonPC, name='comingSoon'),
-
-     #old created app 
-     # path('list_page/<str:_product>', views.list_page, name='list_page_app'),
-     # path('per_page/<str:_product>/<int:ids>', views.per_page, name='per_page_app'),
-     #replace by 
-
-
-     # path('checkout_order_save/', views.checkout_order_save,
-          # name='checkout_order_save_app'),
-
-     # path('client_information_billing_post/<int:ids>', views.client_information_billing_post,
-     #      name='client_information_billing_post_app'),
-     # path('client_information_account_post/<int:ids>', views.client_information_account_post,
-     #      name='client_information_account_post_app'),
-
-     # path('search_btns_post', views.search_btns_post, name='search_btns_post_app'),
-     # path('product_review/<str:_product>/<int:ids>', views.product_review, name='product_review_app'),
 
 
 ]

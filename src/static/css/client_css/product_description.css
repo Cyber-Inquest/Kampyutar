@@ -75,7 +75,7 @@ ul.bb_breadcrumb_content {
   .bb_pd_mainimg{
       background-color: #ffffff;
       width: 85%;
-      border: 2px solid rgba(94, 93, 93, 0.404);
+      /* border: 2px solid rgba(94, 93, 93, 0.404); */
       margin-left: auto;
       margin-right: auto;
       height: 300px;

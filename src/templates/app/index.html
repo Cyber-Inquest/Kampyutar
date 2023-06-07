@@ -18,12 +18,8 @@
                     <div class="bb_perProduct_item">
 
                         <div class="bb_item_img">
-                            {% for images in items.product_image.all %}
-                            {% if images.is_shown %}
                             <a href="{% url 'product_detail' slug=items.categories.slug id=items.id %}"><img
-                                    src="{{images.image.url}}" alt=""></a>
-                            {% endif %}
-                            {% endfor %}
+                                    src="{{items.product_image.first.image.url}}" alt=""></a>
                             {% if items.is_in_wishllist %}
                             <i class="fas fa-heart" style="color:red" data-wishproduct={{items.id}}></i>
                             {% else %}
@@ -96,12 +92,9 @@
                     <div class="bb_perProduct_item">
 
                         <div class="bb_item_img">
-                            {% for images in items.product_image.all %}
-                            {% if images.is_shown %}
                             <a href="{% url 'product_detail' slug=items.categories.slug id=items.id %}"><img
-                                    src="{{images.image.url}}" alt=""></a>
-                            {% endif %}
-                            {% endfor %}
+                                    src="{{items.product_image.first.image.url}}" alt=""></a>
+
                             {% if items.is_in_wishllist %}
                             <i class="fas fa-heart" style="color:red" data-wishproduct={{items.id}}
                             data-wishproducttype={{items.categories}}></i>
@@ -168,12 +161,8 @@
                     <div class="bb_perProduct_item">
 
                         <div class="bb_item_img">
-                            {% for images in items.product_image.all %}
-                            {% if images.is_shown %}
                             <a href="{% url 'product_detail' slug=items.categories.slug id=items.id %}"><img
-                                    src="{{images.image.url}}" alt=""></a>
-                            {% endif %}
-                            {% endfor %}
+                                    src="{{items.product_image.first.image.url}}" alt=""></a>
                             {% if items.is_in_wishllist %}
                             <i class="fas fa-heart" style="color:red" data-wishproduct={{items.id}}
                             data-wishproducttype={{items.categories}}></i>
@@ -245,12 +234,8 @@
                     <div class="bb_perProduct_item">
 
                         <div class="bb_item_img">
-                            {% for images in product.product_image.all %}
-                            {% if images.is_shown %}
                             <a href="{% url 'product_detail' slug=product.categories.slug id=items.id %}"><img
-                                    src="{{images.image.url}}" alt=""></a>
-                            {% endif %}
-                            {% endfor %}
+                                    src="{{product.product_image.first.image.url}}" alt=""></a>
                             {% if product.is_in_wishllist %}
                             <i class="fas fa-heart" style="color:red" data-wishproduct={{product.id}}
                             data-wishproducttype={{product.categories}}></i>

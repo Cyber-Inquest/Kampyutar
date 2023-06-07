@@ -1,6 +1,7 @@
 # helper functions
 
-from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.conf import settings
+from django.core.paginator import Paginator
 from django.contrib import messages
 from django.contrib.auth import logout, login
 from django.contrib.auth.hashers import check_password
@@ -9,18 +10,20 @@ from django.db.models import Max, Min, Q
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.db.models import Sum, OuterRef, Subquery,F,Value,Case,When,IntegerField
+from django.http import HttpResponse,HttpResponseRedirect
+
 
 
 # models
 from admin_panel.models import Address, Category, Order, Billing, Delivery, Wishlist, Cart , Blogs
 from admin_panel.models import Profile, ProductImage, Specification, Product, SubCategory, Brand, ProductReview
+from app.forms import LoginForm
 
 # forms/filters
 try:
     from .filters import SnippetFilterProductList
 except:
     pass
-from .forms import LoginForm
 from .filters import SnippetFilterProductList
 # inbuilt
 import json
@@ -28,21 +31,25 @@ import json
 
 #region updatedCode
 
-# after logged-in if there is any data in cookie save the data into db and clear the cookie
+# after logged-in if there is any data in cookie save the data into db cart table
 def cookie_cart_loging(request, _current_user):
     try:
         cart = json.loads(request.COOKIES['cart'])
     except:
         cart = None
     if cart:
+        print('cookie_cart_loging')
         # for each product type
         for item in cart:
+            print(item)
             check_data = Cart.objects.filter(user=_current_user, product_id=item).last()
             if check_data:
                 check_data.quantity += cart[item]['quantity']
                 check_data.save()
             else:
                 Cart.objects.create(user=_current_user,quantity=cart[item]['quantity'],product_id=item)
+            
+           
 
 
 # getting data for navbar which is in dictonary format and return the data
@@ -623,7 +630,10 @@ def client_sign_in(request):
                 login(request, user)
                 # save cart item to db and delete cart form cookie
                 cookie_cart_loging(request, request.user)
-                return redirect('index_app')
+                response = redirect('index_app')
+                print('cookie_cart_loging')
+                response.delete_cookie('cart')
+                return response
             
             else:
                 # given password does not match or the account is not client privilege
@@ -653,7 +663,7 @@ def logged_out(request):
 #adding and update cart list to database
 def update_cart(request):
     if request.method == 'POST':
-        print('post')
+        print(request.user.is_authenticated)
         if request.user.is_authenticated :
             current_user = request.user
             data = json.loads(request.body)
@@ -751,7 +761,6 @@ def product_review(request):
 # add wishlist if user is logged-in
 def delete_wishlist(request):
     if request.method == 'POST':
-        print('--------------------------------------------------------------')
         data = json.loads(request.body)
         product_id = data['productId']
         wishlist_query = Wishlist.objects.get(product_id=product_id, user=request.user)
@@ -783,228 +792,5 @@ def delete_cart(request):
             wishlist_query.delete()
             return JsonResponse({'_actr': 'True'})
 
-
-#endregion
-
-#region blog unnecessary functions for now 
-
-def blog_page(request):
-    # returns all the blog
-    blog_list = Blogs.objects.all().order_by('-id')
-
-    # find brands that are in laptops to show in top-bar
-    laptop_topnav = SubCategory.objects.filter(categories='Laptops')
-    laptop_brand_id = topbar_laptops()
-
-    laptop_brand = []
-    for item in laptop_brand_id:
-        laptop_brand.append(Brands.objects.filter(id=item).last())
-
-    # find brands that are in desktops to show in top-bar
-    desktop_topnav = SubCategory.objects.filter(categories='Desktops')
-    desktop_brand_id = topbar_desktops()
-
-    desktop_brand = []
-    for item in desktop_brand_id:
-        desktop_brand.append(Brands.objects.filter(id=item).last())
-
-    # find brands that are in apple to show in top-bar
-    apple_topnav = SubCategory.objects.filter(categories='Apple')
-    apple_brand_id = topbar_apple()
-
-    apple_brand = []
-    for item in apple_brand_id:
-        apple_brand.append(Brands.objects.filter(id=item).last())
-
-    # find brands that are in components to show in top-bar
-    components_topnav = SubCategory.objects.filter(categories='Components')
-    components_brand_id = topbar_components()
-
-    components_brand = []
-    for item in components_brand_id:
-        components_brand.append(Brands.objects.filter(id=item).last())
-
-    if request.user.is_authenticated and request.user.is_staff and request.user.profile.authorization is False:
-        order_cart_cookie = user_saved_cart(request, request.user)
-
-        # get current user
-        current_user = request.user
-
-        # variable to know when to del cart after logged-in right-now is set to true meaning save and del cookie cart
-        _cart_selection = '_tr_del_g'
-
-    else:
-        order_cart_cookie = cookie_cart(request)
-
-        # no current user indication
-        current_user = []
-
-        # variable indicating server to pass the deletion of cart
-        _cart_selection = '_fl_del_g'
-
-    paginator_blog_list = Paginator(blog_list, 10)
-    page_number_blog_list = request.GET.get('page_blog')
-    try:
-        page_obj_blog_list = paginator_blog_list.page(page_number_blog_list)
-    except PageNotAnInteger:
-        page_obj_blog_list = paginator_blog_list.page(1)
-    except EmptyPage:
-        page_obj_blog_list = paginator_blog_list.page(paginator_blog_list.num_pages)
-
-    context = {'blog_list': page_obj_blog_list, 'cart_quantity_total': order_cart_cookie['cart_total_items'],
-               'cart_total_price': order_cart_cookie['cart_total_price'], 'current_user': current_user,
-               'laptop_topnav': laptop_topnav,
-               'desktop_topnav': desktop_topnav, 'apple_topnav': apple_topnav, 'components_topnav': components_topnav,
-               'laptop_brand': laptop_brand, 'desktop_brand': desktop_brand, 'apple_brand': apple_brand,
-               'components_brand': components_brand, 'cart_selection': _cart_selection, }
-    return render(request, 'client_page/index_blogList.html', context)
-
-
-def per_blog_page(request, ids):
-    # query get relevent blog
-    per_blog_query = Blogs.objects.get(id=ids)
-
-    # find brands that are in laptops to show in top-bar
-    laptop_topnav = SubCategory.objects.filter(categories='Laptops')
-    laptop_brand_id = topbar_laptops()
-
-    laptop_brand = []
-    for item in laptop_brand_id:
-        laptop_brand.append(Brands.objects.filter(id=item).last())
-
-    # find brands that are in desktops to show in top-bar
-    desktop_topnav = SubCategory.objects.filter(categories='Desktops')
-    desktop_brand_id = topbar_desktops()
-
-    desktop_brand = []
-    for item in desktop_brand_id:
-        desktop_brand.append(Brands.objects.filter(id=item).last())
-
-    # find brands that are in apple to show in top-bar
-    apple_topnav = SubCategory.objects.filter(categories='Apple')
-    apple_brand_id = topbar_apple()
-
-    apple_brand = []
-    for item in apple_brand_id:
-        apple_brand.append(Brands.objects.filter(id=item).last())
-
-    # find brands that are in components to show in top-bar
-    components_topnav = SubCategory.objects.filter(categories='Components')
-    components_brand_id = topbar_components()
-
-    components_brand = []
-    for item in components_brand_id:
-        components_brand.append(Brands.objects.filter(id=item).last())
-
-    if request.user.is_authenticated and request.user.is_staff and request.user.profile.authorization is False:
-        order_cart_cookie = user_saved_cart(request, request.user)
-
-        # get current user
-        current_user = request.user
-
-        # variable to know when to del cart after logged-in right-now is set to true meaning save and del cookie cart
-        _cart_selection = '_tr_del_g'
-
-    else:
-        order_cart_cookie = cookie_cart(request)
-
-        # no current user indication
-        current_user = []
-
-        # variable indicating server to pass the deletion of cart
-        _cart_selection = '_fl_del_g'
-
-    context = {'per_blog_query': per_blog_query, 'cart_quantity_total': order_cart_cookie['cart_total_items'],
-               'cart_total_price': order_cart_cookie['cart_total_price'], 'current_user': current_user,
-               'laptop_topnav': laptop_topnav,
-               'desktop_topnav': desktop_topnav, 'apple_topnav': apple_topnav, 'components_topnav': components_topnav,
-               'laptop_brand': laptop_brand, 'desktop_brand': desktop_brand, 'apple_brand': apple_brand,
-               'components_brand': components_brand, 'cart_selection': _cart_selection, }
-    return render(request, 'client_page/index_blog.html', context)
-
-
-def blog_search(request):
-    if request.method == 'POST' or request.method == 'GET':
-        if request.method == 'POST':
-            search_name = request.POST.get('_search_blog_text')
-            if search_name == '\\':
-                search_name = ''
-        else:
-            search_name = request.GET.get('search_blog')
-
-        blog_list = Blogs.objects.all().order_by('-id')
-
-        # search based title search, description
-        blog_query_search = Blogs.objects.filter(
-            Q(title__icontains=search_name) | Q(blog_summary__icontains=search_name))
-
-        paginator_blog_search_list = Paginator(blog_query_search, 10)
-        page_number_blog_search_list = request.GET.get('page_search_blog')
-        try:
-            page_obj_blog_search_list = paginator_blog_search_list.page(page_number_blog_search_list)
-        except PageNotAnInteger:
-            page_obj_blog_search_list = paginator_blog_search_list.page(1)
-        except EmptyPage:
-            page_obj_blog_search_list = paginator_blog_search_list.page(paginator_blog_search_list.num_pages)
-
-        # find brands that are in laptops to show in top-bar
-        laptop_topnav = SubCategory.objects.filter(categories='Laptops')
-        laptop_brand_id = topbar_laptops()
-
-        laptop_brand = []
-        for item in laptop_brand_id:
-            laptop_brand.append(Brands.objects.filter(id=item).last())
-
-        # find brands that are in desktops to show in top-bar
-        desktop_topnav = SubCategory.objects.filter(categories='Desktops')
-        desktop_brand_id = topbar_desktops()
-
-        desktop_brand = []
-        for item in desktop_brand_id:
-            desktop_brand.append(Brands.objects.filter(id=item).last())
-
-        # find brands that are in apple to show in top-bar
-        apple_topnav = SubCategory.objects.filter(categories='Apple')
-        apple_brand_id = topbar_apple()
-
-        apple_brand = []
-        for item in apple_brand_id:
-            apple_brand.append(Brands.objects.filter(id=item).last())
-
-        # find brands that are in components to show in top-bar
-        components_topnav = SubCategory.objects.filter(categories='Components')
-        components_brand_id = topbar_components()
-
-        components_brand = []
-        for item in components_brand_id:
-            components_brand.append(Brands.objects.filter(id=item).last())
-
-        if request.user.is_authenticated and request.user.is_staff and request.user.profile.authorization is False:
-            order_cart_cookie = user_saved_cart(request, request.user)
-
-            # get current user
-            current_user = request.user
-
-            # variable to know when to del cart after logged-in right-now is set to true meaning save and del cookie
-            # cart
-            _cart_selection = '_tr_del_g'
-
-        else:
-            order_cart_cookie = cookie_cart(request)
-
-            # no current user indication
-            current_user = []
-
-            # variable indicating server to pass the deletion of cart
-            _cart_selection = '_fl_del_g'
-
-        context = {'cart_quantity_total': order_cart_cookie['cart_total_items'],
-                   'cart_total_price': order_cart_cookie['cart_total_price'], 'current_user': current_user,
-                   'laptop_topnav': laptop_topnav, 'page_obj_blog_search_list': page_obj_blog_search_list,
-                   'desktop_topnav': desktop_topnav, 'apple_topnav': apple_topnav, 'blog_list': blog_list,
-                   'components_topnav': components_topnav, 'search_name': search_name,
-                   'laptop_brand': laptop_brand, 'desktop_brand': desktop_brand, 'apple_brand': apple_brand,
-                   'components_brand': components_brand, 'cart_selection': _cart_selection, }
-        return render(request, 'client_page/blog/search.html', context)
 
 #endregion

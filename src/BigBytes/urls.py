@@ -25,9 +25,7 @@ from django.views.decorators.cache import never_cache
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('app.urls')),
-    path('vendor/', include('vendor.urls')),
     path('admin_django/', include('admin_panel.urls')),
-    path('admin_vendor/', include('vendor_admin_panel.urls')),
     path('ckeditor/upload/', login_required(ckeditor_views.upload), name='ckeditor_upload'),
     path('ckeditor/browse/', never_cache(login_required(ckeditor_views.browse)), name='ckeditor_browse'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
