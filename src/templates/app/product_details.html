@@ -18,14 +18,12 @@
         {% endif %}
 
         {% if product.sub_categories %}
-        <li><a
-                href="{% url 'product_list' slug=product.categories %}?brands=&sub_categories={{product.sub_categories.id}}&slider_min=&slider_max=&show_by=&sort_by=">{{product.sub_categories}}</a>
+        <li><a href="{% url 'product_list' slug=product.categories %}?brands=&sub_categories={{product.sub_categories.id}}&slider_min=&slider_max=&show_by=&sort_by=">{{product.sub_categories}}</a>
         </li>
         {% endif %}
 
         {% if product.brands %}
-        <li><a
-                href="{% url 'product_list' slug=product.categories %}?brands={{product.brands.id}}&sub_categories={{product.sub_categories.id}}&slider_min=&slider_max=&show_by=&sort_by=">{{product.brands}}</a>
+        <li><a href="{% url 'product_list' slug=product.categories %}?brands={{product.brands.id}}&sub_categories={{product.sub_categories.id}}&slider_min=&slider_max=&show_by=&sort_by=">{{product.brands}}</a>
         </li>
         {% endif %}
 
@@ -43,8 +41,7 @@
             <div class="bb_pd_column1">
                 <div class="bb_images_pc ">
                     <!-- Fotorama -->
-                    <div class="fotorama bb_pd_mainimg" data-width="600" data-ratio="600/467" id ="product-images" data-max-width="100%"
-                        data-nav="thumbs">
+                    <div class="fotorama bb_pd_mainimg" data-width="600" data-ratio="600/467" id="product-images" data-max-width="100%" data-nav="thumbs">
                         {% for item in per_images %}
                         <img src="{{item.image.url}}" width="128" height="128">
                         {% endfor %}
@@ -84,30 +81,22 @@
                     </div>
                 </div>
                 <div class="bb_pd_addcart">
-                    
-                        {% if product.stock %}
-                        <label for="quantity" class="bb_pd_qty">Quantity:</label>
-                        <input type="number" id="_quantity_per_pagess" name="quantity" min="1" value="1">
-                        <button class="_add_to_cart_btn" onclick="updateUserOrderDatabase({{product.id}})"
-                            data-perproduct={{product.id}} data-peraction="update"><i
-                                class="fas fa-shopping-cart"></i> &nbsp; <span>Add To Cart</span></button>
-                        {% else %}
-                        <button class="_add_to_cart_btn_disable"
-                            data-perproduct={{product.id}} data-peraction="update" disabled><i
-                                class="fas fa-shopping-cart"></i> &nbsp; <span>OUT OF STOCK</span></button>
-                        {% endif %}
-                    
+
+                    {% if product.stock %}
+                    <label for="quantity" class="bb_pd_qty">Quantity:</label>
+                    <input type="number" id="_quantity_per_pagess" name="quantity" min="1" value="1">
+                    <button class="_add_to_cart_btn" onclick="updateUserOrderDatabase({{product.id}})" data-perproduct={{product.id}} data-peraction="update"><i class="fas fa-shopping-cart"></i> &nbsp; <span>Add To Cart</span></button>
+                    {% else %}
+                    <button class="_add_to_cart_btn_disable" data-perproduct={{product.id}} data-peraction="update" disabled><i class="fas fa-shopping-cart"></i> &nbsp; <span>OUT OF STOCK</span></button>
+                    {% endif %}
+
                 </div>
                 <div class="bb_pd_likediv">
 
-                    <div class="fb-like"
-                        data-href="http://127.0.0.1:8000/per_page/{{product.categories}}/{{product.id}}"
-                        data-width="" data-layout="button" data-action="like" data-size="large" data-share="false">
+                    <div class="fb-like" data-href="http://127.0.0.1:8000/per_page/{{product.categories}}/{{product.id}}" data-width="" data-layout="button" data-action="like" data-size="large" data-share="false">
                     </div>
-                    {% post_to_twitter "KAMPYUTER" object_or_url '<button class="bb_pd_likebtn"><span><i
-                                class="fa-brands fa-twitter"></i></span> &nbsp;Tweet</button>' %}
-                    {% post_to_facebook object_or_url '<button class="bb_pd_likebtn"><span><i
-                                class="fa-solid fa-share-nodes"></i></span> &nbsp;Share</button>' %}
+                    <a class="bb_pd_likebtn" ><span><i class="fa-brands fa-twitter"></i></span> &nbsp;Tweet</a><button class="bb_pd_likebtn"><span><i
+                                class="fa-solid fa-share-nodes"></i></span> &nbsp;Share</button>
 
 
                 </div>
@@ -148,52 +137,52 @@
         <!-- for specification end -->
         <!-- for review start -->
         <div class="bb_pd_reviews bb_pd_tab" id="review_tab">
-           
+
             <div class="bb_pd_container">
                 <div class="bb_container_col1">
                     <div class="bb_bd_col_inside">
                         {% for item in products_review_list %}
-                            <div class="review">
+                        <div class="review">
                             <div class="profile">
                                 <div class="profile_star">
                                     {% if item.rating == 1 %}
-                                        <i class="fas fa fa-star checked"></i>
-                                        <i class="far fa fa-star "></i>
-                                        <i class="far fa fa-star "></i>
-                                        <i class="far fa fa-star "></i>
-                                        <i class="far fa fa-star"></i>
+                                    <i class="fas fa fa-star checked"></i>
+                                    <i class="far fa fa-star "></i>
+                                    <i class="far fa fa-star "></i>
+                                    <i class="far fa fa-star "></i>
+                                    <i class="far fa fa-star"></i>
                                     {% endif %}
-            
+
                                     {% if item.rating == 2 %}
-                                        <i class="fas fa fa-star checked"></i>
-                                        <i class="fas fa fa-star checked"></i>
-                                        <i class="far fa fa-star "></i>
-                                        <i class="far fa fa-star "></i>
-                                        <i class="far fa fa-star"></i>
+                                    <i class="fas fa fa-star checked"></i>
+                                    <i class="fas fa fa-star checked"></i>
+                                    <i class="far fa fa-star "></i>
+                                    <i class="far fa fa-star "></i>
+                                    <i class="far fa fa-star"></i>
                                     {% endif %}
-            
+
                                     {% if item.rating == 3 %}
-                                        <i class="fas fa fa-star checked"></i>
-                                        <i class="fas fa fa-star checked"></i>
-                                        <i class="fas fa fa-star checked"></i>
-                                        <i class="far fa fa-star "></i>
-                                        <i class="far fa fa-star"></i>
+                                    <i class="fas fa fa-star checked"></i>
+                                    <i class="fas fa fa-star checked"></i>
+                                    <i class="fas fa fa-star checked"></i>
+                                    <i class="far fa fa-star "></i>
+                                    <i class="far fa fa-star"></i>
                                     {% endif %}
-            
+
                                     {% if item.rating == 4 %}
-                                        <i class="fas fa fa-star checked"></i>
-                                        <i class="fas fa fa-star checked"></i>
-                                        <i class="fas fa fa-star checked"></i>
-                                        <i class="fas fa fa-star checked"></i>
-                                        <i class="far fa fa-star"></i>
+                                    <i class="fas fa fa-star checked"></i>
+                                    <i class="fas fa fa-star checked"></i>
+                                    <i class="fas fa fa-star checked"></i>
+                                    <i class="fas fa fa-star checked"></i>
+                                    <i class="far fa fa-star"></i>
                                     {% endif %}
-            
+
                                     {% if item.rating == 5 %}
-                                        <i class="fas fa fa-star checked"></i>
-                                        <i class="fas fa fa-star checked"></i>
-                                        <i class="fas fa fa-star checked"></i>
-                                        <i class="fas fa fa-star checked"></i>
-                                        <i class="fas fa fa-star checked"></i>
+                                    <i class="fas fa fa-star checked"></i>
+                                    <i class="fas fa fa-star checked"></i>
+                                    <i class="fas fa fa-star checked"></i>
+                                    <i class="fas fa fa-star checked"></i>
+                                    <i class="fas fa fa-star checked"></i>
                                     {% endif %}
                                 </div>
                                 <div class="profile_name">
@@ -202,27 +191,27 @@
                             </div>
                             <div class="des">
                                 <p style="text-align: justify;">
-                                   {{item.review}}
+                                    {{item.review}}
                                 </p>
                             </div>
                         </div>
                         {% endfor %}
-            
+
                     </div>
-            
+
                 </div>
                 {% if review_status %}
                 <div class="bb_container_col2">
                     <h3 class="bb_bd_top">YOU'RE REVIEWING:</h3>
-                    <h3>{{product.title}}</h3> 
+                    <h3>{{product.title}}</h3>
                     <form action="{% url 'product_review' %}" method="post">
                         {% csrf_token %}
                         <div class="form">
                             <input type="hidden" name="product_id" value="{{product.id}}">
-                            <div class="rate" >
-                                
+                            <div class="rate">
+
                                 <input type="radio" id="star5" name="rate" {% if product_review.rating == 5 %} checked{% endif %} value="5" />
-                                <label for="star5"  title="text">5 stars</label>
+                                <label for="star5" title="text">5 stars</label>
                                 <input type="radio" id="star4" name="rate" {% if product_review.rating == 4 %} checked{% endif %} value="4" />
                                 <label for="star4" title="text">4 stars</label>
                                 <input type="radio" id="star3" name="rate" {% if product_review.rating == 3 %} checked{% endif %} value="3" />
@@ -241,13 +230,13 @@
                                     <textarea id="review_box" maxlength="300" name="_review_box" rows="4" cols="50" required>{{product_review.review}}</textarea>
                                 </div>
                             </div>
-            
+
                         </div>
                         <div class="bb_bd_review_submit">
                             <button type="submit">Update Review</button>
                         </div>
                     </form>
-            
+
                 </div>
                 {% else %}
                 <div class="bb_container_col2">
@@ -257,7 +246,7 @@
                         {% csrf_token %}
                         <div class="form">
                             <input type="hidden" name="product_id" value="{{product.id}}">
-                            <div class="rate" >
+                            <div class="rate">
                                 <input type="radio" id="star5" name="rate" value="5" />
                                 <label for="star5" title="text">5 stars</label>
                                 <input type="radio" id="star4" name="rate" value="4" />
@@ -278,13 +267,13 @@
                                     <textarea id="review_box" maxlength="300" name="_review_box" rows="4" cols="50" required></textarea>
                                 </div>
                             </div>
-            
+
                         </div>
                         <div class="bb_bd_review_submit">
                             <button type="submit">Submit Review</button>
                         </div>
                     </form>
-            
+
                 </div>
                 {% endif %}
             </div>
