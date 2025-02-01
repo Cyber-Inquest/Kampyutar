@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kampyutar-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: kampyutar
+  template:
+    metadata:
+      labels:
+        app: kampyutar
+    spec:
+      containers:
+      - name: kampyutar
+        image: sushant796/kampyutar:latest
+        ports:
+        - containerPort: 8000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kampyutar-service
+spec:
+  selector:
+    app: kampyutar
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8000
+  type: LoadBalancer
