@@ -1,0 +1,55 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.9"
+
+      - name: Install dependencies
+        working-directory: src
+        run: pip install -r requirements.txt
+
+      - name: Run tests
+        working-directory: src
+        run: python manage.py test
+
+      - name: Build Docker image
+        run: docker build -t "${{ secrets.DOCKER_USERNAME }}/kampyutar:latest" .
+
+      - name: Login to Docker Hub
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+      - name: Push Docker image
+        run: docker push "${{ secrets.DOCKER_USERNAME }}/kampyutar:latest"
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure kubectl
+        run: |
+          echo "${{ secrets.KUBECONFIG }}" > kubeconfig.yaml
+          export KUBECONFIG=kubeconfig.yaml
+
+      - name: Apply Kubernetes deployment
+        run: kubectl apply -f src/deployment.yaml
+
+      - name: Update deployment image
+        run: kubectl set image deployment/kampyutar-deployment kampyutar="${{ secrets.DOCKER_USERNAME }}/kampyutar:latest"

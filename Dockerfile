@@ -1,21 +1,13 @@
-﻿# Use official Python image
-FROM python:3.9
+﻿FROM python:3.9
 
 WORKDIR /app
 
-# Install dependencies
-COPY requirements.txt .
+COPY src/requirements.txt ./requirements.txt
 RUN pip install --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy project files
-COPY . .
+COPY src/ .
 
-# Run database migrations
-RUN python manage.py migrate
-
-# Expose the application port
 EXPOSE 8000
 
-# Start Django server
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+CMD ["sh", "-c", "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"]
